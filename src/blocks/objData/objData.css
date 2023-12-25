@@ -1,0 +1,29 @@
+.objData {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 100px;
+}
+
+.objData__img {
+    width: 400px;
+    background-position: center;
+    background-size: cover;
+    height: fit-content;
+}
+
+.objData__list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 327px;
+}
+
+.objData__name {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 300px 100px;
+}
+
+.letter{
+    letter-spacing: .03rem;
+}

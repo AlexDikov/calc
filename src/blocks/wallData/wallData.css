@@ -1,0 +1,75 @@
+.wallData {
+    display: flex;
+    margin-top: 100px;
+    max-height: 100vh;
+    justify-content: center;
+}
+
+.wallInput {
+    border: 2px;
+    border-radius: 10px;
+    border-color: black;
+    background-color: rgb(246, 246, 246);
+    padding: 20px;
+    max-width: 1fr;
+    margin: 10px;
+    position: relative;
+}
+
+.wallInputList {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+    justify-content: space-between;
+}
+
+.wallInputUnit {
+    display: flex;
+    justify-content: space-between;
+}
+
+.wallInputValue {
+    width: 60px;
+    border: none;
+    border-bottom: 1px solid;
+    border-color: rgb(165, 165, 165);
+    margin-left: 10px;
+    background-color: rgb(246, 246, 246);
+}
+
+.wallInputValue:hover {
+    background-color: rgb(243, 241, 241);
+}
+
+.wallInputHeader {
+    align-self: center;
+}
+
+.wallInputSP {
+    display: flex;
+    justify-content: end;
+    font-size: 10px;
+}
+
+.wallCloseBtn {
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    top: 5px;
+    right:5px;
+    border: none;
+    background-image:url(../../images/cross.svg);
+    background-position: center;
+    background-size: cover;
+    background-color: transparent;
+}
+
+.wallAddIns {
+    position: absolute;
+    bottom: -20px;
+    right: -5px;
+    border: none;
+    font-size: 12px;
+    background-color: transparent;
+}

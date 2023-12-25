@@ -1,0 +1,4 @@
+.systData {
+    display: flex;
+    flex-direction: column;
+}

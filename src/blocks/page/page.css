@@ -1,0 +1,21 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-width: 320px;
+  max-width: 1280px;
+  min-height: 100vh;
+  margin: 0 auto 0;
+  font-family: Inter, Arial, sans-serif;
+  color: black;
+}
+
+.navbtn {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media screen and (max-width:550px) {
+  .page {
+    padding: 28px 0 36px;
+  }
+}
