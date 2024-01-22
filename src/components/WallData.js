@@ -1,145 +1,89 @@
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import SecondLayer from './SecondLayer';
+import FirstLayer from './FirstLayer';
+import Concrete from './Concrete';
+import Brick from './Brick';
 
 export default function WallData(props) {
   const navigate = useNavigate();
 
+  const wall = () => {
+    if (props.isBuildingType == 1)
+      return (
+        <Concrete
+          onConcreteThickness={props.onConcreteThickness}
+          onConcreteDensity={props.onConcreteDensity}
+          onConcreteHeat={props.onConcreteHeat}
+          onConcreteVapor={props.onConcreteVapor}
+          onConcreteAir={props.onConcreteAir}
+          isConcreteSpHeat={props.isConcreteSpHeat}
+          onConcreteSpHeat={props.onConcreteSpHeat}
+        />
+      );
+    if (props.isBuildingType == 2)
+      return (
+        <>
+          <Concrete
+            onConcreteThickness={props.onConcreteThickness}
+            onConcreteDensity={props.onConcreteDensity}
+            onConcreteHeat={props.onConcreteHeat}
+            onConcreteVapor={props.onConcreteVapor}
+            onConcreteAir={props.onConcreteAir}
+            isConcreteSpHeat={props.isConcreteSpHeat}
+            onConcreteSpHeat={props.onConcreteSpHeat}
+          />
+          <Brick
+            onAddFirstLayer={props.onAddFirstLayer}
+            isFirstLayer={props.isFirstLayer}
+            onBrickThickness={props.onBrickThickness}
+            onBrickDensity={props.onBrickDensity}
+            onBrickHeat={props.onBrickHeat}
+            onBrickVapor={props.onBrickVapor}
+            onBrickAir={props.onBrickAir}
+          />
+        </>
+      );
+    if (props.isBuildingType == 3)
+      return (
+        <Brick
+          onAddFirstLayer={props.onAddFirstLayer}
+          isFirstLayer={props.isFirstLayer}
+          onBrickThickness={props.onBrickThickness}
+          onBrickDensity={props.onBrickDensity}
+          onBrickHeat={props.onBrickHeat}
+          onBrickVapor={props.onBrickVapor}
+          onBrickAir={props.onBrickAir}
+        />
+      );
+  };
+
   return (
     <div>
       <div className="wallData">
-        <div className="wallInput">
-          <div className="wallInputList">
-            <h3 className="wallInputHeader">Железобетон</h3>
-            <div className="wallInputUnit">
-              <li>Толщина, мм</li>
-              <input className="wallInputValue"></input>
-            </div>
-            <div className="wallInputUnit">
-              <li>
-                Плотность, кг/м<sup>3</sup>
-              </li>
-              <input className="wallInputValue"></input>
-            </div>
-            <div className="wallInputUnit">
-              <li>
-                Теплопроводность, Вт/м<sup>2</sup>С<sup>o</sup>
-              </li>
-              <input className="wallInputValue"></input>
-            </div>
-            <div className="wallInputUnit">
-              <li>
-                Паропроницаемость, мг/м<sup>2</sup>чПа
-              </li>
-              <input className="wallInputValue"></input>
-            </div>
-            <div className="wallInputUnit">
-              <li>
-                Воздухороницаемость, м<sup>2</sup>чПа/кг
-              </li>
-              <input className="wallInputValue"></input>
-            </div>
-            <div className="wallInputSP">
-              <Form>
-                <Form.Check // prettier-ignore
-                  type="switch"
-                  id="first-switch"
-                  label="учитывать СП 50.133300.2012"
-                />
-              </Form>
-            </div>
-          </div>
-        </div>
-        <div className="wallInput">
-          <div className="wallInputList">
-            <h3 className="wallInputHeader">Кладка</h3>
-            <div className="wallInputUnit">
-              <li>Толщина, мм</li>
-              <input className="wallInputValue"></input>
-            </div>
-            <div className="wallInputUnit">
-              <li>
-                Плотность, кг/м<sup>3</sup>
-              </li>
-              <input className="wallInputValue"></input>
-            </div>
-            <div className="wallInputUnit">
-              <li>
-                Теплопроводность, Вт/м<sup>2</sup>С<sup>o</sup>
-              </li>
-              <input className="wallInputValue"></input>
-            </div>
-            <div className="wallInputUnit">
-              <li>
-                Паропроницаемость, мг/м<sup>2</sup>чПа
-              </li>
-              <input className="wallInputValue"></input>
-            </div>
-            <div className="wallInputUnit">
-              <li>
-                Воздухороницаемость, м<sup>2</sup>чПа/кг
-              </li>
-              <input className="wallInputValue"></input>
-            </div>
-            <div className="wallInputSP">
-              <Form>
-                <Form.Check // prettier-ignore
-                  type="switch"
-                  id="second-switch"
-                  label="учитывать СП 50.133300.2012"
-                />
-              </Form>
-            </div>
-          </div>
-        </div>
-        <div className="wallInput">
-          <div className="wallInputList">
-            <button className="wallCloseBtn" />
-            <h3 className="wallInputHeader">Утеплитель</h3>
-            <div className="wallInputUnit">
-              <li>Толщина, мм</li>
-              <input className="wallInputValue"></input>
-            </div>
-            <div className="wallInputUnit">
-              <li>
-                Плотность, кг/м<sup>3</sup>
-              </li>
-              <input className="wallInputValue"></input>
-            </div>
-            <div className="wallInputUnit">
-              <li>
-                Теплопроводность, Вт/м<sup>2</sup>С<sup>o</sup>
-              </li>
-              <input className="wallInputValue"></input>
-            </div>
-            <div className="wallInputUnit">
-              <li>
-                Паропроницаемость, мг/м<sup>2</sup>чПа
-              </li>
-              <input className="wallInputValue"></input>
-            </div>
-            <div className="wallInputUnit">
-              <li>
-                Воздухороницаемость, м<sup>2</sup>чПа/кг
-              </li>
-              <input className="wallInputValue"></input>
-            </div>
-            <div className="wallInputSP">
-              <Form>
-                <Form.Check // prettier-ignore
-                  type="switch"
-                  id="third-switch"
-                  label="учитывать СП 50.133300.2012"
-                />
-              </Form>
-
-              <button className="wallAddIns" type="button" onClick={props.onAdd}>
-                Добавить слой утеплителя
-              </button>
-            </div>
-          </div>
-          {props.isSecondLayer ? <SecondLayer /> : null}
-        </div>
+        {wall()}
+        {props.isFirstLayer ? (
+          <FirstLayer
+            onDelete={props.onDeleteFirstLayer}
+            onAddSecondLayer={props.onAddSecondLayer}
+            isSecondLayer={props.isSecondLayer}
+            onInsThickness={props.onInsThickness}
+            onInsDensity={props.onInsDensity}
+            onInsHeat={props.onInsHeat}
+            onInsVapor={props.onInsVapor}
+            onInsAir={props.onInsAir}
+          />
+        ) : null}
+        {props.isSecondLayer ? (
+          <SecondLayer
+            onDelete={props.onDeleteSecondLayer}
+            onSecondInsThickness={props.onSecondInsThickness}
+            onSecondInsDensity={props.onSecondInsDensity}
+            onSecondInsHeat={props.onSecondInsHeat}
+            onSecondInsVapor={props.onSecondInsVapor}
+            onSecondInsAir={props.onSecondInsAir}
+          />
+        ) : null}
       </div>
       <div className="navbnt position-relative mt-3 mb-3">
         <Button

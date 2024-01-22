@@ -1,35 +1,27 @@
 import Form from 'react-bootstrap/Form';
-import frame from '../images/frame building.jpg';
 import Row from 'react-bootstrap/Row';
-import Cities from './Cities';
+import { cities } from './cities';
 import Stack from 'react-bootstrap/Stack';
 import { Button, Col, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { Tooltip } from 'react-tooltip';
 
-export default function ObjData() {
+export default function ObjData(props) {
   const navigate = useNavigate();
 
-  const [tValue, setTValue] = useState(20);
-  const [hValue, setHValue] = useState(50);
-  const [tempJan, setTempJan] = useState('');
-  const [tempHeat, setTempHeat] = useState('');
-  const [timeHeat, setTimeHeat] = useState('');
-  const [humidity, setHumidity] = useState('');
-  const [windSpeed, setWindSpeed] = useState('');
-  const [tempMax, setTempMax] = useState('');
   const [cityValue, setCityValue] = useState('');
-
-  const cities = Cities();
 
   const cityList = cities.map((city, i) => {
     return <option value={i}>{city.c}</option>;
   });
 
-  const cityPropList = cities.find((city, i) => cityValue === i);
+  const cityPropList = cities.find((city, i) => (i == cityValue ? city : null));
+
+  props.onCityProp(cityPropList);
 
   return (
-    <div>
+    <div className="objPage">
       <Row className="mb-5 mt-3">
         <Col>
           <Form.Control placeholder="Название объекта" />
@@ -42,24 +34,32 @@ export default function ObjData() {
         <Col>
           <div className="objData">
             <div className="objData__list">
-              <Form.Select className="mb-3" onChange={(changeEvent) => setCityValue(changeEvent.target.value)}>
+              <Form.Select
+                className="mb-3"
+                id="city"
+                onChange={(changeEvent) => setCityValue(changeEvent.target.value)}
+              >
                 <option>Город строительства</option>
                 {cityList}
               </Form.Select>
-              <Form.Select className="mb-3" aria-label="Default select example">
+              <Form.Select className="mb-3" id="building-aim" onChange={props.onBuildingAim}>
                 <option>Назначение здания</option>
                 <option value="1">Жилое</option>
                 <option value="2">Лечебное</option>
                 <option value="3">Коммерческое</option>
               </Form.Select>
-              <Form.Select className="mb-3" aria-label="Default select example">
+              <Form.Select className="mb-4 " id="building-type" onChange={props.onBuildingType}>
                 <option>Тип конструкции</option>
                 <option value="1">Монолитная</option>
                 <option value="2">Монолитно-каркасная</option>
                 <option value="3">Безкаркасная</option>
               </Form.Select>
+              {props.isBuildingType == 2 ? (
+                <Form.Check className="obj-data__check" label="Есть стены из железобетона" />
+              ) : null}
+
               <Form.Label>
-                Температура внутреннего воздуха: {tValue} <sup>o</sup>C
+                Температура внутреннего воздуха: {props.isTemp} <sup>o</sup>C
               </Form.Label>
               <Form.Range
                 className="mb-3"
@@ -67,33 +67,43 @@ export default function ObjData() {
                 min="16"
                 max="26"
                 step="1"
-                value={tValue}
-                onChange={(changeEvent) => setTValue(changeEvent.target.value)}
+                onChange={props.onTemp}
+                id="temp-in"
               />
-              <Form.Label className="letter">Влажность внутреннего воздуха: {hValue} %</Form.Label>
-              <Form.Range
-                defaultValue="50"
-                min="35"
-                max="65"
-                step="5"
-                value={hValue}
-                onChange={(changeEvent) => setHValue(changeEvent.target.value)}
-              />
+              <Form.Label className="letter">Влажность внутреннего воздуха: {props.isHumidity} %</Form.Label>
+              <Form.Range defaultValue="50" min="35" max="65" step="5" onChange={props.onHumidity} id="humid-in" />
+              <Form.Label htmlFor="mr" data-tooltip-id="mr-tooltip" data-tooltip-content="вот така хуйня">
+                Mr
+                <Tooltip id="mr-tooltip" />
+              </Form.Label>
+
+              <Form.Control id="mr" defaultValue="0.63" onChange={props.onMr} />
             </div>
           </div>
         </Col>
         <Col>
-          <Container>
+          <Container className="container">
             <p>Расчетные параметры атмосферы</p>
             <Stack gap={0}>
               <div className="p-2">
-                {'Температура наиболее холодной пятидневки обеспеченностью 0,92: ' + cityPropList}
+                {'Температура наиболее холодной пятидневки обеспеченностью 0,92: ' + cityPropList.t}
+                <sup>o</sup>C
               </div>
-              <div className="p-2">{'Средняя температура наиболее холодного месяца: ' + tempJan}</div>
-              <div className="p-2">{'Средняя температура отопительного периода: ' + tempHeat}</div>
-              <div className="p-2">{'Продолжительсность отопительного периода: ' + timeHeat}</div>
-              <div className="p-2">{'Относительная влажность воздуха: ' + humidity}</div>
-              <div className="p-2">{'Максимальная из средних скоростей по румбам за январь: ' + windSpeed}</div>
+              <div className="p-2">
+                {'Средняя температура наиболее холодного месяца: ' + cityPropList.tm} <sup>o</sup>C
+              </div>
+              <div className="p-2">
+                {`Средняя температура отопительного периода: ${props.isHeatTemp}`}
+                <sup>o</sup>C
+              </div>
+              <div className="p-2">
+                {`Продолжительсность отопительного периода: ${props.isHeatLength}`}
+                сут
+              </div>
+              <div className="p-2">{'Относительная влажность воздуха: ' + cityPropList.w} %</div>
+              <div className="p-2">
+                {'Максимальная из средних скоростей по румбам за январь: ' + cityPropList.v} м/с
+              </div>
             </Stack>
           </Container>
         </Col>
@@ -115,6 +125,7 @@ export default function ObjData() {
           onClick={() => {
             navigate('/walldata');
           }}
+          onSubmit={props.onConcreteSpHeat()}
         >
           Далее
         </Button>

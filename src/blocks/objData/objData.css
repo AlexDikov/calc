@@ -2,6 +2,11 @@
     display: flex;
     justify-content: space-between;
     padding-right: 100px;
+    height: 50vh;
+}
+
+.objPage {
+    height: 100%;
 }
 
 .objData__img {
@@ -15,7 +20,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 327px;
+    width: 367px;
 }
 
 .objData__name {
@@ -26,4 +31,17 @@
 
 .letter{
     letter-spacing: .03rem;
+}
+
+.container {
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 1px 1px 11px 1px rgba(34, 60, 80, 0.2);
+    width: max-content;
+}
+
+.obj-data__check{
+    position: absolute;
+    top: 395px;
+    font-size: 13px
 }

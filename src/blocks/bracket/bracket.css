@@ -1,0 +1,11 @@
+.bracket-box{
+    border-radius: 5px;
+    padding-left: 70px;
+   padding-top: 15px;
+    margin: 10px;
+    position: relative;
+    box-shadow: 1px 1px 11px 1px rgba(34, 60, 80, 0.2);
+
+
+}
+

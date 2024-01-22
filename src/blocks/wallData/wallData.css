@@ -1,19 +1,17 @@
 .wallData {
     display: flex;
     margin-top: 100px;
-    max-height: 100vh;
+    height: 50vh;
     justify-content: center;
 }
 
 .wallInput {
-    border: 2px;
     border-radius: 10px;
-    border-color: black;
-    background-color: rgb(246, 246, 246);
     padding: 20px;
     max-width: 1fr;
     margin: 10px;
     position: relative;
+    box-shadow: 1px 1px 11px 1px rgba(34, 60, 80, 0.2);
 }
 
 .wallInputList {
@@ -22,6 +20,7 @@
     flex-direction: column;
     height: 300px;
     justify-content: space-between;
+    font-size: 11px;
 }
 
 .wallInputUnit {
@@ -33,17 +32,25 @@
     width: 60px;
     border: none;
     border-bottom: 1px solid;
-    border-color: rgb(165, 165, 165);
+    border-color: rgb(216, 216, 216);
     margin-left: 10px;
-    background-color: rgb(246, 246, 246);
+    
 }
 
 .wallInputValue:hover {
-    background-color: rgb(243, 241, 241);
+    background-color: rgb(249, 247, 247);
 }
 
 .wallInputHeader {
     align-self: center;
+    position: relative;
+}
+
+.wallInputSub {
+    font-size: 10px;
+    position: absolute;
+    top: 30px;
+    left: 45px
 }
 
 .wallInputSP {
@@ -72,4 +79,17 @@
     border: none;
     font-size: 12px;
     background-color: transparent;
+}
+
+.wall-font {
+    font-size: 12px;
+}
+
+.wall-p {
+    position: relative;
+}
+
+.wall-subp {
+    position: absolute;
+    top: 15px
 }

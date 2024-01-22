@@ -2,32 +2,27 @@ import { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { materials } from './materials';
 
-export default function SecondLayer(props) {
-  function handleDeleteClick() {
-    props.onDelete();
-  }
-  const [secondInsSp, setSecondInsSp] = useState(false);
+export default function Brick(props) {
+  const [brickSp, setBrickSp] = useState(false);
 
   const materialList = materials.map((item, i) => {
-    if (item.u) return <option value={i}>{item.u}</option>;
+    if (item.n) return <option value={i}>{item.n}</option>;
   });
 
-  const toggleSecondIns = () => setSecondInsSp((value) => !value);
+  const densityList = materials.find((item, i) => (i == props.isBrickDensity ? item.d : null));
 
+  const toggleBrick = () => setBrickSp((value) => !value);
   return (
     <div className="wallInput">
       <div className="wallInputList">
-        <button className="wallCloseBtn" onClick={handleDeleteClick} />
-        <h3 className="wallInputHeader">
-          Утеплитель<p className="wallInputSub">верхний слой</p>
-        </h3>
-        {secondInsSp ? (
+        <h3 className="wallInputHeader">Кладка</h3>
+        {brickSp ? (
           <div>
-            <Form.Select className="mb-3 wall-font" id="second-ins-type" onChange={props.onBuildingType}>
+            <Form.Select className="mb-3 wall-font" id="brick-type" onChange={props.onBuildingType}>
               <option>Тип заполнения</option>
               {materialList}
             </Form.Select>
-            <Form.Select className="mt-3 w-50 wall-font " id="second-ins-sp-d">
+            <Form.Select className="mt-3 w-50 wall-font " id="brick-sp-d">
               <option>
                 Плотность, кг/м<sup>3</sup>
               </option>
@@ -38,9 +33,9 @@ export default function SecondLayer(props) {
           <li className="wall-p">
             Толщина<li className="wall-subp">мм</li>
           </li>
-          <input className="wallInputValue" id="second-ins-t" onChange={props.onSecondInsThickness}></input>
+          <input className="wallInputValue" onChange={props.onBrickThickness}></input>
         </div>
-        {secondInsSp ? null : (
+        {brickSp ? null : (
           <div className="wallInputUnit">
             <li className="wall-p">
               Плотность
@@ -48,7 +43,7 @@ export default function SecondLayer(props) {
                 кг/м<sup>3</sup>
               </li>
             </li>
-            <input className="wallInputValue" id="second-ins-d" onChange={props.onSecondInsDensity}></input>
+            <input className="wallInputValue" id="brick-d" onChange={props.onBrickDensity}></input>
           </div>
         )}
         <div className="wallInputUnit">
@@ -58,11 +53,7 @@ export default function SecondLayer(props) {
               Вт/м<sup>2</sup>С<sup>o</sup>
             </li>
           </li>
-          {secondInsSp ? (
-            5
-          ) : (
-            <input className="wallInputValue" id="second-ins-h" onChange={props.onSecondInsHeat}></input>
-          )}
+          {brickSp ? 5 : <input className="wallInputValue" id="brick-h" onChange={props.onBrickHeat}></input>}
         </div>
         <div className="wallInputUnit">
           <li className="wall-p">
@@ -71,11 +62,7 @@ export default function SecondLayer(props) {
               мг/м<sup>2</sup>чПа
             </li>
           </li>
-          {secondInsSp ? (
-            5
-          ) : (
-            <input className="wallInputValue" id="second-ins-v" onChange={props.onSecondInsVapor}></input>
-          )}
+          {brickSp ? 5 : <input className="wallInputValue" id="brick-v" onChange={props.onBrickVapor}></input>}
         </div>
         <div className="wallInputUnit">
           <li className="wall-p">
@@ -84,21 +71,22 @@ export default function SecondLayer(props) {
               м<sup>2</sup>чПа/кг
             </li>
           </li>
-          {secondInsSp ? (
-            5
-          ) : (
-            <input className="wallInputValue" id="second-ins-a" onChange={props.onSecondInsAir}></input>
-          )}
+          {brickSp ? 5 : <input className="wallInputValue" id="brick-a" onChange={props.onBrickAir}></input>}
         </div>
         <div className="wallInputSP">
           <Form>
             <Form.Check // prettier-ignore
               type="switch"
-              id="second-ins-sp"
+              id="brick-sp"
               label="учитывать СП 50.133300.2012"
-              onChange={toggleSecondIns}
+              onChange={toggleBrick}
             />
           </Form>
+          {props.isFirstLayer ? null : (
+            <button className="wallAddIns" type="button" onClick={props.onAddFirstLayer}>
+              Добавить слой утеплителя
+            </button>
+          )}
         </div>
       </div>
     </div>
