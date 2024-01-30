@@ -1,20 +1,53 @@
 import { useNavigate } from 'react-router-dom';
 import Bracket from './Bracket';
 import { Button } from 'react-bootstrap';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import React from 'react';
 
 export default function BracketData(props) {
   const navigate = useNavigate();
   const [addBracket, setAddBracket] = useState([]);
-  //useEffect(() => props.onBracketType(), []);
 
+  const uniqueKey = Math.random();
   function addBracketInput() {
-    setAddBracket([...addBracket, <Bracket />]);
+    const newKey = Math.random();
+    setAddBracket((prevBrackets) => [
+      ...prevBrackets,
+      React.cloneElement(<Bracket />, {
+        key: newKey,
+        ukey: uniqueKey,
+        isSecondLayer: props.isSecondLayer,
+        isInsThickness: props.isInsThickness,
+        isSecondInsThickness: props.isSecondInsThickness,
+        isInsHeat: props.isInsHeat,
+        isSecondInsHeat: props.isSecondInsHeat,
+        isBuildingType: props.isBuildingType,
+        isConcreteHeat: props.isConcreteHeat,
+        isBracket: props.isBracket,
+        isBrickHeat: props.isBrickHeat,
+        onBracket: props.onBracket,
+        onBracketResult: props.onBracketResult,
+      }),
+    ]);
   }
+
   return (
     <div className="bracketData">
-      <Bracket onBracketResult={props.onBracketResult} isArrayType={props.isArrayType} />
-
+      <Bracket
+        ukey={132}
+        isSecondLayer={props.isSecondLayer}
+        isInsThickness={props.isInsThickness}
+        isSecondInsThickness={props.isSecondInsThickness}
+        isInsHeat={props.isInsHeat}
+        isSecondInsHeat={props.isSecondInsHeat}
+        isBuildingType={props.isBuildingType}
+        isConcreteHeat={props.isConcreteHeat}
+        isBracket={props.isBracket}
+        isBrickHeat={props.isBrickHeat}
+        onBracket={props.onBracket}
+        onBracketResult={props.onBracketResult}
+      />
+      {addBracket}
       <button className="add-bracket" onClick={addBracketInput}></button>
       <div className="navbnt position-relative mt-3 mb-3">
         <Button

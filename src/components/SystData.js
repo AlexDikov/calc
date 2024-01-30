@@ -4,10 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import winOne from '../images/win1.png';
 import winTwo from '../images/win2.png';
 import winThee from '../images/win3.png';
-import HeatLossCalc from './HeatLossCalc';
+
+import DCalc from './DCalc';
+import LinearLossCalc from './LinearLossCalc';
 
 export default function SystData(props) {
-  useEffect(() => props.onWindowType(), []);
+  // const [arrayType, setArrayType] = useState();
+  // useEffect(() => {
+  //   setArrayType('windows');
+  // }, [setArrayType]);
+
   const navigate = useNavigate();
 
   const [windowHeight, setWindowHeight] = useState('1');
@@ -146,13 +152,18 @@ export default function SystData(props) {
           Далее
         </Button>
       </div>
-      <HeatLossCalc
+      <LinearLossCalc
         isWindowHeight={windowHeight}
         isWindowDepth={windowDepth}
-        isArrayType={props.isArrayType}
-        wallValue="1"
-        insValue="1.6"
         onWindowHeatLoss={props.onWindowHeatLoss}
+        isSecondLayer={props.isSecondLayer}
+        isInsThickness={props.isInsThickness}
+        isSecondInsThickness={props.isSecondInsThickness}
+        isInsHeat={props.isInsHeat}
+        isSecondInsHeat={props.isSecondInsHeat}
+        isBuildingType={props.isBuildingType}
+        isConcreteHeat={props.isConcreteHeat}
+        isBrickHeat={props.isBrickHeat}
       />
     </div>
   );

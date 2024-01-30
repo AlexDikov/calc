@@ -13,23 +13,31 @@ export default function CoverData(props) {
   return (
     <div>
       <div>
-        <SystInput text="Ширина вентилируемого зазора на входе, мм" onVentIn={props.onVentIn} />
-        <SystInput text="Средняя ширина вентилируемого зазора, мм" onVentIn={props.onVentMed} />
-        <SystInput text="Ширина вентилируемого зазора на выходе, мм" onVentIn={props.onVentOut} />
-        <SystInput text="Высота наибольшего зазора, м" onVentIn={props.onVentHeigth} />
+        <SystInput text="Ширина вентилируемого зазора на входе, мм" method={props.onVentIn} />
+        <SystInput text="Средняя ширина вентилируемого зазора, мм" method={props.onVentMed} />
+        <SystInput text="Ширина вентилируемого зазора на выходе, мм" method={props.onVentOut} />
+        <SystInput text="Высота наибольшего зазора, м" method={props.onVentHeight}>
+          <button
+            className="i-btn"
+            data-bs-toggle="tooltip"
+            data-bs-placement="right"
+            title="Высота наибольшего неприрывного участка между входным и выходным зазорами"
+          ></button>
+        </SystInput>
+        <SystInput text="Высота объекта, м" method={props.onHeight} />
         <Row>
           <Form.Check className="mt-3 ms-2" label="Своя облицовка" onChange={props.onOwnCover}></Form.Check>
           {props.isOwnCover ? (
             <Form.Select className="w-25 ms-2" type="text">
               <option>Тип облицовки</option>
-              <option value="1">Алюминий</option>
-              <option value="2">Гранит, гнейс, базальт</option>
-              <option value="3">Известняк</option>
-              <option value="4">Клинкер</option>
-              <option value="5">Медь</option>
-              <option value="6">Мрамор</option>
-              <option value="7">Стекло</option>
-              <option value="8">Фиброцемент</option>
+              <option value={{ r: 0.001, c: 0.05, l: 221 }}>Алюминий</option>
+              <option value={{ r: 0.008, c: 5.3, l: 3.49 }}>Гранит, гнейс, базальт</option>
+              <option value={{ r: 0.06, c: 5.3, l: 1.28 }}>Известняк</option>
+              <option value={{ r: 0.11, c: 5.3, l: 0.81 }}>Клинкер</option>
+              <option value={{ r: 0.001, c: 0.05, l: 407 }}>Медь</option>
+              <option value={{ r: 0.008, c: 5.3, l: 2.91 }}>Мрамор</option>
+              <option value={{ r: 0.001, c: 5.3, l: 0.76 }}>Стекло</option>
+              <option value={{ r: 0.03, c: 5.3, l: 0.52 }}>Фиброцемент</option>
             </Form.Select>
           ) : (
             <Form.Control className="w-25 ms-2" placeholder="Название облицовки" />
@@ -57,7 +65,7 @@ export default function CoverData(props) {
             </Col>
           </Row>
         ) : (
-          <SystInput text="Теплопроводность облицовки, Вт/м&#178;С&#176;" />
+          <SystInput text="Теплопроводность облицовки, Вт/м&#178;С&#176;" method={props.onCoverHeat} />
         )}
         {props.isOwnCover ? (
           <Row>
@@ -87,7 +95,7 @@ export default function CoverData(props) {
           variant="outline-secondary"
           size="lg"
           onClick={() => {
-            navigate('/final');
+            navigate('/pz');
           }}
         >
           Далее

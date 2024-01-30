@@ -82,11 +82,6 @@ export default function Brick(props) {
               onChange={toggleBrick}
             />
           </Form>
-          {props.isFirstLayer ? null : (
-            <button className="wallAddIns" type="button" onClick={props.onAddFirstLayer}>
-              Добавить слой утеплителя
-            </button>
-          )}
         </div>
       </div>
     </div>

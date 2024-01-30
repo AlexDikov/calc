@@ -34,8 +34,6 @@ export default function WallData(props) {
             onConcreteSpHeat={props.onConcreteSpHeat}
           />
           <Brick
-            onAddFirstLayer={props.onAddFirstLayer}
-            isFirstLayer={props.isFirstLayer}
             onBrickThickness={props.onBrickThickness}
             onBrickDensity={props.onBrickDensity}
             onBrickHeat={props.onBrickHeat}
@@ -47,8 +45,6 @@ export default function WallData(props) {
     if (props.isBuildingType == 3)
       return (
         <Brick
-          onAddFirstLayer={props.onAddFirstLayer}
-          isFirstLayer={props.isFirstLayer}
           onBrickThickness={props.onBrickThickness}
           onBrickDensity={props.onBrickDensity}
           onBrickHeat={props.onBrickHeat}
@@ -62,18 +58,17 @@ export default function WallData(props) {
     <div>
       <div className="wallData">
         {wall()}
-        {props.isFirstLayer ? (
-          <FirstLayer
-            onDelete={props.onDeleteFirstLayer}
-            onAddSecondLayer={props.onAddSecondLayer}
-            isSecondLayer={props.isSecondLayer}
-            onInsThickness={props.onInsThickness}
-            onInsDensity={props.onInsDensity}
-            onInsHeat={props.onInsHeat}
-            onInsVapor={props.onInsVapor}
-            onInsAir={props.onInsAir}
-          />
-        ) : null}
+
+        <FirstLayer
+          onAddSecondLayer={props.onAddSecondLayer}
+          isSecondLayer={props.isSecondLayer}
+          onInsThickness={props.onInsThickness}
+          onInsDensity={props.onInsDensity}
+          onInsHeat={props.onInsHeat}
+          onInsVapor={props.onInsVapor}
+          onInsAir={props.onInsAir}
+        />
+
         {props.isSecondLayer ? (
           <SecondLayer
             onDelete={props.onDeleteSecondLayer}
@@ -90,7 +85,7 @@ export default function WallData(props) {
           variant="outline-secondary"
           size="lg"
           onClick={() => {
-            navigate('/objdata');
+            navigate('/');
           }}
         >
           Назад
