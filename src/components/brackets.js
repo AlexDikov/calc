@@ -1,5 +1,3 @@
-import { Matrix } from 'mathjs';
-
 export const brackets = [
   { a: { name: 'MFT-MF HS', value: 1 }, b: { name: 'MFT-MF HS', value: 2 } },
   { a: { name: 'MFT-MF S', value: 3 }, b: { name: 'MFT-MF S', value: 4 } },

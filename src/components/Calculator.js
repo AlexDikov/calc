@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import DkCalc from './DkCalc';
 
 export default function Calculator({

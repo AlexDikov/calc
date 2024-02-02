@@ -5,7 +5,6 @@ import winOne from '../images/win1.png';
 import winTwo from '../images/win2.png';
 import winThee from '../images/win3.png';
 
-import DCalc from './DCalc';
 import LinearLossCalc from './LinearLossCalc';
 
 export default function SystData(props) {

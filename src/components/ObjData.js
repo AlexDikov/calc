@@ -4,8 +4,6 @@ import { cities } from './cities';
 import Stack from 'react-bootstrap/Stack';
 import { Button, Col, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { Tooltip } from 'react-tooltip';
 
 export default function ObjData(props) {
   const navigate = useNavigate();
