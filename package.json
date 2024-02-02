@@ -2,7 +2,7 @@
   "name": "calc",
   "version": "0.1.0",
   "private": true,
-  "homepage":"https://alexdikov.github.io/",
+  "homepage":"https://alexdikov.github.io/calc",
   "dependencies": {
     "@floating-ui/react": "^0.26.6",
     "@testing-library/jest-dom": "^5.17.0",
