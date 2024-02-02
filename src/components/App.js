@@ -1,4 +1,4 @@
-import { Route, Router, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Final from './Final';
 import Header from './Header';
 import ObjData from './ObjData';
@@ -250,9 +250,10 @@ export default function App(props) {
   const handleOwnCover = () => setOwnCover((value) => !value);
 
   return (
-    <div className="page">
-      <Header />
-      <Router>
+    <Router>
+      <div className="page">
+        <Header />
+
         <Routes>
           <Route
             path="/"
@@ -427,7 +428,7 @@ export default function App(props) {
             }
           ></Route>
         </Routes>
-      </Router>
-    </div>
+      </div>
+    </Router>
   );
 }
