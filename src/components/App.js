@@ -251,7 +251,6 @@ export default function App(props) {
   return (
     <div className="page">
       <Header />
-
       <Routes>
         <Route
           path="/"
