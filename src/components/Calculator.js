@@ -309,7 +309,7 @@ export default function Calculator({
       <h2>Объект : ЖК "Дом", расположенный по адресу : г. Москва, ул. Уютная, стр. 12</h2>
       <br />
       <h5>1. Данные для расчета.</h5>
-      <p>
+      <div>
         Климатические данные района строительства: Климатические данные принимаются по СП 131.13330.2020; <br />-
         средняя температура наиболее холодной пятидневки, с обеспеченностью 0,92 = {isCityProp.t} °С, по табл.3.1;
         <br />- средняя температура наиболее холодного месяца = {isCityProp.tm} °С, по табл.5.1; <br />- средняя
@@ -448,52 +448,52 @@ export default function Calculator({
         оконных блоков принимаем характеристики этих узлов по таблице Г.33 приложения Г СП 230.1325800.2015{' '}
         {windowDepth()} и {windowHeight()}.
         <br />
-      </p>
-      <tr className="table">
-        <table className="table center-text">
-          <thead>
+      </div>
+
+      <table className="table center-text">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Элемент конструкции</th>
+            <th scope="col">Тип элемента конструкции</th>
+            <th scope="col">Удельный геометрический показатель</th>
+            <th scope="col">Удельные потери теплоты</th>
+            <th scope="col">
+              Удельный поток теплоты, обусловленный эл-том , <br />
+              Вт/(м² °С)
+            </th>
+            <th scope="col">Доля общего потока теплоты через фрагмент,%</th>
+          </tr>
+        </thead>
+        <tbody>
+          {isBuildingType !== 3 ? (
             <tr>
-              <th scope="col"></th>
-              <th scope="col">Элемент конструкции</th>
-              <th scope="col">Тип элемента конструкции</th>
-              <th scope="col">Удельный геометрический показатель</th>
-              <th scope="col">Удельные потери теплоты</th>
-              <th scope="col">
-                Удельный поток теплоты, обусловленный эл-том , <br />
-                Вт/(м² °С)
-              </th>
-              <th scope="col">Доля общего потока теплоты через фрагмент,%</th>
+              <th scope="row">1</th>
+              <td>Стена</td>
+              <td>Плоский</td>
+              <td>{isConcreteArea / (isConcreteArea + isBrickArea)}</td>
+              <td>{concreteQ}</td>
+              <td>{concreteQ * isConcreteArea}</td>
+              <td>@mdo</td>
             </tr>
-          </thead>
-          <tbody>
-            {isBuildingType !== 3 ? (
-              <tr>
-                <th scope="row">1</th>
-                <td>Стена</td>
-                <td>Плоский</td>
-                <td>{isConcreteArea / (isConcreteArea + isBrickArea)}</td>
-                <td>{concreteQ}</td>
-                <td>{concreteQ * isConcreteArea}</td>
-                <td>@mdo</td>
-              </tr>
-            ) : null}
-            {isBuildingType !== 1 ? (
-              <tr>
-                <th scope="row">1</th>
-                <td>Стена</td>
-                <td>Плоский</td>
-                <td>{isBrickArea / (isConcreteArea + isBrickArea)}</td>
-                <td>{brickQ}</td>
-                <td>{brickQ * isBrickArea}</td>
-                <td>@mdo</td>
-              </tr>
-            ) : null}
-            {brackets4()}
-          </tbody>
-        </table>
-      </tr>
+          ) : null}
+          {isBuildingType !== 1 ? (
+            <tr>
+              <th scope="row">1</th>
+              <td>Стена</td>
+              <td>Плоский</td>
+              <td>{isBrickArea / (isConcreteArea + isBrickArea)}</td>
+              <td>{brickQ}</td>
+              <td>{brickQ * isBrickArea}</td>
+              <td>@mdo</td>
+            </tr>
+          ) : null}
+          {brackets4()}
+        </tbody>
+      </table>
+
       <br />
-      <p>
+      <div>
         Осредненное по площади условное сопротивление теплопередаче стены с НФС R = 1/8,7 + {concreteQ} + {brickQ} +
         {insQ} + {secondInsQ} + 1/12 = {rRed} м²°С/Вт <br />
         Коэффициент теплотехнической однородности стены с НФС : r = {rRed}/{rCond0} = {r}
@@ -566,7 +566,7 @@ export default function Calculator({
         теплопередаче стены с НФС остается без изменений. Вывод: утепление рассматриваемого участка объекта ЖК "Дом" по
         адресу:г. Москва, ул. Уютная, стр. 12 с приведенным сопротивлением теплопередаче 1,79 м²˚С/Вт удовлетворяет
         условию теплотехнического расчета - приведенное сопротивление меньше требуемого, составляющего 3,85 м²˚С/Вт.
-      </p>
+      </div>
     </>
   );
 }

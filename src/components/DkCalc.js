@@ -1,4 +1,5 @@
 import { dk } from './dk';
+import { useEffect } from 'react';
 export default function DkCalc(props) {
   const ins = () => {
     let ins1, ins2;
@@ -55,65 +56,65 @@ export default function DkCalc(props) {
       return [ins1.l10, ins1.l11, ins2.l10, ins2.l11];
     }
   };
+  useEffect(() => {
+    const finalValue = () => {
+      const wallResult = wall();
 
-  const finalValue = () => {
-    const wallResult = wall();
+      const wallX1 = () => {
+        if (0.02 <= props.isK && props.isK < 0.04) return 0.02;
+        if (0.04 <= props.isK && props.isK < 0.06) return 0.04;
+        if (0.06 <= props.isK && props.isK < 0.08) return 0.06;
+        if (0.08 <= props.isK && props.isK < 0.1) return 0.08;
+        if (0.1 <= props.isK && props.isK < 0.12) return 0.1;
+        if (0.12 <= props.isK && props.isK < 0.14) return 0.12;
+        if (0.14 <= props.isK && props.isK < 0.16) return 0.14;
+        if (0.16 <= props.isK && props.isK < 0.18) return 0.16;
+        if (0.18 <= props.isK && props.isK < 0.2) return 0.18;
+      };
 
-    const wallX1 = () => {
-      if (0.02 <= props.isK && props.isK < 0.04) return 0.02;
-      if (0.04 <= props.isK && props.isK < 0.06) return 0.04;
-      if (0.06 <= props.isK && props.isK < 0.08) return 0.06;
-      if (0.08 <= props.isK && props.isK < 0.1) return 0.08;
-      if (0.1 <= props.isK && props.isK < 0.12) return 0.1;
-      if (0.12 <= props.isK && props.isK < 0.14) return 0.12;
-      if (0.14 <= props.isK && props.isK < 0.16) return 0.14;
-      if (0.16 <= props.isK && props.isK < 0.18) return 0.16;
-      if (0.18 <= props.isK && props.isK < 0.2) return 0.18;
+      const wallX2 = () => {
+        if (0.02 < props.isK && props.isK <= 0.04) return 0.04;
+        if (0.04 < props.isK && props.isK <= 0.06) return 0.06;
+        if (0.06 < props.isK && props.isK <= 0.08) return 0.08;
+        if (0.08 < props.isK && props.isK <= 0.1) return 0.1;
+        if (0.1 < props.isK && props.isK <= 0.12) return 0.12;
+        if (0.12 < props.isK && props.isK <= 0.14) return 0.14;
+        if (0.14 < props.isK && props.isK <= 0.16) return 0.16;
+        if (0.16 < props.isK && props.isK <= 0.18) return 0.18;
+        if (0.18 < props.isK && props.isK <= 0.2) return 0.2;
+      };
+      const insX1 = () => {
+        if (0.001 <= props.isD && props.isD < 0.005) return 0.001;
+        if (0.005 <= props.isD && props.isD < 0.01) return 0.005;
+        if (0.01 <= props.isD && props.isD < 0.015) return 0.01;
+        if (0.02 <= props.isD && props.isD < 0.03) return 0.02;
+        if (0.03 <= props.isD && props.isD < 0.04) return 0.03;
+        if (0.04 <= props.isD && props.isD < 0.06) return 0.04;
+        if (0.06 <= props.isD && props.isD < 0.08) return 0.06;
+        if (0.08 <= props.isD && props.isD < 0.1) return 0.08;
+        if (0.1 <= props.isD && props.isD < 0.12) return 0.1;
+      };
+
+      const insX2 = () => {
+        if (0.001 < props.isD && props.isD <= 0.005) return 0.005;
+        if (0.005 < props.isD && props.isD <= 0.01) return 0.01;
+        if (0.01 < props.isD && props.isD <= 0.015) return 0.015;
+        if (0.015 < props.isD && props.isD <= 0.02) return 0.02;
+        if (0.02 < props.isD && props.isD <= 0.03) return 0.03;
+        if (0.03 < props.isD && props.isD <= 0.04) return 0.04;
+        if (0.04 < props.isD && props.isD <= 0.06) return 0.06;
+        if (0.06 < props.isD && props.isD <= 0.08) return 0.08;
+        if (0.08 < props.isD && props.isD <= 0.1) return 0.1;
+        if (0.1 < props.isD && props.isD <= 0.12) return 0.12;
+      };
+
+      const pre1 = wallResult[0] + ((props.isK - wallX1()) * (wallResult[1] - wallResult[0])) / (wallX2() - wallX1());
+      const pre2 = wallResult[2] + ((props.isK - wallX1()) * (wallResult[3] - wallResult[2])) / (wallX2() - wallX1());
+
+      const final = pre1 + ((props.isD - insX1()) * (pre2 - pre1)) / (insX2() - insX1());
+
+      props.onDk(final);
     };
-
-    const wallX2 = () => {
-      if (0.02 < props.isK && props.isK <= 0.04) return 0.04;
-      if (0.04 < props.isK && props.isK <= 0.06) return 0.06;
-      if (0.06 < props.isK && props.isK <= 0.08) return 0.08;
-      if (0.08 < props.isK && props.isK <= 0.1) return 0.1;
-      if (0.1 < props.isK && props.isK <= 0.12) return 0.12;
-      if (0.12 < props.isK && props.isK <= 0.14) return 0.14;
-      if (0.14 < props.isK && props.isK <= 0.16) return 0.16;
-      if (0.16 < props.isK && props.isK <= 0.18) return 0.18;
-      if (0.18 < props.isK && props.isK <= 0.2) return 0.2;
-    };
-    const insX1 = () => {
-      if (0.001 <= props.isD && props.isD < 0.005) return 0.001;
-      if (0.005 <= props.isD && props.isD < 0.01) return 0.005;
-      if (0.01 <= props.isD && props.isD < 0.015) return 0.01;
-      if (0.02 <= props.isD && props.isD < 0.03) return 0.02;
-      if (0.03 <= props.isD && props.isD < 0.04) return 0.03;
-      if (0.04 <= props.isD && props.isD < 0.06) return 0.04;
-      if (0.06 <= props.isD && props.isD < 0.08) return 0.06;
-      if (0.08 <= props.isD && props.isD < 0.1) return 0.08;
-      if (0.1 <= props.isD && props.isD < 0.12) return 0.1;
-    };
-
-    const insX2 = () => {
-      if (0.001 < props.isD && props.isD <= 0.005) return 0.005;
-      if (0.005 < props.isD && props.isD <= 0.01) return 0.01;
-      if (0.01 < props.isD && props.isD <= 0.015) return 0.015;
-      if (0.015 < props.isD && props.isD <= 0.02) return 0.02;
-      if (0.02 < props.isD && props.isD <= 0.03) return 0.03;
-      if (0.03 < props.isD && props.isD <= 0.04) return 0.04;
-      if (0.04 < props.isD && props.isD <= 0.06) return 0.06;
-      if (0.06 < props.isD && props.isD <= 0.08) return 0.08;
-      if (0.08 < props.isD && props.isD <= 0.1) return 0.1;
-      if (0.1 < props.isD && props.isD <= 0.12) return 0.12;
-    };
-
-    const pre1 = wallResult[0] + ((props.isK - wallX1()) * (wallResult[1] - wallResult[0])) / (wallX2() - wallX1());
-    const pre2 = wallResult[2] + ((props.isK - wallX1()) * (wallResult[3] - wallResult[2])) / (wallX2() - wallX1());
-
-    const final = pre1 + ((props.isD - insX1()) * (pre2 - pre1)) / (insX2() - insX1());
-
-    props.onDk(final);
-  };
-
-  finalValue();
+    finalValue();
+  }, [props.isD, props.isK, props.onDk]);
 }
