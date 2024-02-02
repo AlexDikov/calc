@@ -7,49 +7,60 @@ export default function Bracket(props) {
   const [bracketType, setBracketType] = useState('');
   const [bracketWeight, setBracketWeight] = useState('');
   const [wallType, setWallType] = useState('');
+  const [result, setResult] = useState();
+  const [bracket, setBracket] = useState('MFT-MF HS');
+  const [bracketPcs, setBracketPcs] = useState('');
 
   const bracketList = brackets.map((list, i) => {
     if (bracketType && bracketWeight && list.c)
       return (
-        <option key={i} value={i}>
+        <option key={`c-${i}`} value={i}>
           {list.c.name}
         </option>
       );
     if (bracketType && !bracketWeight)
       return (
-        <option key={i} value={i}>
+        <option key={`a-${i}`} value={i}>
           {list.a.name}
         </option>
       );
     if (!bracketType && bracketWeight && list.d)
       return (
-        <option key={i} value={i}>
+        <option key={`d-${i}`} value={i}>
           {list.d.name}
         </option>
       );
     if (!bracketType && !bracketWeight)
       return (
-        <option key={i} value={i}>
+        <option key={`b-${i}`} value={i}>
           {list.b.name}
         </option>
       );
     return null;
   });
 
+  function handleBracket(e) {
+    setBracket(e.target.options[e.target.selectedIndex].text);
+  }
+  function handleBracketPcs(changeEvent) {
+    setBracketPcs(changeEvent.target.value);
+  }
+  const handleResult = (item) => {
+    setResult(item);
+    props.onBracketResult(item);
+  };
   const setAluminium = () => {
     setBracketType(true);
   };
   const setSteel = () => {
     setBracketType(false);
   };
-
   const setHeavy = () => {
     setBracketWeight(true);
   };
   const setLight = () => {
     setBracketWeight(false);
   };
-
   const setConcrete = () => {
     setWallType(true);
   };
@@ -118,7 +129,7 @@ export default function Bracket(props) {
             htmlFor={`${props.ukey}-b`}
             className="mt-2 w-75"
             id="bracket"
-            onChange={props.onBracket}
+            onChange={handleBracket}
           >
             <option>Тип кронштейна</option>
             {bracketList}
@@ -156,7 +167,7 @@ export default function Bracket(props) {
             className="w-50 mt-2"
             id="bracket-pcs"
             key={`${props.ukey}-pcs`}
-            onChange={props.onBracketPcs}
+            onChange={handleBracketPcs}
           />
         </Col>
       </Row>
@@ -165,8 +176,11 @@ export default function Bracket(props) {
         isArrayType={props.isArrayType}
         wallValue={props.wallValue}
         insValue={props.insValue}
-        isBracket={props.isBracket}
-        onBracketResult={props.onBracketResult}
+        isBracket={bracket}
+        isBracketPcs={bracketPcs}
+        isBracketType={bracketType}
+        isBracketWeight={bracketWeight}
+        onBracketResult={handleResult}
         isSecondLayer={props.isSecondLayer}
         isInsThickness={props.isInsThickness}
         isSecondInsThickness={props.isSecondInsThickness}

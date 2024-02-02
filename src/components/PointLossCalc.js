@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { bracketData } from './brackets';
 
 export default function PointLossCalc(props) {
-  const { isBracket, ukey } = props;
+  const { isBracket, ukey, isBracketPcs, isBracketType, isBracketWeight, isWallType } = props;
   useEffect(() => {
     const insValue = props.isSecondLayer
       ? 0.001 /
@@ -80,9 +80,17 @@ export default function PointLossCalc(props) {
 
       const final = pre1 + ((insValue - insX1()) * (pre2 - pre1)) / (insX2() - insX1());
 
-      props.onBracketResult({ ukey, final });
+      props.onBracketResult({
+        index: ukey,
+        value: final,
+        bracket: isBracket,
+        pcs: isBracketPcs,
+        weight: isBracketWeight,
+        type: isBracketType,
+        wall: isWallType,
+      });
     };
 
     finalValue();
-  }, [isBracket, ukey]);
+  }, [ukey, isBracket, isBracketPcs, isBracketType, isBracketWeight, isWallType]);
 }

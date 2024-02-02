@@ -35,3 +35,7 @@
 .i-btn:hover {
   opacity: 0.3;
 }
+
+.center-text {
+  text-align: center;
+}

@@ -17,7 +17,7 @@ export const brackets = [
     d: { name: 'MFT-RB L', value: 15 },
   },
   {
-    a: { name: 'MFT-MF HAB', value: 16 },
+    a: { name: 'MFT-RB HAB', value: 16 },
     b: { name: 'MFT-MF LH', value: 17 },
     c: { name: 'MFT-RB LH', value: 18 },
     d: { name: 'MFT-RB LH', value: 19 },

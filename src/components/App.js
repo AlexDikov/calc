@@ -11,9 +11,7 @@ import CoverData from './CoverData';
 import { FormDataProvider } from '../contexts/FormContext';
 
 export default function App(props) {
-  const [bracket, setBracket] = useState('MFT-MF HS');
-  const [bracketPcs, setBracketPcs] = useState(1);
-  const [bracketResult, setBracketResult] = useState([]);
+  const [bracketResult, setBracketResult] = useState({});
   const [brickAir, setBrickAir] = useState(1);
   const [brickArea, setBrickArea] = useState(1);
   const [brickDensity, setBrickDensity] = useState(1);
@@ -24,26 +22,27 @@ export default function App(props) {
   const [buildingType, setBuildingType] = useState(1);
 
   const [cityProp, setCityProp] = useState({
-    c: 'Агата',
-    t: -53,
-    tm: -34.7,
-    z8: 291,
-    t8: -16.6,
-    z10: 306,
-    t10: -15.3,
-    w: 75,
-    vm: 2.9,
-    v: 1.6,
-    s: '',
+    c: 'Москва',
+    t: -26,
+    tm: -7.8,
+    z8: 204,
+    t8: -2.2,
+    z10: 222,
+    t10: -1.3,
+    w: 84,
+    vm: 2,
+    v: 1.8,
+    s: 'Б',
   });
   const [cityValue, setCityValue] = useState(1);
+  const [concreteAir, setConcreteAir] = useState(1);
   const [concreteArea, setConcreteArea] = useState(1);
   const [concreteDensity, setConcreteDensity] = useState(1);
   const [concreteHeat, setConcreteHeat] = useState(2.04);
   const [concreteSpHeat, setConcreteSpHeat] = useState(2.04);
   const [concreteThickness, setConcreteThickness] = useState(0.1);
   const [concreteVapor, setConcreteVapor] = useState(1);
-  const [concreteAir, setConcreteAir] = useState(1);
+  const [concreteWall, setConcreteWall] = useState(false);
   const [coverData, setCoverData] = useState({ r: 0.001, c: 0.05, l: 221 });
   const [coverHeat, setCoverHeat] = useState(1);
   const [coverThickness, setCoverThickness] = useState(1);
@@ -70,24 +69,23 @@ export default function App(props) {
   const [secondInsVapor, setSecondInsVapor] = useState(1);
   const [vaporMembraneR, setVaporMembraneR] = useState(0.1);
   const [ventHeight, setVentHeight] = useState(20);
-  const [ventIn, setVentIn] = useState(20);
-  const [ventMed, setVentMed] = useState(20);
-  const [ventOut, setVentOut] = useState(20);
+  const [ventIn, setVentIn] = useState(0.02);
+  const [ventMed, setVentMed] = useState(0.02);
+  const [ventOut, setVentOut] = useState(0.02);
   const [windMembraneR, setWindMembraneR] = useState(0.1);
   const [windowLength, setWindowLength] = useState(1);
   const [windowHeatLoss, setWindowHeatLoss] = useState(1);
-  console.log(bracketResult);
+  const [windowHeight, setWindowHeight] = useState('1');
+  const [windowDepth, setWindowDepth] = useState('1');
+
   function handleAddSecondLayer() {
     setSecondLayer(true);
   }
-  function handleBracket(e) {
-    setBracket(e.target.options[e.target.selectedIndex].text);
-  }
-  function handleBracketPcs(value) {
-    setBracketPcs(value);
-  }
-  function handleBracketResult({ index, value }) {
-    setBracketResult((prevBracketResult) => prevBracketResult.map((item, i) => (i === index ? value : item)));
+  function handleBracketResult({ index, value, bracket, pcs, type, weight, wall }) {
+    setBracketResult((prevBracketResult) => ({
+      ...prevBracketResult,
+      [index]: { value, bracket, pcs, type, weight, wall },
+    }));
   }
   function handleBrickAir(changeEvent) {
     setBrickAir(changeEvent.target.value);
@@ -137,6 +135,9 @@ export default function App(props) {
   }
   function handleConcreteVapor(changeEvent) {
     setConcreteVapor(changeEvent.target.value);
+  }
+  function toggleConcreteWall() {
+    setConcreteWall(!concreteWall);
   }
   function handleCoverHeat(changeEvent) {
     setCoverHeat(changeEvent.target.value);
@@ -230,6 +231,12 @@ export default function App(props) {
   function handleWindowLength(changeEvent) {
     setWindowLength(changeEvent.target.value);
   }
+  function handleWindowHeight(changeEvent) {
+    setWindowHeight(changeEvent.target.value);
+  }
+  function handleWindowDepth(changeEvent) {
+    setWindowDepth(changeEvent.target.value);
+  }
   function handleWindMembraneR(changeEvent) {
     setWindMembraneR(changeEvent.target.value);
   }
@@ -260,8 +267,9 @@ export default function App(props) {
                 onBuildingAim={handleBuildingAim}
                 isBuildingType={buildingType}
                 onBuildingType={handleBuildingType}
-                onConcreteSpHeat={handleConcreteSpHeat}
                 onCityValue={handleCityValue}
+                onConcreteSpHeat={handleConcreteSpHeat}
+                onConcreteWall={toggleConcreteWall}
                 onInnerTemp={handleInnerTemp}
                 onHumidity={handleHumidity}
                 onMr={handleMr}
@@ -305,7 +313,6 @@ export default function App(props) {
             path="/systdata"
             element={
               <SystData
-                onWindowLength={handleWindowLength}
                 onBrickArea={handleBrickArea}
                 onConcreteArea={handleConcreteArea}
                 onGribDepth={handleGribDepth}
@@ -319,6 +326,9 @@ export default function App(props) {
                 isBuildingType={buildingType}
                 isConcreteHeat={concreteHeat}
                 isBrickHeat={brickHeat}
+                onWindowLength={handleWindowLength}
+                onWindowHeight={handleWindowHeight}
+                onWindowDepth={handleWindowDepth}
               />
             }
           ></Route>
@@ -326,7 +336,6 @@ export default function App(props) {
             path="/bracketdata"
             element={
               <BracketData
-                isBracket={bracket}
                 isBuildingType={buildingType}
                 isBrickHeat={brickHeat}
                 isConcreteHeat={concreteHeat}
@@ -335,8 +344,6 @@ export default function App(props) {
                 isSecondLayer={secondLayer}
                 isSecondInsThickness={secondInsThickness}
                 isSecondInsHeat={secondInsHeat}
-                onBracket={handleBracket}
-                onBracketPcs={handleBracketPcs}
                 onBracketResult={handleBracketResult}
               />
             }
@@ -364,8 +371,6 @@ export default function App(props) {
             path="/pz"
             element={
               <Calculator
-                isBracket={bracket}
-                isBracketPcs={bracketPcs}
                 isBracketResult={bracketResult}
                 isBrickArea={brickArea}
                 isBrickThickness={brickThickness}
@@ -374,6 +379,7 @@ export default function App(props) {
                 isBrickVapor={brickVapor}
                 isBrickAir={brickAir}
                 isBuildingAim={buildingAim}
+                isBuildingType={buildingType}
                 isHumidity={humidity}
                 isInnerTemp={innerTemp}
                 isConcreteAir={concreteAir}
@@ -383,6 +389,7 @@ export default function App(props) {
                 isConcreteThickness={concreteThickness}
                 isConcreteSpHeat={concreteSpHeat}
                 isConcreteVapor={concreteVapor}
+                isConcreteWall={concreteWall}
                 isCoverData={coverData}
                 isCoverHeat={coverHeat}
                 isCoverThickness={coverThickness}
@@ -411,6 +418,8 @@ export default function App(props) {
                 isWindMembraneR={windMembraneR}
                 isWindowLength={windowLength}
                 isWindowHeatLoss={windowHeatLoss}
+                isWindowHeight={windowHeight}
+                isWindowDepth={windowDepth}
                 onEgap={handleEgap}
                 onGobl={handleGobl}
                 onGu={handleGu}

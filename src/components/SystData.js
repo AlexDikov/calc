@@ -16,21 +16,12 @@ export default function SystData(props) {
 
   const navigate = useNavigate();
 
-  const [windowHeight, setWindowHeight] = useState('1');
-  const [windowDepth, setWindowDepth] = useState('1');
-
   const windowDepthPic = () => {
     if (props.isWindowDepth == 1) return winOne;
     if (props.isWindowDepth == 2) return winTwo;
     if (props.isWindowDepth == 3) return winThee;
   };
 
-  function handleWindowHeight(e) {
-    setWindowHeight(e.target.value);
-  }
-  function handleWindowDepth(e) {
-    setWindowDepth(e.target.value);
-  }
   return (
     <div>
       <div className="systData">
@@ -55,7 +46,7 @@ export default function SystData(props) {
             <Form.Control id="brick-area" className="w-25" onChange={props.onConcreteArea}></Form.Control>
           </Col>
           <Col>
-            <Form onChange={handleWindowDepth}>
+            <Form onChange={props.WindowDepth}>
               {['radio'].map((type) => (
                 <div key={`inline-${type}`} className="mb-3">
                   <Form.Check
@@ -93,7 +84,7 @@ export default function SystData(props) {
             <Form.Control id="grib-pcs" className="w-25" onChange={props.onGribPcs}></Form.Control>
           </Col>
           <Col>
-            <Form onChange={handleWindowHeight}>
+            <Form onChange={props.onWindowHeight}>
               {['radio'].map((type) => (
                 <div key={`inline-${type}`} className="mb-3">
                   <Form.Check
@@ -153,8 +144,8 @@ export default function SystData(props) {
         </Button>
       </div>
       <LinearLossCalc
-        isWindowHeight={windowHeight}
-        isWindowDepth={windowDepth}
+        isWindowHeight={props.isWindowHeight}
+        isWindowDepth={props.isWindowDepth}
         onWindowHeatLoss={props.onWindowHeatLoss}
         isSecondLayer={props.isSecondLayer}
         isInsThickness={props.isInsThickness}

@@ -85,7 +85,7 @@ export default function CoverData(props) {
           variant="outline-secondary"
           size="lg"
           onClick={() => {
-            navigate('/walldata');
+            navigate('/bracketdata');
           }}
         >
           Назад

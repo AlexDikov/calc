@@ -7,15 +7,14 @@ import React from 'react';
 export default function BracketData(props) {
   const navigate = useNavigate();
   const [addBracket, setAddBracket] = useState([]);
+  const [uKey, setUKey] = useState(1);
 
-  const uniqueKey = Math.random();
   function addBracketInput() {
-    const newKey = Math.random();
     setAddBracket((prevBrackets) => [
       ...prevBrackets,
       React.cloneElement(<Bracket />, {
-        key: newKey,
-        ukey: uniqueKey,
+        key: uKey,
+        ukey: uKey,
         isSecondLayer: props.isSecondLayer,
         isInsThickness: props.isInsThickness,
         isSecondInsThickness: props.isSecondInsThickness,
@@ -23,18 +22,17 @@ export default function BracketData(props) {
         isSecondInsHeat: props.isSecondInsHeat,
         isBuildingType: props.isBuildingType,
         isConcreteHeat: props.isConcreteHeat,
-        isBracket: props.isBracket,
         isBrickHeat: props.isBrickHeat,
-        onBracket: props.onBracket,
         onBracketResult: props.onBracketResult,
       }),
     ]);
+    setUKey((prevKey) => prevKey + 1);
   }
 
   return (
     <div className="bracketData">
       <Bracket
-        ukey={132}
+        ukey={0}
         isSecondLayer={props.isSecondLayer}
         isInsThickness={props.isInsThickness}
         isSecondInsThickness={props.isSecondInsThickness}
@@ -42,13 +40,11 @@ export default function BracketData(props) {
         isSecondInsHeat={props.isSecondInsHeat}
         isBuildingType={props.isBuildingType}
         isConcreteHeat={props.isConcreteHeat}
-        isBracket={props.isBracket}
         isBrickHeat={props.isBrickHeat}
-        onBracket={props.onBracket}
         onBracketResult={props.onBracketResult}
       />
       {addBracket}
-      <button className="add-bracket" onClick={addBracketInput}></button>
+      <button className="add-bracket" key="add-btn" onClick={addBracketInput}></button>
       <div className="navbnt position-relative mt-3 mb-3">
         <Button
           variant="outline-secondary"

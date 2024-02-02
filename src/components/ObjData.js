@@ -42,18 +42,22 @@ export default function ObjData(props) {
               </Form.Select>
               <Form.Select className="mb-3" id="building-aim" onChange={props.onBuildingAim}>
                 <option>Назначение здания</option>
-                <option value={1}>Жилое</option>
-                <option value={2}>Лечебное</option>
-                <option value={3}>Коммерческое</option>
+                <option value="1">Жилое</option>
+                <option value="2">Лечебное</option>
+                <option value="3">Коммерческое</option>
               </Form.Select>
               <Form.Select className="mb-4 " id="building-type" onChange={props.onBuildingType}>
                 <option>Тип конструкции</option>
-                <option value={1}>Монолитная</option>
-                <option value={2}>Монолитно-каркасная</option>
-                <option value={3}>Безкаркасная</option>
+                <option value="1">Монолитная</option>
+                <option value="2">Монолитно-каркасная</option>
+                <option value="3">Безкаркасная</option>
               </Form.Select>
               {props.isBuildingType === 2 ? (
-                <Form.Check className="obj-data__check" label="Есть стены из железобетона" />
+                <Form.Check
+                  className="obj-data__check"
+                  onClick={props.onConcreteWall}
+                  label="Есть стены из железобетона"
+                />
               ) : null}
 
               <Form.Label>
