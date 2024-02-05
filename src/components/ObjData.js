@@ -4,8 +4,30 @@ import { cities } from './cities';
 import Stack from 'react-bootstrap/Stack';
 import { Button, Col, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
-export default function ObjData(props) {
+export default function ObjData({
+  isBuildingAim,
+  isBuildingType,
+  isCityValue,
+  isConcreteWall,
+  isHumidity,
+  isInnerTemp,
+  isMr,
+  isObjName,
+  isObjAddress,
+  onBuildingAim,
+  onBuildingType,
+  onCityValue,
+  onCityProp,
+  // onConcreteSpHeat,
+  onConcreteWall,
+  onHumidity,
+  onInnerTemp,
+  onMr,
+  onObjName,
+  onObjAddress,
+}) {
   const navigate = useNavigate();
 
   const cityList = cities.map((city, i) => {
@@ -16,50 +38,94 @@ export default function ObjData(props) {
     );
   });
 
-  const cityPropList = cities.find((city, i) => (i == props.isCityValue ? city : null));
+  const cityPropList = cities.find((city, i) => (i == isCityValue ? city : null));
 
-  props.onCityProp(cityPropList);
-  console.log(props.isBuildingAim);
+  onCityProp(cityPropList);
+
+  // useEffect(() => {
+  //   const savedObjName = localStorage.getItem('objName');
+  //   const savedObjAddress = localStorage.getItem('objAddress');
+  //   const savedBuildingAim = localStorage.getItem('buildingAim');
+  //   const savedBuildingType = localStorage.getItem('buildingType');
+  //   const savedConcreteWall = localStorage.getItem('concreteWall');
+  //   const savedCityValue = localStorage.getItem('cityValue');
+  //   const savedHumidity = localStorage.getItem('humidity');
+  //   const savedInnerTemp = localStorage.getItem('innerTemp');
+  //   const savedMr = localStorage.getItem('mr');
+  //   if (savedObjName) onObjName(savedObjName);
+  //   if (savedObjAddress) onObjAddress(savedObjAddress);
+  //   if (savedBuildingAim) onBuildingAim(savedBuildingAim);
+  //   if (savedBuildingType) onBuildingType(savedBuildingType);
+  //   if (savedConcreteWall) onConcreteWall(savedConcreteWall);
+  //   if (savedCityValue) onCityValue(savedCityValue);
+  //   if (savedHumidity) onHumidity(savedHumidity);
+  //   if (savedInnerTemp) onInnerTemp(savedInnerTemp);
+  //   if (savedMr) onMr(savedMr);
+  // }, []);
+
+  // useEffect(() => {
+  //   localStorage.setItem('objName', isObjName);
+  //   localStorage.setItem('objAddress', isObjAddress);
+  //   localStorage.setItem('buildingAim', isBuildingAim);
+  //   localStorage.setItem('buildingType', isBuildingType);
+  //   localStorage.setItem('concreteWall', isConcreteWall);
+  //   localStorage.setItem('cityValue', isCityValue);
+  //   localStorage.setItem('humidity', isHumidity);
+  //   localStorage.setItem('innerTemp', isInnerTemp);
+  //   localStorage.setItem('mr', isMr);
+  // }, [
+  //   isObjName,
+  //   isObjAddress,
+  //   isBuildingAim,
+  //   isBuildingType,
+  //   isCityValue,
+  //   isHumidity,
+  //   isInnerTemp,
+  //   isMr,
+  //   isConcreteWall,
+  // ]);
+
   return (
     <div className="objPage">
       <Row className="mb-5 mt-3">
         <Col>
-          <Form.Control placeholder="Название объекта" />
+          <Form.Control placeholder="Название объекта" value={isObjName} onChange={onObjName} />
         </Col>
         <Col>
-          <Form.Control placeholder="Адрес объекта" />
+          <Form.Control placeholder="Адрес объекта" value={isObjAddress} onChange={onObjAddress} />
         </Col>
       </Row>
       <Row>
         <Col>
           <div className="objData">
             <div className="objData__list">
-              <Form.Select className="mb-3" id="city" onChange={props.onCityValue}>
+              <Form.Select className="mb-3" id="city" onChange={onCityValue}>
                 <option>Город строительства</option>
                 {cityList}
               </Form.Select>
-              <Form.Select className="mb-3" id="building-aim" onChange={props.onBuildingAim}>
+              <Form.Select className="mb-3" id="building-aim" onChange={onBuildingAim}>
                 <option>Назначение здания</option>
                 <option value="1">Жилое</option>
                 <option value="2">Лечебное</option>
                 <option value="3">Коммерческое</option>
               </Form.Select>
-              <Form.Select className="mb-4 " id="building-type" onChange={props.onBuildingType}>
+              <Form.Select className="mb-4 " id="building-type" onChange={onBuildingType}>
                 <option>Тип конструкции</option>
                 <option value="1">Монолитная</option>
                 <option value="2">Монолитно-каркасная</option>
                 <option value="3">Безкаркасная</option>
               </Form.Select>
-              {props.isBuildingType === 2 ? (
+              {isBuildingType === 2 ? (
                 <Form.Check
                   className="obj-data__check"
-                  onClick={props.onConcreteWall}
+                  onClick={onConcreteWall}
+                  checked={isConcreteWall}
                   label="Есть стены из железобетона"
                 />
               ) : null}
 
               <Form.Label>
-                Температура внутреннего воздуха: {props.isInnerTemp} <sup>o</sup>C
+                Температура внутреннего воздуха: {isInnerTemp} <sup>o</sup>C
               </Form.Label>
               <Form.Range
                 className="mb-3"
@@ -67,27 +133,27 @@ export default function ObjData(props) {
                 min="16"
                 max="26"
                 step="1"
-                onChange={props.onInnerTemp}
+                onChange={onInnerTemp}
                 id="temp-in"
               />
-              <Form.Label className="letter">Влажность внутреннего воздуха: {props.isHumidity} %</Form.Label>
-              <Form.Range defaultValue="50" min="35" max="65" step="5" onChange={props.onHumidity} id="humid-in" />
+              <Form.Label className="letter">Влажность внутреннего воздуха: {isHumidity} %</Form.Label>
+              <Form.Range defaultValue="50" min="35" max="65" step="5" onChange={onHumidity} id="humid-in" />
               <Form.Label
                 htmlFor="mr"
                 data-tooltip-id="mr-tooltip"
-                className="position-relative w-25"
+                className="position-relative mt-3"
                 data-tooltip-content="коэф"
               >
                 Mr
                 <button
-                  className="i-btn"
+                  className="i-btn position-absolute"
                   data-bs-toggle="tooltip"
                   data-bs-placement="right"
                   title="Высота наибольшего неприрывного участка между входным и выходным зазорами"
                 ></button>
               </Form.Label>
 
-              <Form.Control id="mr" defaultValue="0.63" onChange={props.onMr} />
+              <Form.Control id="mr" value={isMr} onChange={onMr} />
             </div>
           </div>
         </Col>
@@ -96,21 +162,21 @@ export default function ObjData(props) {
             <p>Расчетные параметры атмосферы</p>
             <Stack gap={0}>
               <div className="p-2">
-                {'Температура наиболее холодной пятидневки обеспеченностью 0,92: ' + (cityPropList?.t || '')}
+                {'Температура наиболее холодной пятидневки обеспеченностью 0,92: ' + cityPropList?.t}
                 <sup>o</sup>C
               </div>
               <div className="p-2">
-                {'Средняя температура наиболее холодного месяца: ' + (cityPropList?.tm || '')} <sup>o</sup>C
+                {'Средняя температура наиболее холодного месяца: ' + cityPropList?.tm} <sup>o</sup>C
               </div>
               <div className="p-2">
-                {'Средняя температура отопительного периода: ' + props.isBuildingAim === 2
-                  ? cityPropList.t10 || ''
-                  : cityPropList?.t8 || ''}
+                {`Средняя температура отопительного периода: ${
+                  isBuildingAim === '2' ? cityPropList.t10 || '' : cityPropList.t8 || ''
+                }`}
                 <sup>o</sup>C
               </div>
               <div className="p-2">
                 {`Продолжительсность отопительного периода: ${
-                  props.isBuildingAim === 2 ? cityPropList?.z10 || '' : cityPropList?.z8 || ''
+                  isBuildingAim === '2' ? cityPropList?.z10 || '' : cityPropList?.z8 || ''
                 }`}
                 сут
               </div>
@@ -130,7 +196,6 @@ export default function ObjData(props) {
           onClick={() => {
             navigate('/walldata');
           }}
-          onSubmit={props.onConcreteSpHeat()}
         >
           Далее
         </Button>

@@ -143,17 +143,17 @@ export default function SystData(props) {
         </Button>
       </div>
       <LinearLossCalc
-        isWindowHeight={props.isWindowHeight}
-        isWindowDepth={props.isWindowDepth}
-        onWindowHeatLoss={props.onWindowHeatLoss}
-        isSecondLayer={props.isSecondLayer}
-        isInsThickness={props.isInsThickness}
-        isSecondInsThickness={props.isSecondInsThickness}
-        isInsHeat={props.isInsHeat}
-        isSecondInsHeat={props.isSecondInsHeat}
         isBuildingType={props.isBuildingType}
-        isConcreteHeat={props.isConcreteHeat}
         isBrickHeat={props.isBrickHeat}
+        isConcreteHeat={props.isConcreteHeat}
+        isInsHeat={props.isInsHeat}
+        isInsThickness={props.isInsThickness}
+        isSecondInsHeat={props.isSecondInsHeat}
+        isSecondInsThickness={props.isSecondInsThickness}
+        isSecondLayer={props.isSecondLayer}
+        isWindowDepth={props.isWindowDepth}
+        isWindowHeight={props.isWindowHeight}
+        onWindowHeatLoss={props.onWindowHeatLoss}
       />
     </div>
   );

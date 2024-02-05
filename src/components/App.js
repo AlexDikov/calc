@@ -38,7 +38,7 @@ export default function App(props) {
   const [concreteArea, setConcreteArea] = useState(1);
   const [concreteDensity, setConcreteDensity] = useState(1);
   const [concreteHeat, setConcreteHeat] = useState(2.04);
-  const [concreteSpHeat, setConcreteSpHeat] = useState(2.04);
+  // const [concreteSpHeat, setConcreteSpHeat] = useState(2.04);
   const [concreteThickness, setConcreteThickness] = useState(0.1);
   const [concreteVapor, setConcreteVapor] = useState(1);
   const [concreteWall, setConcreteWall] = useState(false);
@@ -59,6 +59,8 @@ export default function App(props) {
   const [insThickness, setInsThickness] = useState(0.1);
   const [insVapor, setInsVapor] = useState(1);
   const [mr, setMr] = useState(0.63);
+  const [objName, setObjName] = useState('');
+  const [objAddress, setObjAddress] = useState('');
   const [ownCover, setOwnCover] = useState(false);
   const [secondLayer, setSecondLayer] = useState(false);
   const [secondInsAir, setSecondInsAir] = useState(1);
@@ -126,18 +128,16 @@ export default function App(props) {
     setConcreteHeat(changeEvent.target.value);
   }
 
-  function handleConcreteSpHeat() {
-    setConcreteSpHeat(cityProp.s === 'А' ? 1.72 : 2.04);
-  }
+  // function handleConcreteSpHeat() {
+  //   setConcreteSpHeat(cityProp.s === 'А' ? 1.72 : 2.04);
+  // }
   function handleConcreteThickness(changeEvent) {
     setConcreteThickness(changeEvent.target.value * 0.001);
   }
   function handleConcreteVapor(changeEvent) {
     setConcreteVapor(changeEvent.target.value);
   }
-  function toggleConcreteWall() {
-    setConcreteWall(!concreteWall);
-  }
+
   function handleCoverHeat(changeEvent) {
     setCoverHeat(changeEvent.target.value);
   }
@@ -199,6 +199,7 @@ export default function App(props) {
   function handleInnerTemp(changeEvent) {
     setInnerTemp(changeEvent.target.value);
   }
+
   function handleSecondInsAir(changeEvent) {
     setSecondInsAir(changeEvent.target.value);
   }
@@ -214,7 +215,12 @@ export default function App(props) {
   function handleSecondInsVapor(changeEvent) {
     setSecondInsVapor(changeEvent.target.value);
   }
-
+  function handleObjAddress(e) {
+    setObjAddress(e.target.value);
+  }
+  function handleObjName(e) {
+    setObjName(e.target.value);
+  }
   function handleVentHeight(changeEvent) {
     setVentHeight(changeEvent.target.value * 0.001);
   }
@@ -248,6 +254,10 @@ export default function App(props) {
 
   const handleOwnCover = () => setOwnCover((value) => !value);
 
+  function toggleConcreteWall() {
+    setConcreteWall(!concreteWall);
+  }
+
   return (
     <div className="page">
       <Header />
@@ -257,20 +267,26 @@ export default function App(props) {
           element={
             <ObjData
               isBuildingAim={buildingAim}
+              isBuildingType={buildingType}
               isCityProp={cityProp}
               isCityValue={cityValue}
+              isConcreteWall={concreteWall}
               isInnerTemp={innerTemp}
               isHumidity={humidity}
-              onCityProp={handleCityProp}
+              isMr={mr}
+              isObjName={objName || ''}
+              isObjAddress={objAddress || ''}
               onBuildingAim={handleBuildingAim}
-              isBuildingType={buildingType}
               onBuildingType={handleBuildingType}
+              onCityProp={handleCityProp}
               onCityValue={handleCityValue}
-              onConcreteSpHeat={handleConcreteSpHeat}
+              // onConcreteSpHeat={handleConcreteSpHeat}
               onConcreteWall={toggleConcreteWall}
               onInnerTemp={handleInnerTemp}
               onHumidity={handleHumidity}
               onMr={handleMr}
+              onObjAddress={handleObjAddress}
+              onObjName={handleObjName}
             />
           }
         ></Route>
@@ -279,7 +295,7 @@ export default function App(props) {
           element={
             <WallData
               isBuildingType={buildingType}
-              isConcreteSpHeat={concreteSpHeat}
+              // isConcreteSpHeat={concreteSpHeat}
               isSecondLayer={secondLayer}
               onAddSecondLayer={handleAddSecondLayer}
               onBrickAir={handleBrickAir}
@@ -291,7 +307,7 @@ export default function App(props) {
               onConcreteAir={handleConcreteAir}
               onConcreteDensity={handleConcreteDensity}
               onConcreteHeat={handleConcreteHeat}
-              onConcreteSpHeat={handleConcreteSpHeat}
+              // onConcreteSpHeat={handleConcreteSpHeat}
               onConcreteThickness={handleConcreteThickness}
               onConcreteVapor={handleConcreteVapor}
               onInsAir={handleInsAir}
@@ -311,22 +327,24 @@ export default function App(props) {
           path="/systdata"
           element={
             <SystData
+              isBrickHeat={brickHeat}
+              isBuildingType={buildingType}
+              isConcreteHeat={concreteHeat}
+              isInsHeat={insHeat}
+              isInsThickness={insThickness}
+              isSecondInsThickness={secondInsThickness}
+              isSecondInsHeat={secondInsHeat}
+              isSecondLayer={secondLayer}
+              isWindowDepth={windowDepth}
+              isWindowHeight={windowHeight}
               onBrickArea={handleBrickArea}
               onConcreteArea={handleConcreteArea}
               onGribDepth={handleGribDepth}
               onGribPcs={handleGribPcs}
-              onWindowHeatLoss={handleWindowHeatLoss}
-              isSecondLayer={secondLayer}
-              isInsThickness={insThickness}
-              isSecondInsThickness={secondInsThickness}
-              isInsHeat={insHeat}
-              isSecondInsHeat={secondInsHeat}
-              isBuildingType={buildingType}
-              isConcreteHeat={concreteHeat}
-              isBrickHeat={brickHeat}
               onWindowLength={handleWindowLength}
               onWindowHeight={handleWindowHeight}
               onWindowDepth={handleWindowDepth}
+              onWindowHeatLoss={handleWindowHeatLoss}
             />
           }
         ></Route>
@@ -385,7 +403,7 @@ export default function App(props) {
               isConcreteDensity={concreteDensity}
               isConcreteHeat={concreteHeat}
               isConcreteThickness={concreteThickness}
-              isConcreteSpHeat={concreteSpHeat}
+              // isConcreteSpHeat={concreteSpHeat}
               isConcreteVapor={concreteVapor}
               isConcreteWall={concreteWall}
               isCoverData={coverData}
@@ -401,6 +419,8 @@ export default function App(props) {
               isInsVapor={insVapor}
               isInsAir={insAir}
               isMr={mr}
+              isObjAddress={objAddress}
+              isObjName={objName}
               isSecondLayer={secondLayer}
               isSecondIns={secondLayer}
               isSecondInsAir={secondInsAir}

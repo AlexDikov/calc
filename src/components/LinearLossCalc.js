@@ -39,7 +39,7 @@ export default function LinearLossCalc(props) {
     } else if (0.6 < wallValue && wallValue < 1.8) {
       return [ins1.l3, ins1.l4, ins2.l3, ins2.l4];
     } else if (1.8 < wallValue && wallValue < 2.1) {
-      return [ins1.l4, ins1.l5, ins2.l4, ins2.l5];
+      return [ins1.l4, ins1.l5, ins2.l4, ins2.l3];
     }
   };
 

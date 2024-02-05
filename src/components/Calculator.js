@@ -35,6 +35,8 @@ export default function Calculator({
   isInsVapor,
   isInsAir,
   isMr,
+  isObjAddress,
+  isObjName,
   isSecondLayer,
   isSecondIns,
   isSecondInsAir,
@@ -86,7 +88,7 @@ export default function Calculator({
     (isInnerTemp - (isBuildingAim === 2 ? isCityProp.t8 : isCityProp.t10)) *
     (isBuildingAim === 2 ? isCityProp.z8 : isCityProp.z10);
 
-  const concreteQ = parseFloat((isConcreteThickness / isConcreteSpHeat).toFixed(3));
+  const concreteQ = parseFloat((isConcreteThickness / isConcreteHeat).toFixed(3));
   const brickQ = parseFloat((isBrickThickness / isBrickHeat).toFixed(3));
   const insQ = parseFloat((isInsThickness / isInsHeat).toFixed(3));
   const secondInsQ = parseFloat((isSecondInsThickness / isSecondInsHeat).toFixed(3));
@@ -306,21 +308,24 @@ export default function Calculator({
     <>
       <DkCalc isD={d} isK={kAir} onDk={handleDk} />
       <h2>Пояснительная записка к расчету энергоэффективности ограждающей конструкции с системой НВФ</h2>
-      <h2>Объект : ЖК "Дом", расположенный по адресу : г. Москва, ул. Уютная, стр. 12</h2>
+      <h2>
+        Объект : {isObjName}, расположенный по адресу : {isObjAddress}
+      </h2>
       <br />
       <h5>1. Данные для расчета.</h5>
       <div>
         Климатические данные района строительства: Климатические данные принимаются по СП 131.13330.2020; <br />-
-        средняя температура наиболее холодной пятидневки, с обеспеченностью 0,92 = {isCityProp.t} °С, по табл.3.1;
-        <br />- средняя температура наиболее холодного месяца = {isCityProp.tm} °С, по табл.5.1; <br />- средняя
-        температура отопительного периода = {isBuildingAim === '2' ? isCityProp.z8 : isCityProp.z10} °С, по табл.3.1;
-        <br />- продолжительность отопительного периода = {isBuildingAim === '2' ? isCityProp.z8 : isCityProp.z10} сут,
-        по табл.3.1;
-        <br />- максимальная из скоростей ветра по румбам за январь ν = {isCityProp.v} м/c, по табл.3.1. <br />
-        Микроклимат в здании: <br /> - расчетная температура внутреннего воздуха = {isInnerTemp} °С; <br />- расчетная
-        относительная влажность внутреннего воздуха = {isHumidity} %, по п.5.7 СП 50.13330.2012; <br /> - средняя
-        месячная относительная влажность воздуха наиболее холодного месяца = {isCityProp.w} %, по табл.3.1 СП
-        131.13330.2020.
+        средняя температура наиболее холодной пятидневки, с обеспеченностью 0,92: t = {isCityProp.t} °С, по табл.3.1;
+        <br />- средняя температура наиболее холодного месяца: t<sub>м</sub> = {isCityProp.tm} °С, по табл.5.1; <br />-
+        средняя температура отопительного периода: t<sub>{isBuildingAim === '2' ? '8' : '10'}</sub> ={' '}
+        {isBuildingAim === '2' ? isCityProp.z8 : isCityProp.z10} °С, по табл.3.1;
+        <br />- продолжительность отопительного периода: z<sub>{isBuildingAim === '2' ? '8' : '10'}</sub> ={' '}
+        {isBuildingAim === '2' ? isCityProp.z8 : isCityProp.z10} сут, по табл.3.1;
+        <br />- максимальная из скоростей ветра по румбам за январь: ν = {isCityProp.v} м/c, по табл.3.1. <br />
+        Микроклимат в здании: <br /> - расчетная температура внутреннего воздуха: t<sub>в</sub>= {isInnerTemp} °С;{' '}
+        <br />- расчетная относительная влажность внутреннего воздуха: φ = {isHumidity} %, по п.5.7 СП 50.13330.2012;{' '}
+        <br /> - средняя месячная относительная влажность воздуха наиболее холодного месяца: φ<sub>м</sub> ={' '}
+        {isCityProp.w} %, по табл.3.1 СП 131.13330.2020.
         <br />
         <br />
         <br /> <b>Состав стены:</b>
@@ -374,7 +379,9 @@ export default function Calculator({
         {gsop} +{b()}) ∙ {isMr} = {rObl.toFixed(2)} м²°С/Вт.
         <br /> <br />
         <h5>3. Минимально необходимая толщина утеплителя.</h5>
-        Приближенная толщина утеплителя : δ = ({k} ∙ {rObl.toFixed(2)} - {concreteQ} - {brickQ} - 1 / 8.7 - 1 / 12) ∙ (
+        Приближенная толщина утеплителя : δ = ({k} ∙ {rObl.toFixed(2)}
+        {concreteQ ? ` - ${concreteQ}` : null}
+        {brickQ ? ` - ${brickQ}` : null} - 1 / 8.7 - 1 / 12) ∙ (
         {isSecondIns ? `(${isInsThickness} + ${isSecondInsThickness} ) / (${insQ} + ${secondInsQ})` : isInsHeat}) =
         {preIns.toFixed(2) * 1000} мм; <br />У применяемого на данном объекте тарельчатого анкера расстояние от края
         стального распорного элемента до тарелки дюбеля {isGribDepth} мм.
