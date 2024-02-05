@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import DkCalc from './DkCalc';
+import LinearLossCalc from './LinearLossCalc';
 
 export default function Calculator({
   isBracketPcs,
@@ -7,7 +8,7 @@ export default function Calculator({
   isBrickArea,
   isBrickThickness,
   isBrickDensity,
-  isBrickHeat,
+  isBrickLambda,
   isBrickVapor,
   isBrickAir,
   isBuildingAim,
@@ -17,32 +18,35 @@ export default function Calculator({
   isConcreteAir,
   isConcreteArea,
   isConcreteDensity,
-  isConcreteHeat,
+  isConcreteLambda,
   isConcreteThickness,
-  isConcreteSpHeat,
+  isConcreteSpLambda,
   isConcreteVapor,
   isConcreteWall,
   isCoverData,
-  isCoverHeat,
+  isCoverLambda,
+  isCoverName,
   isCoverThickness,
+  isCoverVapor,
   isCityProp,
+  isGrib,
   isGribDepth,
   isGribPcs,
   isHeight,
   isInsThickness,
   isInsDensity,
-  isInsHeat,
+  isInsLambda,
   isInsVapor,
   isInsAir,
   isMr,
   isObjAddress,
   isObjName,
-  isSecondLayer,
+  isPlaster,
   isSecondIns,
   isSecondInsAir,
   isSecondInsThickness,
   isSecondInsDensity,
-  isSecondInsHeat,
+  isSecondInsLambda,
   isSecondInsVapor,
   isVaporMembraneR,
   isVentIn,
@@ -51,7 +55,6 @@ export default function Calculator({
   isVentHeight,
   isWindMembraneR,
   isWindowLength,
-  isWindowHeatLoss,
   isWindowDepth,
   isWindowHeight,
   onEgap,
@@ -61,6 +64,11 @@ export default function Calculator({
   const [dk, setDk] = useState(0.1);
   //const [kState, setK] = useState(0.1);
   //const [dState, setD] = useState(0.1);
+  const [windowLoss, setWindowLoss] = useState('');
+
+  function handleWindowLoss(value) {
+    setWindowLoss(value);
+  }
 
   function handleDk() {
     setDk();
@@ -88,17 +96,17 @@ export default function Calculator({
     (isInnerTemp - (isBuildingAim === 2 ? isCityProp.t8 : isCityProp.t10)) *
     (isBuildingAim === 2 ? isCityProp.z8 : isCityProp.z10);
 
-  const concreteQ = parseFloat((isConcreteThickness / isConcreteHeat).toFixed(3));
-  const brickQ = parseFloat((isBrickThickness / isBrickHeat).toFixed(3));
-  const insQ = parseFloat((isInsThickness / isInsHeat).toFixed(3));
-  const secondInsQ = parseFloat((isSecondInsThickness / isSecondInsHeat).toFixed(3));
+  const concreteQ = parseFloat((isConcreteThickness / isConcreteLambda).toFixed(3));
+  const brickQ = parseFloat((isBrickThickness / isBrickLambda).toFixed(3));
+  const insQ = parseFloat((isInsThickness / isInsLambda).toFixed(3));
+  const secondInsQ = parseFloat((isSecondInsThickness / isSecondInsLambda).toFixed(3));
 
   const rObl = (a() * gsop + b()) * isMr;
   const preIns =
     (k * rObl - concreteQ - brickQ - 1 / 8.7 - 1 / 12) *
-    (isSecondIns ? isInsThickness + isSecondInsThickness / (insQ + secondInsQ) : isInsHeat);
+    (isSecondIns ? isInsThickness + isSecondInsThickness / (insQ + secondInsQ) : isInsLambda);
 
-  const linearLoss = isWindowHeatLoss * isWindowLength;
+  const linearLoss = windowLoss * isWindowLength;
 
   const pointLoss = 1;
 
@@ -108,46 +116,45 @@ export default function Calculator({
   const u1 = isBuildingAim === 3 ? null : parseFloat(1 / rCond1).toFixed(3);
   const u2 = isBuildingAim === 1 ? null : parseFloat(1 / rCond2).toFixed(3);
 
-  const rRed = (1 / parseFloat(u1 + u2 + linearLoss + pointLoss)).toFixed(3);
+  const rRed = parseFloat((1 / parseFloat(u1 + u2 + linearLoss + pointLoss)).toFixed(3));
   const rCond0 = 1 / 8.7 + isBuildingAim === 1 ? rCond1 : parseFloat(rCond1 + rCond2 + 1 / 12);
   const r = parseFloat((rRed / rCond0).toFixed(3));
 
-  const tempGapInit = isCityProp.t + 1;
+  const tempGapInit = isCityProp.tm + 1;
   const epsilon = parseFloat(
     (
-      1.2 * ((isVentMed / isVentIn) ^ 2) +
+      1.2 * (isVentMed / isVentIn) ** 2 +
       (0.04 * isVentHeight) / (2 * isVentMed) +
-      1.2 * ((isVentMed / isVentOut) ^ 2)
+      1.2 * (isVentMed / isVentOut) ** 2
     ).toFixed(3)
   );
-  const vVent0 = 0.1;
-  const m0 = (0.04 * ((273 + tempGapInit) / 100)) ^ 3;
-  const alphaC0 = (7.34 * vVent0) ^ (0.656 + 3.78 * Math.E) ^ (-1.91 * vVent0);
-  const alphaR0 = m0 / (1 / 5.77 + 1 / 4.4 + 1 / 5.3);
-  const alphaGap0 = alphaC0 + 2 * alphaR0;
-  const rOuter0 = 1 / alphaGap0 + 1 / 12 + isCoverData.r;
-  const x00 = (1005 * vVent0 * isVentMed * (373 / 273 + tempGapInit)) / (1 / rRed + 1 / rOuter0);
+
+  const rOuter0 = 1 / 23 + 1 / 12 + isCoverData.r;
+
+  const vVent0 =
+    Math.sqrt((0.08 * isVentHeight) / epsilon) * Math.sqrt(((isInnerTemp - isCityProp.tm) * rOuter0) / rRed);
+  const x00 = (1005 * vVent0 * isVentMed * (373 / (273 + tempGapInit))) / (1 / rRed + 1 / rOuter0);
   const temp00 = (isInnerTemp / rRed + isCityProp.tm / rOuter0) / (1 / rRed + 1 / rOuter0);
-  const tempGap0 = temp00 - (((temp00 - isCityProp.tm) * x00) / isVentHeight) * (1 - Math.exp(-isVentHeight / x00));
+  const tempGap0 = temp00 - (temp00 - isCityProp.tm) * (x00 / isVentHeight) * (1 - Math.exp(-isVentHeight / x00));
 
   function vVent(tempGap) {
-    return Math.sqrt((0.08 * isVentHeight * (tempGap - isCityProp.t)) / epsilon);
+    return Math.sqrt((0.08 * isVentHeight * (tempGap - isCityProp.tm)) / epsilon);
   }
 
   const vVent1 = vVent(tempGap0);
 
   function m(tempGap) {
-    return (0.04 * ((273 + tempGap) / 100)) ^ 3;
+    return 0.04 * ((273 + tempGap) / 100) ** 3;
   }
-  const m1 = m(vVent1);
+  const m1 = m(tempGap0);
 
   function alphaC(vVent) {
-    return (7.34 * vVent) ^ (0.656 + 3.78 * Math.E) ^ (-1.91 * vVent);
+    return 7.34 * vVent ** 0.656 + 3.78 * Math.E ** (-1.91 * vVent);
   }
   const alphaC1 = alphaC(vVent1);
 
   function alphaR(m) {
-    return m / (1 / 5.77 + 1 / 4, 4 + 1 / isCoverData.c);
+    return m / (1 / 4.4 + 1 / isCoverData.c - 1 / 5.77);
   }
   const alphaR1 = alphaR(m1);
 
@@ -162,12 +169,12 @@ export default function Calculator({
   const rOuter1 = rOuter(alphaGap1);
 
   function temp0(rOuter) {
-    return (isInnerTemp / rRed + isCityProp.t / rOuter) / (1 / rRed + rOuter);
+    return (isInnerTemp / rRed + isCityProp.tm / rOuter) / (1 / rRed + 1 / rOuter);
   }
   const temp01 = temp0(rOuter1);
 
   function x0(vVent, tempGap, rOuter) {
-    return (1005 * vVent * isVentMed * (373 / 273 + tempGap)) / (1 / rRed + 1 / rOuter);
+    return (1005 * vVent * isVentMed * (373 / (273 + tempGap))) / (1 / rRed + 1 / rOuter);
   }
   const x01 = x0(vVent1, tempGap0, rOuter1);
 
@@ -206,20 +213,23 @@ export default function Calculator({
   const x04 = x0(vVent4, tempGap3, rOuter4);
   const tempGap4 = tempGap(temp04, x04);
 
-  const vVent5 = vVent(tempGap4);
+  const vVent5 = parseFloat(vVent(tempGap4).toFixed(3));
 
   const rVaporWhole =
-    isConcreteThickness / isConcreteVapor +
-    isBrickThickness / isBrickVapor +
-    isInsThickness / isInsVapor +
-    isSecondInsThickness / isSecondInsVapor;
+    isBuildingType !== '3'
+      ? isConcreteThickness / isConcreteVapor
+      : null + isBuildingType !== '1'
+      ? isBrickThickness / isBrickVapor
+      : null + isSecondIns
+      ? isInsThickness / isInsVapor + isSecondInsThickness / isSecondInsVapor
+      : isInsThickness / isInsVapor + 0.015 / 0.09;
   const rVaporIns = isInsThickness / isInsVapor + isVaporMembraneR + isWindMembraneR + 0.02;
-  const outE = 1.84 * (10 ^ 11) * Math.exp(-5330 / (273 + isCityProp.tm));
-  const inE = 1.84 * (10 ^ 11) * Math.exp(-5330 / (273 + isInnerTemp));
-  const eIn = (isHumidity / 100) * inE;
+  const outE = parseFloat((1.84 * 10 ** 11 * Math.exp(-5330 / (273 + isCityProp.tm))).toFixed(2));
+  const inE = 1.84 * 10 ** 11 * Math.exp(-5330 / (273 + isInnerTemp));
+  const eIn = parseFloat(((isHumidity / 100) * inE).toFixed(2));
   const qVapor = ((1 / 2) * rVaporWhole + (1 / 4) * rVaporIns) * (eIn - outE);
 
-  const eOut = (isCityProp.w / 100) * outE;
+  const eOut = parseFloat(((isCityProp.w / 100) * outE).toFixed(2));
   const kVapor = qVapor / (eIn - outE);
   const rEq = isCoverData.r;
   const e1 = (eOut + rEq * kVapor * eIn) / (kVapor * rEq + 1);
@@ -229,11 +239,11 @@ export default function Calculator({
 
   const rX = 1 / 8.7 + concreteQ + brickQ + insQ + secondInsQ;
   const tx = isInnerTemp - ((isInnerTemp - isCityProp.tm) / (isBuildingAim == '1' ? rCond1 : rCond2)) * rX;
-  const eCond = 1.84 * (10 ^ 11) * Math.exp(-5330 / (273 + tx));
+  const eCond = 1.84 * 10 ** 11 * Math.exp(-5330 / (273 + tx));
   const rVaporOuter =
     isWindMembraneR + 1 / (1 / rEq + (28753 / (1 + tempGap4 / 273)) * (isVentMed / isVentHeight) * vVent5);
-  const kAir = 0.1; //rVaporOuter / rVaporWhole;
-  const d = 0.1; //(eCond - eOut) / (eIn - eOut);
+  const kAir = rVaporOuter / rVaporWhole;
+  const d = (eCond - eOut) / (eIn - eOut);
 
   const g = dk;
   const gObl = g / (6.14 * rVaporWhole);
@@ -241,7 +251,7 @@ export default function Calculator({
   const rU = isConcreteAir + isBrickAir + isInsAir + isSecondInsAir + isWindMembraneR;
   const yOuter = 3463 / (273 + isCityProp.tm);
   const yInner = 3463 / (273 + isInnerTemp);
-  const deltaP = (0.55 * isHeight * (yOuter - yInner) + 0.03 * yOuter * isCityProp.v) ^ 2;
+  const deltaP = 0.55 * isHeight * (yOuter - yInner) + 0.03 * yOuter * isCityProp.v ** 2;
   const gU = deltaP / rU;
   onGu(gU);
 
@@ -307,6 +317,19 @@ export default function Calculator({
   return (
     <>
       <DkCalc isD={d} isK={kAir} onDk={handleDk} />
+      <LinearLossCalc
+        isBuildingType={isBuildingType}
+        isBrickLambda={isBrickLambda}
+        isConcreteLambda={isConcreteLambda}
+        isInsLambda={isInsLambda}
+        isInsThickness={isInsThickness}
+        isSecondInsLambda={isSecondInsLambda}
+        isSecondInsThickness={isSecondInsThickness}
+        isSecondIns={isSecondIns}
+        isWindowDepth={isWindowDepth}
+        isWindowHeight={isWindowHeight}
+        onWindowLoss={handleWindowLoss}
+      />
       <h2>Пояснительная записка к расчету энергоэффективности ограждающей конструкции с системой НВФ</h2>
       <h2>
         Объект : {isObjName}, расположенный по адресу : {isObjAddress}
@@ -329,46 +352,96 @@ export default function Calculator({
         <br />
         <br />
         <br /> <b>Состав стены:</b>
-        <br />- ж/б конструкции, для расчета требуемого сопротивления перекрытия толщину принимаем{' '}
-        {isBrickThickness * 1000} мм
-        <br />- газо- и пенобетон на цементном вяжущем плотностью {isBrickDensity} кг/м³, толщиной{' '}
-        {isBrickThickness * 1000} мм
-        <br />- внутренний слой теплоизоляции плотностью {isInsDensity} кг/м³, толщиной {isInsThickness * 1000} мм
-        <br />- внешний слой теплоизоляции плотностью {isSecondInsDensity} кг/м³, толщиной {isSecondInsThickness * 1000}{' '}
-        мм
+        {isBuildingType !== '1' ? (
+          isConcreteWall ? (
+            <div>
+              - монолитный железобетон, плотностью {isConcreteDensity} кг/м³, толщиной {isConcreteThickness * 1000} мм
+            </div>
+          ) : (
+            <div>
+              - монолитный железобетон, для расчета требуемого сопротивления перекрытия толщину принимаем{' '}
+              {isBrickThickness * 1000} мм
+            </div>
+          )
+        ) : (
+          <div>
+            - монолитный железобетон, плотностью {isConcreteDensity} кг/м³, толщиной {isConcreteThickness * 1000} мм
+          </div>
+        )}
+        {isBuildingType !== '1' ? (
+          <div>
+            - газо- и пенобетон на цементном вяжущем плотностью {isBrickDensity} кг/м³, толщиной{' '}
+            {isBrickThickness * 1000} мм
+          </div>
+        ) : null}
+        {isSecondIns ? (
+          <div>
+            - внутренний слой теплоизоляции плотностью {isInsDensity} кг/м³, толщиной {isInsThickness * 1000} мм <br />-
+            внешний слой теплоизоляции плотностью {isSecondInsDensity} кг/м³, толщиной {isSecondInsThickness * 1000} мм
+          </div>
+        ) : (
+          <div>
+            - слой теплоизоляции плотностью {isInsDensity} кг/м³, толщиной {isInsThickness * 1000} мм
+          </div>
+        )}
         <br />
-        <br />
-        Расчетные характеристики материалов: <br />
-        Железобетонные конструкции : <br />- коэффициент теплопроводности материала λ = {isConcreteHeat} Вт/(м°С);
-        <br />- коэффициент паропроницаемости материала μ = {isConcreteVapor} мг/(м∙ч∙Па);
-        <br /> - коэффициент воздухопроницаемости ί = {isConcreteAir} кг/(м∙ч∙Па);
-        <br /> Кладочное заполнение стен :
-        <br /> - коэффициент теплопроводности материала λ = {isBrickHeat} Вт/(м°С);
-        <br /> - коэффициент паропроницаемости материала μ = {isBrickVapor} мг/(м∙ч∙Па);
-        <br /> - коэффициент воздухопроницаемости ί = {isBrickAir} кг/(м∙ч∙Па);
-        <br /> Утеплитель :
-        <br /> - коэффициент теплопроводности материала λ = {isInsHeat} Вт/(м°С);
-        <br /> - коэффициент паропроницаемости материала μ = {isInsVapor} мг/(м∙ч∙Па);
-        <br />- коэффициент воздухопроницаемости ί = 0,1 кг/(м∙ч∙Па);
-        <br /> Штукатурка :
-        <br /> - коэффициент теплопроводности материала λ = {isSecondInsHeat} Вт/(м°С);
+        <b>Расчетные характеристики материалов:</b> <br />
+        {isBuildingType !== '3' ? (
+          <div>
+            {' '}
+            Железобетон : <br />- коэффициент теплопроводности материала λ = {isConcreteLambda} Вт/(м°С);
+            <br />- коэффициент паропроницаемости материала μ = {isConcreteVapor} мг/(м∙ч∙Па);
+            <br /> - коэффициент воздухопроницаемости ί = {isConcreteAir} кг/(м∙ч∙Па);
+          </div>
+        ) : null}
+        {isBuildingType !== '1' ? (
+          <div>
+            {' '}
+            Кладка :
+            <br /> - коэффициент теплопроводности материала λ = {isBrickLambda} Вт/(м°С);
+            <br /> - коэффициент паропроницаемости материала μ = {isBrickVapor} мг/(м∙ч∙Па);
+            <br /> - коэффициент воздухопроницаемости ί = {isBrickAir} кг/(м∙ч∙Па);
+          </div>
+        ) : null}
+        {isSecondIns ? (
+          <div>
+            Внутренний слой утеплителя:
+            <br /> - коэффициент теплопроводности материала λ = {isInsLambda} Вт/(м°С);
+            <br /> - коэффициент паропроницаемости материала μ = {isInsVapor} мг/(м∙ч∙Па);
+            <br />- коэффициент воздухопроницаемости ί = 0,1 кг/(м∙ч∙Па);
+            <br />
+            Внешний слой утеплителя:
+            <br /> - коэффициент теплопроводности материала λ = {isSecondInsLambda} Вт/(м°С);
+            <br /> - коэффициент паропроницаемости материала μ = {isInsVapor} мг/(м∙ч∙Па);
+            <br />- коэффициент воздухопроницаемости ί = 0,1 кг/(м∙ч∙Па);
+          </div>
+        ) : (
+          <div>
+            Утеплитель :
+            <br /> - коэффициент теплопроводности материала λ = {isInsLambda} Вт/(м°С);
+            <br /> - коэффициент паропроницаемости материала μ = {isInsVapor} мг/(м∙ч∙Па);
+            <br />- коэффициент воздухопроницаемости ί = 0,1 кг/(м∙ч∙Па);{' '}
+          </div>
+        )}
+        Штукатурка :
+        <br /> - коэффициент теплопроводности материала λ = 0.93 Вт/(м°С);
         <br /> - коэффициент паропроницаемости материала μ = {isSecondInsVapor} мг/(м∙ч∙Па);
         <br /> - коэффициент воздухопроницаемости ί = {isSecondInsAir} кг/(м∙ч∙Па);
         <br />
-        <br /> Характеристики элементов НФС:
+        <br /> <b>Характеристики элементов НФС:</b>
         <br />
-        Высота наибольшей непрерывной воздушной прослойки h = 30 м <br />
         Ширина вентилируемого зазора на входе δ<sub>вх</sub> = {isVentIn * 1000} мм <br />
-        Ширина вентилируемого зазора на выходе δ = {isVentOut * 1000} мм
+        Ширина вентилируемого зазора на выходе δ<sub>вых</sub> = {isVentOut * 1000} мм
         <br />
-        Средняя ширина вентилируемого зазора δ = {isVentMed * 1000} мм
+        Средняя ширина воздушной прослойки δ<sub>ср</sub> = {isVentMed * 1000} мм
         <br />
+        Высота наибольшего непрерывной воздушной прослойки h = 30 м <br />
         <br />
         Средняя частота кронштейнов на фасаде 2,8 шт/м² из них:
         {<div dangerouslySetInnerHTML={{ __html: brackets() }} />}
         <br /> Средняя частота установки тарельчатых анкеров для крепления изоляции {isGribPcs} шт/м²
         <br />
-        <br /> Облицовка - Клинкер толщиной {isCoverThickness} мм
+        <br /> Облицовка - {isCoverName} толщиной {isCoverThickness} мм
         <br />
         <br /> <h5>2. Требуемое сопротивление теплопередаче.</h5>
         Градусо-сутки отопительного периода для рассматриваемого случая составляют: ГСОП = ({isInnerTemp} -(
@@ -382,9 +455,9 @@ export default function Calculator({
         Приближенная толщина утеплителя : δ = ({k} ∙ {rObl.toFixed(2)}
         {concreteQ ? ` - ${concreteQ}` : null}
         {brickQ ? ` - ${brickQ}` : null} - 1 / 8.7 - 1 / 12) ∙ (
-        {isSecondIns ? `(${isInsThickness} + ${isSecondInsThickness} ) / (${insQ} + ${secondInsQ})` : isInsHeat}) =
+        {isSecondIns ? `(${isInsThickness} + ${isSecondInsThickness} ) / (${insQ} + ${secondInsQ})` : isInsLambda}) =
         {preIns.toFixed(2) * 1000} мм; <br />У применяемого на данном объекте тарельчатого анкера расстояние от края
-        стального распорного элемента до тарелки дюбеля {isGribDepth} мм.
+        стального распорного элемента до тарелки дюбеля {isGrib}.
         <br /> В соответствии с таблицей Г4 СП 230.1325800.2015 χ = {isGribDepth} Вт/°С.
         <br /> Удельные потери теплоты через кронштейны в соответствии с заключением НИИСФ РААСН по договору №
         12250(2020) от «09» декабря 2020 г. находятся по таблицам Г.71, Г.73, Г.74, Г.75 СП 230.1325800.2015
@@ -416,13 +489,13 @@ export default function Calculator({
         )}
         <br /> - дюбель со стальным сердечником, прикрепляющий слой теплоизоляции к основанию (точечный элемент 1).
         {<div dangerouslySetInnerHTML={{ __html: brackets3() }} />}
-        <br /> Геометрические характеристики проекций элементов.
+        <br /> <b>Геометрические характеристики проекций элементов.</b>
         <br /> Площадь поверхности фрагмента ограждающей конструкции для расчета R составляет: А =
         {isConcreteArea + isBrickArea} м²;
         <br /> Площадь стены с основанием из блоков составляет {isConcreteArea + isBrickArea} - {isConcreteArea} =
         {isBrickArea} м².
         <br /> Доля этой площади от общей площади фрагмента ограждающей конструкции равна а ={isBrickArea}/
-        {isConcreteArea + isBrickArea} ={isConcreteArea / (isConcreteArea + isBrickArea)} м²;
+        {isConcreteArea + isBrickArea} = {isConcreteArea / (isConcreteArea + isBrickArea)} м²;
         <br />
         Суммарная площадь торцов перекрытий из монолитного железобетона (т.е. площадь проекции на поверхность фрагмента)
         составляет {isConcreteArea} м².
@@ -437,14 +510,14 @@ export default function Calculator({
         <br /> <b>Расчет удельных потерь теплоты, обусловленных элементами.</b>
         <br /> Для плоского элемента {isConcreteWall === true ? 1 : null} удельные потери теплоты определяются по
         формулам Е.6, Е.З СП 50.13330.2012:
-        <br />R = 1/8,7 + {concreteQ} + {isSecondLayer ? `${insQ} + ${secondInsQ}` : `${insQ}`}+ 1/12 = {rCond1} м²°С/Вт
+        <br />R = 1/8,7 + {concreteQ} + {isSecondIns ? `${insQ} + ${secondInsQ}` : `${insQ}`}+ 1/12 = {rCond1} м²°С/Вт
         <br />
         U1 = 1/ {rCond1} = {u1} Вт/(м²°С)
         <br />
         {isConcreteWall && (
           <>
             Для плоского элемента 2 удельные потери теплоты определяются аналогично: <br />R = 1/8.7 + {brickQ} +{' '}
-            {isSecondLayer ? `${insQ}+${secondInsQ}` : `${insQ}`} + 1/12 = {rCond2} м²°C/Вт
+            {isSecondIns ? `${insQ}+${secondInsQ}` : `${insQ}`} + 1/12 = {rCond2} м²°C/Вт
             <br />
             U2 = 1/ {rCond1} = {u2} Вт/(м²°С)
           </>
@@ -511,11 +584,12 @@ export default function Calculator({
         <h5>5. Воздухообмен в воздушной прослойке.</h5>
         Воздухообмен в воздушной прослойке находится для термического сопротивления стены от внутренней поверхности до
         воздушной прослойки равного требуемому сопротивлению теплопередаче фасада. <br />
-        Сумма коэффициентов местных сопротивлений для исследуемой конструкции составляет: ξ = 1,2 ∙ (({isVentMed}/
-        {isVentIn})²) + 0,04 ∙ ({isVentHeight}/(2 ∙ {isVentMed})) + (1,2 ∙ ({isVentMed}/{isVentOut})²) = {epsilon}
-        <br />R = 1/23 + 1/12 + 0,010 = 0,140 м²˚С/Вт
+        Сумма коэффициентов местных сопротивлений для исследуемой конструкции составляет: <br />ξ = 1,2 ∙ (({isVentMed}/
+        {isVentIn})²) + 0,04 ∙ ({isVentHeight}/(2 ∙ {isVentMed})) + (1,2 ∙ ({isVentMed}/{isVentOut})²) ={' '}
+        {epsilon.toFixed(2)}
+        <br />R = 1 / 23 + 1 / 12 + {isCoverData.r}= {rOuter0.toFixed(3)} м²˚С/Вт
         <br />
-        После 4 иттераций скорость воздуха в прослойке составляет: V<sub>пр</sub> =
+        После 4 иттераций скорость воздуха в прослойке составляет: V<sub>пр</sub> = {vVent5} м/с
         <br />
         <br />
         <h5>6. Поток водяного пара из конструкции в воздушную прослойку.</h5>
@@ -537,35 +611,42 @@ export default function Calculator({
         <br />
         <br />
         <h5>7. Влажность воздуха на выходе из вентилируемой воздушной прослойки.</h5>
-        Среднее парциальное давление водяного пара наружного воздуха для января месяца: e = ({outE}/100) ∙ 344,00 =
+        Среднее парциальное давление водяного пара наружного воздуха для января месяца: e = ({outE}/100) ∙ 344.00 =
         {eOut}
-        Па
+        Па Вспомогательные величины:
+        <br />k = qVapor / (eIn - outE) = {kVapor} мг/м²∙ч∙Па
+        <br />e<sub>1</sub> = ({eOut} + {rEq} * {kVapor} * {eIn}) / ({kVapor} * {rEq} + 1) = {e1.toFixed(2)} Па;
+        <br />x<sub>1</sub> = (22100 * ({vVent5} * {isVentMed} * 1.005 * {rEq})) / ({kVapor} * {rEq} + 1) ={' '}
+        {x1.toFixed(1)} м;
         <br />
-        Вспомогательные величины: где R = 0,008/0,11 = 0,07 м² ∙ ч ∙ Па/мг
-        <br />
+        где R = {isCoverThickness} / {isCoverVapor} = {rEq} м²∙ч∙Па/мг <br />
         Парциальное давление водяного пара на выходе из воздушной прослойки:
+        <br />e<sub>пр</sub> = {eGap.toFixed(2)} Па
         <br />
-        Полученное давление водяного пара меньше давления насыщенного водяного пара при температуре наружного воздуха в
-        наиболее холодный месяц E = 344,00 Па, что будет препятствовать выпадению конденсата в воздушной прослойке с
+        Полученное давление меньше давления насыщенного водяного пара при температуре наружного воздуха в наиболее
+        холодный месяц E = 344.00 Па, что будет препятствовать выпадению конденсата в воздушной прослойке с
         железобетонными конструкциями.
         <br />
         <br />
         <h5>8. Проверка воздухопроницаемости конструкции.</h5>
         Сопротивление влагообмену на наружной границе стены составляет:
         <br />
-        Вспомогательные величины: Rx = 1/8,7+ 0,2/0,26+0,2/2,04+0,1/0,04+142/0,93 = 4,680 м²°С/Вт <br />t ={isInnerTemp}
-        - ({isInnerTemp} - ({isCityProp.tm})/4,770) ∙ 4,680 = -7,3 °С <br />E = 1,84 ∙ 10^11 ∙ exp(-5330/(273 - (
-        {isCityProp.tm}))) = {eOut} Па. <br />D = (356,00 - 289,00)/(817,0 - 289,00) = 0,13
+        Вспомогательные величины: R<sub>x</sub> = 1/8.7+ {brickQ}+{concreteQ}+{insQ}+{secondInsQ}+0.015/0.93 ={' '}
+        {rX.toFixed(3)} м²°С/Вт
+        <br />t<sub>x</sub> ={isInnerTemp}- ({isInnerTemp} - ({isCityProp.tm})/{isBuildingAim === '1' ? rCond1 : rCond2}
+        ) ∙ {rX.toFixed(3)} = -7,3 °С
+        <br />E = 1,84 ∙ 10^11 ∙ exp(-5330/(273 - ({isCityProp.tm}))) = {eOut} Па.
+        <br />D = (356,00 - 289,00)/(817,0 - 289,00) = 0,13
         <br />
         Параметр Г определяется интерполяцией по таблице 1 и составляет {dk}
         <br />
         Требуемая воздухопроницаемость стены с облицовкой на относе составляет:
         <br />
         Сопротивление воздухопроницаемости исследуемой стены составляет: R = {isConcreteThickness}/{isConcreteAir} +
-        {isBrickThickness}/{isBrickAir} + 0,00 + 142/373 = {rU} м² ∙ ч ∙ Па/кг <br />
+        {isBrickThickness}/{isBrickAir} + 0,00 + 142/373 = {rU} м²∙ч∙Па/кг <br />
         Разность давлений на наружной и внутренней поверхностях ограждения: Δp = 0,55 ∙ 48 ∙ (13,1 - 11,9) + 0,03 ∙ 13,1
         ∙ 2² = {deltaP} Па <br />
-        Воздухопроницаемость данной конструкции составляет: G = 24,00/386,00 = 0,062 кг/(м² ∙ ч)
+        Воздухопроницаемость данной конструкции составляет: G = 24,00/386,00 = 0,062 кг/(м²∙ч)
         <br />
         Таким образом, все требования к стене с НФС для исследуемой конструкции выполняются, в доработках она не
         нуждается, нужно уточнить приведенное сопротивление теплопередаче для конечной конструкции. Так как в процессе

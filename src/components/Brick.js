@@ -53,7 +53,7 @@ export default function Brick(props) {
               Вт/м<sup>2</sup>С<sup>o</sup>
             </li>
           </li>
-          {brickSp ? 5 : <input className="wallInputValue" id="brick-h" onChange={props.onBrickHeat}></input>}
+          {brickSp ? 5 : <input className="wallInputValue" id="brick-h" onChange={props.onBrickLambda}></input>}
         </div>
         <div className="wallInputUnit">
           <li className="wall-p">

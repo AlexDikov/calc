@@ -3,9 +3,6 @@ import { Form } from 'react-bootstrap';
 import { materials } from './materials';
 
 export default function FirstLayer(props) {
-  function handleDeleteClick() {
-    props.onDelete();
-  }
   const [insSp, setInsSp] = useState(false);
 
   const materialList = materials.map((item, i) => {
@@ -56,7 +53,7 @@ export default function FirstLayer(props) {
               Вт/м<sup>2</sup>С<sup>o</sup>
             </li>
           </li>
-          {insSp ? 5 : <input className="wallInputValue" id="ins-h" onChange={props.onInsHeat}></input>}
+          {insSp ? 5 : <input className="wallInputValue" id="ins-h" onChange={props.onInsLambda}></input>}
         </div>
         <div className="wallInputUnit">
           <li className="wall-p">

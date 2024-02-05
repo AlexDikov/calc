@@ -5,9 +5,30 @@ import winOne from '../images/win1.png';
 import winTwo from '../images/win2.png';
 import winThee from '../images/win3.png';
 
-import LinearLossCalc from './LinearLossCalc';
-
-export default function SystData(props) {
+export default function SystData({
+  isBrickLambda,
+  isBuildingType,
+  isConcreteLambda,
+  isGrib,
+  isInsLambda,
+  isInsThickness,
+  isSecondInsThickness,
+  isSecondInsLambda,
+  isSecondLayer,
+  isWindowDepth,
+  isWindowLength,
+  isWindowHeight,
+  isBrickArea,
+  onBrickArea,
+  isConcreteArea,
+  onConcreteArea,
+  onGrib,
+  isGribPcs,
+  onGribPcs,
+  onWindowLength,
+  onWindowHeight,
+  onWindowDepth,
+}) {
   // const [arrayType, setArrayType] = useState();
   // useEffect(() => {
   //   setArrayType('windows');
@@ -16,9 +37,9 @@ export default function SystData(props) {
   const navigate = useNavigate();
 
   const windowDepthPic = () => {
-    if (props.isWindowDepth == 1) return winOne;
-    if (props.isWindowDepth == 2) return winTwo;
-    if (props.isWindowDepth == 3) return winThee;
+    if (isWindowDepth == 1) return winOne;
+    if (isWindowDepth == 2) return winTwo;
+    if (isWindowDepth == 3) return winThee;
   };
 
   return (
@@ -31,21 +52,26 @@ export default function SystData(props) {
             <Form.Label htmlFor="brick-area">Площадь заполнения стен, м&#178;</Form.Label>
           </Col>
           <Col xs={3}>
-            <Form.Control id="brick-area" className="w-25" onChange={props.onBrickArea}></Form.Control>
+            <Form.Control id="brick-area" className="w-25" value={isBrickArea} onChange={onBrickArea}></Form.Control>
           </Col>
           <Col>
-            <Form.Label>Положение оконного блока</Form.Label>
+            <Form.Label htmlFor="window-depth">Положение оконного блока</Form.Label>
           </Col>
         </Row>
         <Row className="mt-3">
           <Col xs={3}>
-            <Form.Label htmlFor="brick-area">Площадь перекрытий, м&#178;</Form.Label>
+            <Form.Label htmlFor="concrete-area">Площадь перекрытий, м&#178;</Form.Label>
           </Col>
           <Col xs={3}>
-            <Form.Control id="brick-area" className="w-25" onChange={props.onConcreteArea}></Form.Control>
+            <Form.Control
+              id="concrete-area"
+              className="w-25"
+              value={isConcreteArea}
+              onChange={onConcreteArea}
+            ></Form.Control>
           </Col>
           <Col>
-            <Form onChange={props.WindowDepth}>
+            <Form id="window-depth" onChange={onWindowDepth}>
               {['radio'].map((type) => (
                 <div key={`inline-${type}`} className="mb-3">
                   <Form.Check
@@ -69,10 +95,15 @@ export default function SystData(props) {
             <Form.Label htmlFor="window-length">Длина оконных откосов, м</Form.Label>
           </Col>
           <Col xs={3}>
-            <Form.Control id="window-length" className="w-25" onChange={props.onWindowLength}></Form.Control>
+            <Form.Control
+              id="window-length"
+              className="w-25"
+              value={isWindowLength}
+              onChange={onWindowLength}
+            ></Form.Control>
           </Col>
           <Col>
-            <Form.Label>Нахлест утеплителя на оконный блок</Form.Label>
+            <Form.Label htmlFor="window-height">Нахлест утеплителя на оконный блок</Form.Label>
           </Col>
         </Row>
         <Row className="mt-3">
@@ -80,10 +111,10 @@ export default function SystData(props) {
             <Form.Label htmlFor="grib-pcs">Количество тарельчатых дюбелей, шт/м&#178;</Form.Label>
           </Col>
           <Col xs={3}>
-            <Form.Control id="grib-pcs" className="w-25" onChange={props.onGribPcs}></Form.Control>
+            <Form.Control id="grib-pcs" className="w-25" value={isGribPcs} onChange={onGribPcs}></Form.Control>
           </Col>
           <Col>
-            <Form onChange={props.onWindowHeight}>
+            <Form id="window-height" onChange={onWindowHeight}>
               {['radio'].map((type) => (
                 <div key={`inline-${type}`} className="mb-3">
                   <Form.Check
@@ -108,15 +139,31 @@ export default function SystData(props) {
           </Col>
 
           <Col xs={7}>
-            <Form.Select id="grib" className="w-25" onChange={props.onGribDepth}>
-              <option value={0.006}>{'L ≤ 2 мм'}</option>
-              <option value={0.005}>{'2 < L ≤ 6 мм'}</option>
-              <option value={0.004}>{'6 < L ≤ 11 мм'}</option>
-              <option value={0.003}>{'11 < L ≤ 16 мм'}</option>
-              <option value={0.0025}>{'16 < L ≤ 24 мм'}</option>
-              <option value={0.002}>{'24 < L ≤ 40 мм'}</option>
-              <option value={0.0015}>{'40 < L ≤ 70 мм'}</option>
-              <option value={0.001}>{'L ≥ 70 мм'}</option>
+            <Form.Select id="grib" className="w-25" value={isGrib} onChange={onGrib}>
+              <option id="g-1" value={0.006}>
+                {'L ≤ 2 мм'}
+              </option>
+              <option id="g-2" value={0.005}>
+                {'2 < L ≤ 6 мм'}
+              </option>
+              <option id="g-3" value={0.004}>
+                {'6 < L ≤ 11 мм'}
+              </option>
+              <option id="g-4" value={0.003}>
+                {'11 < L ≤ 16 мм'}
+              </option>
+              <option id="g-5" value={0.0025}>
+                {'16 < L ≤ 24 мм'}
+              </option>
+              <option id="g-6" value={0.002}>
+                {'24 < L ≤ 40 мм'}
+              </option>
+              <option id="g-7" value={0.0015}>
+                {'40 < L ≤ 70 мм'}
+              </option>
+              <option id="g-8" value={0.001}>
+                {'L ≥ 70 мм'}
+              </option>
             </Form.Select>
           </Col>
         </Row>
@@ -142,19 +189,6 @@ export default function SystData(props) {
           Далее
         </Button>
       </div>
-      <LinearLossCalc
-        isBuildingType={props.isBuildingType}
-        isBrickHeat={props.isBrickHeat}
-        isConcreteHeat={props.isConcreteHeat}
-        isInsHeat={props.isInsHeat}
-        isInsThickness={props.isInsThickness}
-        isSecondInsHeat={props.isSecondInsHeat}
-        isSecondInsThickness={props.isSecondInsThickness}
-        isSecondLayer={props.isSecondLayer}
-        isWindowDepth={props.isWindowDepth}
-        isWindowHeight={props.isWindowHeight}
-        onWindowHeatLoss={props.onWindowHeatLoss}
-      />
     </div>
   );
 }

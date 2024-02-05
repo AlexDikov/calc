@@ -3,10 +3,10 @@ import { windows } from './windows';
 export default function LinearLossCalc(props) {
   const insValue = props.isSecondLayer
     ? 0.001 /
-      ((props.isInsThickness / (props.isInsThickness + props.isSecondInsThickness)) * props.isInsHeat +
-        (props.isSecondInsThickness / (props.isInsThickness + props.isSecondInsThickness)) * props.isSecondInsHeat)
-    : props.isInsThickness / props.isInsHeat;
-  const wallValue = props.isBuildingType === 1 ? props.isConcreteHeat : props.isBrickHeat;
+      ((props.isInsThickness / (props.isInsThickness + props.isSecondInsThickness)) * props.isInsLambda +
+        (props.isSecondInsThickness / (props.isInsThickness + props.isSecondInsThickness)) * props.isSecondInsLambda)
+    : props.isInsThickness / props.isInsLambda;
+  const wallValue = props.isBuildingType === 1 ? props.isConcreteLambda : props.isBrickLambda;
   const ins = () => {
     let ins1, ins2;
     let heatItem;
@@ -79,7 +79,7 @@ export default function LinearLossCalc(props) {
 
     const final = pre1 + ((insValue - insX1()) * (pre2 - pre1)) / (insX2() - insX1());
 
-    props.onWindowHeatLoss(final);
+    props.onWindowLambdaLoss(final);
   };
   finalValue();
 }

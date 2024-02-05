@@ -9,45 +9,45 @@ export default function WallData(props) {
   const navigate = useNavigate();
 
   const wall = () => {
-    if (props.isBuildingType == 1)
+    if (props.isBuildingType === '1')
       return (
         <Concrete
           onConcreteThickness={props.onConcreteThickness}
           onConcreteDensity={props.onConcreteDensity}
-          onConcreteHeat={props.onConcreteHeat}
+          onConcreteLambda={props.onConcreteLambda}
           onConcreteVapor={props.onConcreteVapor}
           onConcreteAir={props.onConcreteAir}
-          isConcreteSpHeat={props.isConcreteSpHeat}
-          onConcreteSpHeat={props.onConcreteSpHeat}
+          isConcreteSpLambda={props.isConcreteSpLambda}
+          onConcreteSpLambda={props.onConcreteSpLambda}
         />
       );
-    if (props.isBuildingType == 2)
+    if (props.isBuildingType === '2')
       return (
         <>
           <Concrete
             onConcreteThickness={props.onConcreteThickness}
             onConcreteDensity={props.onConcreteDensity}
-            onConcreteHeat={props.onConcreteHeat}
+            onConcreteLambda={props.onConcreteLambda}
             onConcreteVapor={props.onConcreteVapor}
             onConcreteAir={props.onConcreteAir}
-            isConcreteSpHeat={props.isConcreteSpHeat}
-            onConcreteSpHeat={props.onConcreteSpHeat}
+            isConcreteSpLambda={props.isConcreteSpLambda}
+            onConcreteSpLambda={props.onConcreteSpLambda}
           />
           <Brick
             onBrickThickness={props.onBrickThickness}
             onBrickDensity={props.onBrickDensity}
-            onBrickHeat={props.onBrickHeat}
+            onBrickLambda={props.onBrickLambda}
             onBrickVapor={props.onBrickVapor}
             onBrickAir={props.onBrickAir}
           />
         </>
       );
-    if (props.isBuildingType == 3)
+    if (props.isBuildingType === '3')
       return (
         <Brick
           onBrickThickness={props.onBrickThickness}
           onBrickDensity={props.onBrickDensity}
-          onBrickHeat={props.onBrickHeat}
+          onBrickLambda={props.onBrickLambda}
           onBrickVapor={props.onBrickVapor}
           onBrickAir={props.onBrickAir}
         />
@@ -64,7 +64,7 @@ export default function WallData(props) {
           isSecondLayer={props.isSecondLayer}
           onInsThickness={props.onInsThickness}
           onInsDensity={props.onInsDensity}
-          onInsHeat={props.onInsHeat}
+          onInsLambda={props.onInsLambda}
           onInsVapor={props.onInsVapor}
           onInsAir={props.onInsAir}
         />
@@ -74,7 +74,7 @@ export default function WallData(props) {
             onDelete={props.onDeleteSecondLayer}
             onSecondInsThickness={props.onSecondInsThickness}
             onSecondInsDensity={props.onSecondInsDensity}
-            onSecondInsHeat={props.onSecondInsHeat}
+            onSecondInsLambda={props.onSecondInsLambda}
             onSecondInsVapor={props.onSecondInsVapor}
             onSecondInsAir={props.onSecondInsAir}
           />

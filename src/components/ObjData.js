@@ -20,7 +20,6 @@ export default function ObjData({
   onBuildingType,
   onCityValue,
   onCityProp,
-  // onConcreteSpHeat,
   onConcreteWall,
   onHumidity,
   onInnerTemp,
@@ -42,49 +41,6 @@ export default function ObjData({
 
   onCityProp(cityPropList);
 
-  // useEffect(() => {
-  //   const savedObjName = localStorage.getItem('objName');
-  //   const savedObjAddress = localStorage.getItem('objAddress');
-  //   const savedBuildingAim = localStorage.getItem('buildingAim');
-  //   const savedBuildingType = localStorage.getItem('buildingType');
-  //   const savedConcreteWall = localStorage.getItem('concreteWall');
-  //   const savedCityValue = localStorage.getItem('cityValue');
-  //   const savedHumidity = localStorage.getItem('humidity');
-  //   const savedInnerTemp = localStorage.getItem('innerTemp');
-  //   const savedMr = localStorage.getItem('mr');
-  //   if (savedObjName) onObjName(savedObjName);
-  //   if (savedObjAddress) onObjAddress(savedObjAddress);
-  //   if (savedBuildingAim) onBuildingAim(savedBuildingAim);
-  //   if (savedBuildingType) onBuildingType(savedBuildingType);
-  //   if (savedConcreteWall) onConcreteWall(savedConcreteWall);
-  //   if (savedCityValue) onCityValue(savedCityValue);
-  //   if (savedHumidity) onHumidity(savedHumidity);
-  //   if (savedInnerTemp) onInnerTemp(savedInnerTemp);
-  //   if (savedMr) onMr(savedMr);
-  // }, []);
-
-  // useEffect(() => {
-  //   localStorage.setItem('objName', isObjName);
-  //   localStorage.setItem('objAddress', isObjAddress);
-  //   localStorage.setItem('buildingAim', isBuildingAim);
-  //   localStorage.setItem('buildingType', isBuildingType);
-  //   localStorage.setItem('concreteWall', isConcreteWall);
-  //   localStorage.setItem('cityValue', isCityValue);
-  //   localStorage.setItem('humidity', isHumidity);
-  //   localStorage.setItem('innerTemp', isInnerTemp);
-  //   localStorage.setItem('mr', isMr);
-  // }, [
-  //   isObjName,
-  //   isObjAddress,
-  //   isBuildingAim,
-  //   isBuildingType,
-  //   isCityValue,
-  //   isHumidity,
-  //   isInnerTemp,
-  //   isMr,
-  //   isConcreteWall,
-  // ]);
-
   return (
     <div className="objPage">
       <Row className="mb-5 mt-3">
@@ -99,17 +55,23 @@ export default function ObjData({
         <Col>
           <div className="objData">
             <div className="objData__list">
-              <Form.Select className="mb-3" id="city" onChange={onCityValue}>
+              <Form.Select className="mb-3" id="city" value={isCityValue} required onChange={onCityValue}>
                 <option>Город строительства</option>
                 {cityList}
               </Form.Select>
-              <Form.Select className="mb-3" id="building-aim" onChange={onBuildingAim}>
+              <Form.Select className="mb-3" id="building-aim" value={isBuildingAim} required onChange={onBuildingAim}>
                 <option>Назначение здания</option>
                 <option value="1">Жилое</option>
                 <option value="2">Лечебное</option>
                 <option value="3">Коммерческое</option>
               </Form.Select>
-              <Form.Select className="mb-4 " id="building-type" onChange={onBuildingType}>
+              <Form.Select
+                className="mb-4 "
+                id="building-type"
+                value={isBuildingType}
+                required
+                onChange={onBuildingType}
+              >
                 <option>Тип конструкции</option>
                 <option value="1">Монолитная</option>
                 <option value="2">Монолитно-каркасная</option>

@@ -50,15 +50,15 @@ export default function Concrete(props) {
             <input
               className="wallInputValue"
               id="concrete-sp-h"
-              defaultValue={props.isConcreteSpHeat}
-              onChange={props.onConcreteHeat}
+              defaultValue={props.isConcreteSpLambda}
+              onChange={props.onConcreteLambda}
             ></input>
           ) : (
             <input
               className="wallInputValue"
               id="concrete-h"
               defaultValue={null}
-              onChange={props.onConcreteHeat}
+              onChange={props.onConcreteLambda}
             ></input>
           )}
         </div>

@@ -40,7 +40,7 @@ export default function CoverData(props) {
               <option value={{ r: 0.03, c: 5.3, l: 0.52 }}>Фиброцемент</option>
             </Form.Select>
           ) : (
-            <Form.Control className="w-25 ms-2" placeholder="Название облицовки" />
+            <Form.Control className="w-25 ms-2" placeholder="Название облицовки" onChange={props.onCoverName} />
           )}
         </Row>
         {props.isOwnCover ? (
@@ -53,7 +53,7 @@ export default function CoverData(props) {
             </Col>
           </Row>
         ) : (
-          <SystInput text="Толщина облицовки, мм" />
+          <SystInput text="Толщина облицовки, мм" method={props.onCoverThickness} />
         )}
         {props.isOwnCover ? (
           <Row>
@@ -65,7 +65,7 @@ export default function CoverData(props) {
             </Col>
           </Row>
         ) : (
-          <SystInput text="Теплопроводность облицовки, Вт/м&#178;С&#176;" method={props.onCoverHeat} />
+          <SystInput text="Теплопроводность облицовки, Вт/м&#178;С&#176;" method={props.onCoverLambda} />
         )}
         {props.isOwnCover ? (
           <Row>
@@ -77,7 +77,7 @@ export default function CoverData(props) {
             </Col>
           </Row>
         ) : (
-          <SystInput text="Коэффициент паропроницания облицовки, мг/м∙ч∙Па" />
+          <SystInput text="Коэффициент паропроницания облицовки, мг/м∙ч∙Па" method={props.onCoverVapor} />
         )}
       </div>
       <div className="navbnt position-relative mt-3 mb-3">

@@ -61,7 +61,7 @@ export default function SecondLayer(props) {
           {secondInsSp ? (
             5
           ) : (
-            <input className="wallInputValue" id="second-ins-h" onChange={props.onSecondInsHeat}></input>
+            <input className="wallInputValue" id="second-ins-h" onChange={props.onSecondInsLambda}></input>
           )}
         </div>
         <div className="wallInputUnit">

@@ -184,11 +184,11 @@ export default function Bracket(props) {
         isSecondLayer={props.isSecondLayer}
         isInsThickness={props.isInsThickness}
         isSecondInsThickness={props.isSecondInsThickness}
-        isInsHeat={props.isInsHeat}
-        isSecondInsHeat={props.isSecondInsHeat}
+        isInsLambda={props.isInsLambda}
+        isSecondInsLambda={props.isSecondInsLambda}
         isBuildingType={props.isBuildingType}
-        isConcreteHeat={props.isConcreteHeat}
-        isBrickHeat={props.isBrickHeat}
+        isConcreteLambda={props.isConcreteLambda}
+        isBrickLambda={props.isBrickLambda}
         isWallType={wallType}
       />
     </div>
