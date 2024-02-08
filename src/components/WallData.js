@@ -1,106 +1,115 @@
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import SecondLayer from './SecondLayer';
-import FirstLayer from './FirstLayer';
 import Concrete from './Concrete';
 import Brick from './Brick';
+import WallInput from './WallInput';
 
-export default function WallData(props) {
+export default function WallData({
+  isBuildingType,
+  isCityProp,
+  isSecondIns,
+  onAddSecondIns,
+  onBrickAir,
+  onBrickDensity,
+  onBrickLambda,
+  onBrickThickness,
+  onBrickVapor,
+  onDeleteSecondIns,
+  onConcreteAir,
+  onConcreteDensity,
+  onConcreteLambda,
+  onConcreteThickness,
+  onConcreteVapor,
+  onInsAir,
+  onInsDensity,
+  onInsLambda,
+  onInsThickness,
+  onInsVapor,
+  onSecondInsAir,
+  onSecondInsDensity,
+  onSecondInsLambda,
+  onSecondInsThickness,
+  onSecondInsVapor,
+}) {
   const navigate = useNavigate();
-
-  const wall = () => {
-    if (props.isBuildingType === '1')
-      return (
-        <Concrete
-          onConcreteThickness={props.onConcreteThickness}
-          onConcreteDensity={props.onConcreteDensity}
-          onConcreteLambda={props.onConcreteLambda}
-          onConcreteVapor={props.onConcreteVapor}
-          onConcreteAir={props.onConcreteAir}
-          isConcreteSpLambda={props.isConcreteSpLambda}
-          onConcreteSpLambda={props.onConcreteSpLambda}
-        />
-      );
-    if (props.isBuildingType === '2')
-      return (
-        <>
-          <Concrete
-            onConcreteThickness={props.onConcreteThickness}
-            onConcreteDensity={props.onConcreteDensity}
-            onConcreteLambda={props.onConcreteLambda}
-            onConcreteVapor={props.onConcreteVapor}
-            onConcreteAir={props.onConcreteAir}
-            isConcreteSpLambda={props.isConcreteSpLambda}
-            onConcreteSpLambda={props.onConcreteSpLambda}
-          />
-          <Brick
-            onBrickThickness={props.onBrickThickness}
-            onBrickDensity={props.onBrickDensity}
-            onBrickLambda={props.onBrickLambda}
-            onBrickVapor={props.onBrickVapor}
-            onBrickAir={props.onBrickAir}
-          />
-        </>
-      );
-    if (props.isBuildingType === '3')
-      return (
-        <Brick
-          onBrickThickness={props.onBrickThickness}
-          onBrickDensity={props.onBrickDensity}
-          onBrickLambda={props.onBrickLambda}
-          onBrickVapor={props.onBrickVapor}
-          onBrickAir={props.onBrickAir}
-        />
-      );
-  };
 
   return (
     <div>
       <div className="wallData">
-        {wall()}
-
-        <FirstLayer
-          onAddSecondLayer={props.onAddSecondLayer}
-          isSecondLayer={props.isSecondLayer}
-          onInsThickness={props.onInsThickness}
-          onInsDensity={props.onInsDensity}
-          onInsLambda={props.onInsLambda}
-          onInsVapor={props.onInsVapor}
-          onInsAir={props.onInsAir}
+        {isBuildingType !== '3' ? (
+          <WallInput
+            isCityProp={isCityProp}
+            isName="Железобетон"
+            isId="concrete"
+            onAir={onConcreteAir}
+            onDensity={onConcreteDensity}
+            onLambda={onConcreteLambda}
+            onThickness={onConcreteThickness}
+            onVapor={onConcreteVapor}
+            isSpAir={1}
+            isSpLambda={isCityProp.s === 'A' ? 1.72 : 2.04}
+            isSpVapor={20000}
+          />
+        ) : null}
+        {isBuildingType !== '1' ? (
+          <WallInput
+            isCityProp={isCityProp}
+            isName="Кладка"
+            isId="brick"
+            onAir={onBrickAir}
+            onDensity={onBrickDensity}
+            onLambda={onBrickLambda}
+            onThickness={onBrickThickness}
+            onVapor={onBrickVapor}
+          />
+        ) : null}
+        <WallInput
+          isCityProp={isCityProp}
+          isId="ins-1"
+          isName="Утеплитель"
+          onAddSecondIns={onAddSecondIns}
+          isSecondIns={isSecondIns}
+          onAir={onInsAir}
+          onDensity={onInsDensity}
+          onLambda={onInsLambda}
+          onThickness={onInsThickness}
+          onVapor={onInsVapor}
         />
-
-        {props.isSecondLayer ? (
-          <SecondLayer
-            onDelete={props.onDeleteSecondLayer}
-            onSecondInsThickness={props.onSecondInsThickness}
-            onSecondInsDensity={props.onSecondInsDensity}
-            onSecondInsLambda={props.onSecondInsLambda}
-            onSecondInsVapor={props.onSecondInsVapor}
-            onSecondInsAir={props.onSecondInsAir}
+        {isSecondIns ? (
+          <WallInput
+            isCityProp={isCityProp}
+            isName="Утеплитель"
+            isId="ins-2"
+            onDeleteSecondIns={onDeleteSecondIns}
+            isSecondIns={isSecondIns}
+            onAir={onSecondInsAir}
+            onDensity={onSecondInsDensity}
+            onLambda={onSecondInsLambda}
+            onThickness={onSecondInsThickness}
+            onVapor={onSecondInsVapor}
           />
         ) : null}
       </div>
-      <div className="navbnt position-relative mt-3 mb-3">
-        <Button
-          variant="outline-secondary"
-          size="lg"
-          onClick={() => {
-            navigate('/');
-          }}
-        >
-          Назад
-        </Button>
-        <Button
-          className="position-absolute end-0 bottom-0"
-          variant="outline-secondary"
-          size="lg"
-          onClick={() => {
-            navigate('/systdata');
-          }}
-        >
-          Далее
-        </Button>
-      </div>
+      <Button
+        className="btn-previous"
+        variant="outline-secondary"
+        size="sm"
+        onClick={() => {
+          navigate('/');
+        }}
+      >
+        Назад
+      </Button>
+      <Button
+        className="btn-next"
+        variant="outline-secondary"
+        size="sm"
+        onClick={() => {
+          navigate('/systdata');
+        }}
+      >
+        Далее
+      </Button>
     </div>
   );
 }

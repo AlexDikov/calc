@@ -1,6 +1,6 @@
 .wallData {
     display: flex;
-    margin-top: 100px;
+    margin-top: 50px;
     height: 50vh;
     justify-content: center;
 }
@@ -11,14 +11,15 @@
     max-width: 1fr;
     margin: 10px;
     position: relative;
-    box-shadow: 1px 1px 11px 1px rgba(34, 60, 80, 0.2);
+    box-shadow: 1px 1px 11px 1px rgba(30, 31, 33, 0.2);
+    max-height: 300px
 }
 
 .wallInputList {
     list-style: none;
     display: flex;
     flex-direction: column;
-    height: 300px;
+    
     justify-content: space-between;
     font-size: 11px;
 }
@@ -33,7 +34,7 @@
     border: none;
     border-bottom: 1px solid;
     border-color: rgb(216, 216, 216);
-    margin-left: 10px;
+    margin: 0 0 15px 10px;
     
 }
 
@@ -57,6 +58,8 @@
     display: flex;
     justify-content: end;
     font-size: 10px;
+    position: absolute;
+    bottom: 5px;
 }
 
 .wallCloseBtn {

@@ -26,9 +26,21 @@ export default function CoverData(props) {
         </SystInput>
         <SystInput text="Высота объекта, м" method={props.onHeight} />
         <Row>
-          <Form.Check className="mt-3 ms-2" label="Своя облицовка" onChange={props.onOwnCover}></Form.Check>
+          <Form.Check
+            className="mt-3 ms-2"
+            id="own-cover"
+            label="Своя облицовка"
+            onChange={props.onOwnCover}
+          ></Form.Check>
           {props.isOwnCover ? (
-            <Form.Select className="w-25 ms-2" type="text">
+            <Form.Control
+              className="w-25 ms-2"
+              id="covers-list"
+              placeholder="Название облицовки"
+              onChange={props.onCoverName}
+            />
+          ) : (
+            <Form.Select className="w-25 ms-2" type="text" onChange={props.onCoverName}>
               <option>Тип облицовки</option>
               <option value={{ r: 0.001, c: 0.05, l: 221 }}>Алюминий</option>
               <option value={{ r: 0.008, c: 5.3, l: 3.49 }}>Гранит, гнейс, базальт</option>
@@ -39,10 +51,18 @@ export default function CoverData(props) {
               <option value={{ r: 0.001, c: 5.3, l: 0.76 }}>Стекло</option>
               <option value={{ r: 0.03, c: 5.3, l: 0.52 }}>Фиброцемент</option>
             </Form.Select>
-          ) : (
-            <Form.Control className="w-25 ms-2" placeholder="Название облицовки" onChange={props.onCoverName} />
           )}
         </Row>
+        {props.isOwnCover ? (
+          <Row>
+            <Form.Check
+              className="mt-3 ms-2"
+              id="mtel-cover"
+              label="Металлическая"
+              onChange={props.oтMetallCover}
+            ></Form.Check>
+          </Row>
+        ) : null}
         {props.isOwnCover ? (
           <Row>
             <Col xs={4}>
@@ -53,24 +73,21 @@ export default function CoverData(props) {
             </Col>
           </Row>
         ) : (
-          <SystInput text="Толщина облицовки, мм" method={props.onCoverThickness} />
+          <div>
+            <SystInput text="Толщина облицовки, мм" method={props.onCoverThickness} />
+          </div>
         )}
         {props.isOwnCover ? (
-          <Row>
-            <Col xs={4}>
-              <Form.Label className="mt-3">Теплопроводность облицовки, Вт/м&#178;С&#176;</Form.Label>
-            </Col>
-            <Col>
-              <Form.Label className="mt-3">5</Form.Label>
-            </Col>
-          </Row>
+          <SystInput text="Теплопроводность облицовки, Вт/м&#178;С&#176;" iValue={props.isCoverName.l} />
         ) : (
           <SystInput text="Теплопроводность облицовки, Вт/м&#178;С&#176;" method={props.onCoverLambda} />
         )}
         {props.isOwnCover ? (
           <Row>
             <Col xs={4}>
-              <Form.Label className="mt-3">Коэффициент паропроницания облицовки, мг/м∙ч∙ Па</Form.Label>
+              <Form.Label className="mt-3">
+                Коэффициент паропроницания облицовки, мг/м<sup>2</sup>∙ч∙Па
+              </Form.Label>
             </Col>
             <Col>
               <Form.Label className="mt-3">5</Form.Label>
@@ -80,27 +97,27 @@ export default function CoverData(props) {
           <SystInput text="Коэффициент паропроницания облицовки, мг/м∙ч∙Па" method={props.onCoverVapor} />
         )}
       </div>
-      <div className="navbnt position-relative mt-3 mb-3">
-        <Button
-          variant="outline-secondary"
-          size="lg"
-          onClick={() => {
-            navigate('/bracketdata');
-          }}
-        >
-          Назад
-        </Button>
-        <Button
-          className="position-absolute end-0"
-          variant="outline-secondary"
-          size="lg"
-          onClick={() => {
-            navigate('/pz');
-          }}
-        >
-          Далее
-        </Button>
-      </div>
+
+      <Button
+        className="btn-previous"
+        variant="outline-secondary"
+        size="sm"
+        onClick={() => {
+          navigate('/bracketdata');
+        }}
+      >
+        Назад
+      </Button>
+      <Button
+        className="btn-next"
+        variant="outline-secondary"
+        size="sm"
+        onClick={() => {
+          navigate('/final');
+        }}
+      >
+        Далее
+      </Button>
     </div>
   );
 }

@@ -9,12 +9,12 @@
 .header__title{
   display:flex;
   justify-self: center;
-  font-size: 48px;
+  font-size: 32px;
 }
 
 .header__logo {
-  width: 500px;
-  margin-bottom: 40px;
+  width: 300px;
+  margin-bottom: 20px;
 }
 
 @media screen and (max-width:950px) {

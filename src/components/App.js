@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import BracketData from './BracketData';
 import Calculator from './Calculator';
 import CoverData from './CoverData';
+import { cities } from './cities';
 
 export default function App(props) {
   const [bracketResult, setBracketResult] = useState({});
@@ -19,20 +20,7 @@ export default function App(props) {
   const [brickVapor, setBrickVapor] = useState(0.155);
   const [buildingAim, setBuildingAim] = useState('');
   const [buildingType, setBuildingType] = useState('');
-
-  const [cityProp, setCityProp] = useState({
-    c: 'Москва',
-    t: -26,
-    tm: -7.8,
-    z8: 204,
-    t8: -2.2,
-    z10: 222,
-    t10: -1.3,
-    w: 84,
-    vm: 2,
-    v: 1.8,
-    s: 'Б',
-  });
+  const [cityProp, setCityProp] = useState({});
   const [cityValue, setCityValue] = useState('');
   const [concreteAir, setConcreteAir] = useState(1);
   const [concreteArea, setConcreteArea] = useState('');
@@ -44,12 +32,10 @@ export default function App(props) {
   const [concreteWall, setConcreteWall] = useState(false);
   const [coverData, setCoverData] = useState({ r: 0.014, c: 5.3, l: 0.81 });
   const [coverLambda, setCoverLambda] = useState(1);
-  const [coverName, setCoverName] = useState(1);
+  const [coverName, setCoverName] = useState({});
   const [coverThickness, setCoverThickness] = useState(0.01);
   const [coverVapor, setCoverVapor] = useState(1);
-  const [eGap, setEgap] = useState();
-  const [gObl, setGobl] = useState();
-  const [gU, setGu] = useState();
+  const [finalValues, setFinalValues] = useState({});
   const [grib, setGrib] = useState('');
   const [gribDepth, setGribDepth] = useState(0.006);
   const [gribPcs, setGribPcs] = useState('');
@@ -66,7 +52,7 @@ export default function App(props) {
   const [objAddress, setObjAddress] = useState('');
   const [ownCover, setOwnCover] = useState(false);
   const [plaster, setPlaster] = useState(true);
-  const [secondLayer, setSecondLayer] = useState(false);
+  const [secondIns, setSecondIns] = useState(false);
   const [secondInsAir, setSecondInsAir] = useState(0.5);
   const [secondInsDensity, setSecondInsDensity] = useState(1);
   const [secondInsLambda, setSecondInsLambda] = useState(0.05);
@@ -79,12 +65,12 @@ export default function App(props) {
   const [ventOut, setVentOut] = useState(0.03);
   const [windMembraneR, setWindMembraneR] = useState(0.1);
   const [windowLength, setWindowLength] = useState('');
-  const [windowLambdaLoss, setWindowLambdaLoss] = useState(1);
+  const [windowLambdaLoss, setWindowLoss] = useState(1);
   const [windowHeight, setWindowHeight] = useState('1');
   const [windowDepth, setWindowDepth] = useState('1');
 
-  function handleAddSecondLayer() {
-    setSecondLayer(true);
+  function handleAddSecondIns() {
+    setSecondIns(true);
   }
   function handleBracketResult({ index, value, bracket, pcs, type, weight, wall }) {
     setBracketResult((prevBracketResult) => ({
@@ -118,6 +104,8 @@ export default function App(props) {
   }
   function handleCityValue(changeEvent) {
     setCityValue(changeEvent.target.value);
+    const cityValue = cities.find((city, i) => (i == changeEvent.target.value ? city : null));
+    setCityProp(cityValue);
   }
   function handleConcreteAir(changeEvent) {
     setConcreteAir(changeEvent.target.value);
@@ -145,8 +133,8 @@ export default function App(props) {
   function handleCoverLambda(changeEvent) {
     setCoverLambda(changeEvent.target.value);
   }
-  function handleCoverName(changeEvent) {
-    setCoverName(changeEvent.target.value);
+  function handleCoverName(e) {
+    setCoverName(e.target.value);
   }
   function handleCoverThickness(changeEvent) {
     setCoverThickness(changeEvent.target.value);
@@ -154,25 +142,16 @@ export default function App(props) {
   function handleCoverVapor(changeEvent) {
     setCoverVapor(changeEvent.target.value);
   }
-  function handleDeleteSecondLayer() {
-    setSecondLayer(false);
-  }
-  function handleCityProp(item) {
-    setCityProp(item);
+  function handleDeleteSecondIns() {
+    setSecondIns(false);
   }
 
   function handleCoverData(changeEvent) {
     setCoverData(changeEvent.target.value);
   }
 
-  function handleEgap() {
-    setEgap();
-  }
-  function handleGobl() {
-    setGobl();
-  }
-  function handleGu() {
-    setGu();
+  function handleFinalValues() {
+    setFinalValues();
   }
   function handleGrib(e) {
     setGrib(e.target.options[e.target.selectedIndex].text);
@@ -286,7 +265,6 @@ export default function App(props) {
               isObjAddress={objAddress || ''}
               onBuildingAim={handleBuildingAim}
               onBuildingType={handleBuildingType}
-              onCityProp={handleCityProp}
               onCityValue={handleCityValue}
               onConcreteWall={toggleConcreteWall}
               onInnerTemp={handleInnerTemp}
@@ -302,19 +280,18 @@ export default function App(props) {
           element={
             <WallData
               isBuildingType={buildingType}
-              isConcreteSpLambda={concreteSpLambda}
-              isSecondLayer={secondLayer}
-              onAddSecondLayer={handleAddSecondLayer}
+              isCityProp={cityProp}
+              isSecondIns={secondIns}
+              onAddSecondIns={handleAddSecondIns}
               onBrickAir={handleBrickAir}
               onBrickDensity={handleBrickDensity}
               onBrickLambda={handleBrickLambda}
               onBrickThickness={handleBrickThickness}
               onBrickVapor={handleBrickVapor}
-              onDeleteSecondLayer={handleDeleteSecondLayer}
+              onDeleteSecondIns={handleDeleteSecondIns}
               onConcreteAir={handleConcreteAir}
               onConcreteDensity={handleConcreteDensity}
               onConcreteLambda={handleConcreteLambda}
-              onConcreteSpLambda={handleConcreteSpLambda}
               onConcreteThickness={handleConcreteThickness}
               onConcreteVapor={handleConcreteVapor}
               onInsAir={handleInsAir}
@@ -344,7 +321,7 @@ export default function App(props) {
               isInsThickness={insThickness}
               isSecondInsThickness={secondInsThickness}
               isSecondInsLambda={secondInsLambda}
-              isSecondLayer={secondLayer}
+              isSecondIns={secondIns}
               isWindowDepth={windowDepth}
               isWindowHeight={windowHeight}
               isWindowLength={windowLength}
@@ -367,7 +344,7 @@ export default function App(props) {
               isConcreteLambda={concreteLambda}
               isInsLambda={insLambda}
               isInsThickness={insThickness}
-              isSecondLayer={secondLayer}
+              isSecondIns={secondIns}
               isSecondInsThickness={secondInsThickness}
               isSecondInsLambda={secondInsLambda}
               onBracketResult={handleBracketResult}
@@ -378,6 +355,7 @@ export default function App(props) {
           path="/coverdata"
           element={
             <CoverData
+              isCoverName={coverName}
               isOwnCover={ownCover}
               onCoverData={handleCoverData}
               onCoverLambda={handleCoverLambda}
@@ -393,7 +371,7 @@ export default function App(props) {
             />
           }
         ></Route>
-        <Route path="/final" element={<Final />}></Route>
+        <Route path="/final" element={<Final isFinalValues={finalValues} />}></Route>
 
         <Route
           path="/pz"
@@ -437,7 +415,7 @@ export default function App(props) {
               isObjAddress={objAddress}
               isObjName={objName}
               isPlaster={plaster}
-              isSecondIns={secondLayer}
+              isSecondIns={secondIns}
               isSecondInsAir={secondInsAir}
               isSecondInsThickness={secondInsThickness}
               isSecondInsDensity={secondInsDensity}
@@ -453,9 +431,7 @@ export default function App(props) {
               isWindowLambdaLoss={windowLambdaLoss}
               isWindowHeight={windowHeight}
               isWindowDepth={windowDepth}
-              onEgap={handleEgap}
-              onGobl={handleGobl}
-              onGu={handleGu}
+              onFinalValues={handleFinalValues}
             />
           }
         ></Route>

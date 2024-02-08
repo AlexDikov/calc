@@ -10,7 +10,7 @@ export default function SystInput(props) {
         </Form.Label>
       </Col>
       <Col xs={3}>
-        <Form.Control className="w-25 mt-2 " onChange={props.method} />
+        <Form.Control className="w-25 mt-2 " onChange={props.method} value={props.iValue} />
       </Col>
     </Row>
   );

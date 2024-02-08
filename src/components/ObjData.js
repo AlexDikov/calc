@@ -10,6 +10,7 @@ export default function ObjData({
   isBuildingAim,
   isBuildingType,
   isCityValue,
+  isCityProp,
   isConcreteWall,
   isHumidity,
   isInnerTemp,
@@ -36,10 +37,6 @@ export default function ObjData({
       </option>
     );
   });
-
-  const cityPropList = cities.find((city, i) => (i == isCityValue ? city : null));
-
-  onCityProp(cityPropList);
 
   return (
     <div className="objPage">
@@ -75,7 +72,7 @@ export default function ObjData({
                 <option>Тип конструкции</option>
                 <option value="1">Монолитная</option>
                 <option value="2">Монолитно-каркасная</option>
-                <option value="3">Безкаркасная</option>
+                <option value="3">Беcкаркасная</option>
               </Form.Select>
               {isBuildingType === 2 ? (
                 <Form.Check
@@ -124,44 +121,43 @@ export default function ObjData({
             <p>Расчетные параметры атмосферы</p>
             <Stack gap={0}>
               <div className="p-2">
-                {'Температура наиболее холодной пятидневки обеспеченностью 0,92: ' + cityPropList?.t}
+                {`Температура наиболее холодной пятидневки обеспеченностью 0,92: ${isCityProp?.t || ''}`}
                 <sup>o</sup>C
               </div>
               <div className="p-2">
-                {'Средняя температура наиболее холодного месяца: ' + cityPropList?.tm} <sup>o</sup>C
+                {`Средняя температура наиболее холодного месяца: ${isCityProp?.tm || ''}`} <sup>o</sup>C
               </div>
               <div className="p-2">
                 {`Средняя температура отопительного периода: ${
-                  isBuildingAim === '2' ? cityPropList.t10 || '' : cityPropList.t8 || ''
+                  isBuildingAim === '2' ? isCityProp.t10 || '' : isCityProp.t8 || ''
                 }`}
                 <sup>o</sup>C
               </div>
               <div className="p-2">
                 {`Продолжительсность отопительного периода: ${
-                  isBuildingAim === '2' ? cityPropList?.z10 || '' : cityPropList?.z8 || ''
+                  isBuildingAim === '2' ? isCityProp?.z10 || '' : isCityProp?.z8 || ''
                 }`}
                 сут
               </div>
-              <div className="p-2">{'Относительная влажность воздуха: ' + (cityPropList?.w || '')} %</div>
+              <div className="p-2">{'Относительная влажность воздуха: ' + (isCityProp?.w || '')} %</div>
               <div className="p-2">
-                {'Максимальная из средних скоростей по румбам за январь: ' + (cityPropList?.v || '')} м/с
+                {'Максимальная из средних скоростей по румбам за январь: ' + (isCityProp?.v || '')} м/с
               </div>
             </Stack>
           </Container>
         </Col>
       </Row>
-      <div className="navbnt position-relative mt-3 mb-3">
-        <Button
-          className="position-absolute end-0"
-          variant="outline-secondary"
-          size="lg"
-          onClick={() => {
-            navigate('/walldata');
-          }}
-        >
-          Далее
-        </Button>
-      </div>
+      <div className="navbnt position-relative mt-3 mb-3"></div>
+      <Button
+        className="btn-next"
+        variant="outline-secondary"
+        size="sm"
+        onClick={() => {
+          navigate('/walldata');
+        }}
+      >
+        Далее
+      </Button>
     </div>
   );
 }

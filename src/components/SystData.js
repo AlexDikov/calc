@@ -168,27 +168,27 @@ export default function SystData({
           </Col>
         </Row>
       </div>
-      <div className="navbnt position-relative mt-3 mb-3">
-        <Button
-          variant="outline-secondary"
-          size="lg"
-          onClick={() => {
-            navigate('/walldata');
-          }}
-        >
-          Назад
-        </Button>
-        <Button
-          className="position-absolute end-0"
-          variant="outline-secondary"
-          size="lg"
-          onClick={() => {
-            navigate('/bracketdata');
-          }}
-        >
-          Далее
-        </Button>
-      </div>
+
+      <Button
+        className="btn-previous"
+        variant="outline-secondary"
+        size="sm"
+        onClick={() => {
+          navigate('/walldata');
+        }}
+      >
+        Назад
+      </Button>
+      <Button
+        className="btn-next"
+        variant="outline-secondary"
+        size="sm"
+        onClick={() => {
+          navigate('/bracketdata');
+        }}
+      >
+        Далее
+      </Button>
     </div>
   );
 }

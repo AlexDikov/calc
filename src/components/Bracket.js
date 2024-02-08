@@ -180,7 +180,6 @@ export default function Bracket(props) {
         isBracketPcs={bracketPcs}
         isBracketType={bracketType}
         isBracketWeight={bracketWeight}
-        onBracketResult={handleResult}
         isSecondLayer={props.isSecondLayer}
         isInsThickness={props.isInsThickness}
         isSecondInsThickness={props.isSecondInsThickness}
@@ -190,6 +189,7 @@ export default function Bracket(props) {
         isConcreteLambda={props.isConcreteLambda}
         isBrickLambda={props.isBrickLambda}
         isWallType={wallType}
+        onBracketResult={handleResult}
       />
     </div>
   );

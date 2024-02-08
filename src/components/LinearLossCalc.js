@@ -79,7 +79,7 @@ export default function LinearLossCalc(props) {
 
     const final = pre1 + ((insValue - insX1()) * (pre2 - pre1)) / (insX2() - insX1());
 
-    props.onWindowLambdaLoss(final);
+    props.onWindowLoss(final);
   };
   finalValue();
 }

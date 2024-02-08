@@ -31,7 +31,9 @@ export default function FirstLayer(props) {
         ) : null}
         <div className="wallInputUnit">
           <li className="wall-p">
-            Толщина<li className="wall-subp">мм</li>
+            Толщина`
+            <br />
+            мм
           </li>
           <input className="wallInputValue" id="ins-t" onChange={props.onInsThickness}></input>
         </div>
@@ -39,9 +41,8 @@ export default function FirstLayer(props) {
           <div className="wallInputUnit">
             <li className="wall-p">
               Плотность
-              <li className="wall-subp">
-                кг/м<sup>3</sup>
-              </li>
+              <br />
+              кг/м<sup>3</sup>
             </li>
             <input className="wallInputValue" id="ins-d" onChange={props.onInsDensity}></input>
           </div>
@@ -49,27 +50,23 @@ export default function FirstLayer(props) {
         <div className="wallInputUnit">
           <li className="wall-p">
             Теплопроводность
-            <li className="wall-subp">
-              Вт/м<sup>2</sup>С<sup>o</sup>
-            </li>
+            <br />
+            Вт/м<sup>2</sup>С<sup>o</sup>
           </li>
           {insSp ? 5 : <input className="wallInputValue" id="ins-h" onChange={props.onInsLambda}></input>}
         </div>
         <div className="wallInputUnit">
           <li className="wall-p">
             Паропроницаемость
-            <li className="wall-subp">
-              мг/м<sup>2</sup>чПа
-            </li>
+            <br />
+            мг/м<sup>2</sup>чПа
           </li>
           {insSp ? 5 : <input className="wallInputValue" id="ins-v" onChange={props.onInsVapor}></input>}
         </div>
         <div className="wallInputUnit">
           <li className="wall-p">
             Воздухороницаемость
-            <li className="wall-subp">
-              м<sup>2</sup>чПа/кг
-            </li>
+            <br />м<sup>2</sup>чПа/кг
           </li>
           {insSp ? 5 : <input className="wallInputValue" id="ins-a" onChange={props.onInsAir}></input>}
         </div>
@@ -82,12 +79,12 @@ export default function FirstLayer(props) {
               onChange={toggleIns}
             />
           </Form>
-          {props.isSecondLayer ? null : (
-            <button className="wallAddIns" type="button" onClick={props.onAddSecondLayer}>
-              Добавить слой утеплителя
-            </button>
-          )}
         </div>
+        {props.isSecondLayer ? null : (
+          <button className="wallAddIns" type="button" onClick={props.onAddSecondLayer}>
+            Добавить слой утеплителя
+          </button>
+        )}
       </div>
     </div>
   );

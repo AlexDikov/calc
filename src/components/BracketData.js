@@ -45,27 +45,27 @@ export default function BracketData(props) {
       />
       {addBracket}
       <button className="add-bracket" key="add-btn" onClick={addBracketInput}></button>
-      <div className="navbnt position-relative mt-3 mb-3">
-        <Button
-          variant="outline-secondary"
-          size="lg"
-          onClick={() => {
-            navigate('/systdata');
-          }}
-        >
-          Назад
-        </Button>
-        <Button
-          className="position-absolute end-0"
-          variant="outline-secondary"
-          size="lg"
-          onClick={() => {
-            navigate('/coverdata');
-          }}
-        >
-          Далее
-        </Button>
-      </div>
+
+      <Button
+        className="btn-previous"
+        variant="outline-secondary"
+        size="sm"
+        onClick={() => {
+          navigate('/systdata');
+        }}
+      >
+        Назад
+      </Button>
+      <Button
+        className="btn-next"
+        variant="outline-secondary"
+        size="sm"
+        onClick={() => {
+          navigate('/coverdata');
+        }}
+      >
+        Далее
+      </Button>
     </div>
   );
 }

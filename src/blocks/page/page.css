@@ -7,7 +7,7 @@
   margin: 0 auto 0;
   font-family: Inter, Arial, sans-serif;
   color: black;
-  padding: 30px;
+  padding: 0 30px 0;
 }
 
 .navbtn {
@@ -39,4 +39,14 @@
 
 .center-text {
   text-align: center;
+}
+.btn-next {
+  position:absolute;
+  bottom: 40px;
+  right: 40px;
+}
+.btn-previous {
+  position:absolute;
+  bottom: 40px;
+  left: 40px;
 }

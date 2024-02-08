@@ -3,7 +3,6 @@ import DkCalc from './DkCalc';
 import LinearLossCalc from './LinearLossCalc';
 
 export default function Calculator({
-  isBracketPcs,
   isBracketResult,
   isBrickArea,
   isBrickThickness,
@@ -57,9 +56,7 @@ export default function Calculator({
   isWindowLength,
   isWindowDepth,
   isWindowHeight,
-  onEgap,
-  onGobl,
-  onGu,
+  onFinalValues,
 }) {
   const [dk, setDk] = useState(0.1);
   //const [kState, setK] = useState(0.1);
@@ -108,7 +105,9 @@ export default function Calculator({
 
   const linearLoss = windowLoss * isWindowLength;
 
-  const pointLoss = 1;
+  const pointLoss = () => {
+    Object.entries(isBracketResult).reduce((a, item) => (a = a + item.bracket * item.pcs), 0);
+  };
 
   const rCond1 = isBuildingAim === 3 ? null : parseFloat(1 / 8.7 + concreteQ + insQ + secondInsQ + 1 / 12).toFixed(3);
   const rCond2 = isBuildingAim === 1 ? null : parseFloat(1 / 8.7 + brickQ + insQ + secondInsQ + 1 / 12).toFixed(3);
@@ -116,7 +115,7 @@ export default function Calculator({
   const u1 = isBuildingAim === 3 ? null : parseFloat(1 / rCond1).toFixed(3);
   const u2 = isBuildingAim === 1 ? null : parseFloat(1 / rCond2).toFixed(3);
 
-  const rRed = parseFloat((1 / parseFloat(u1 + u2 + linearLoss + pointLoss)).toFixed(3));
+  const rRed = parseFloat((1 / parseFloat(u1 + u2 + linearLoss + pointLoss())).toFixed(3));
   const rCond0 = 1 / 8.7 + isBuildingAim === 1 ? rCond1 : parseFloat(rCond1 + rCond2 + 1 / 12);
   const r = parseFloat((rRed / rCond0).toFixed(3));
 
@@ -235,8 +234,6 @@ export default function Calculator({
   const e1 = (eOut + rEq * kVapor * eIn) / (kVapor * rEq + 1);
   const x1 = (22100 * (vVent5 * isVentMed * 1.005 * rEq)) / (kVapor * rEq + 1);
   const eGap = e1 - (e1 - eOut) * Math.exp(-isHeight / x1);
-  onEgap(eGap);
-
   const rX = 1 / 8.7 + concreteQ + brickQ + insQ + secondInsQ;
   const tx = isInnerTemp - ((isInnerTemp - isCityProp.tm) / (isBuildingAim == '1' ? rCond1 : rCond2)) * rX;
   const eCond = 1.84 * 10 ** 11 * Math.exp(-5330 / (273 + tx));
@@ -253,14 +250,8 @@ export default function Calculator({
   const yInner = 3463 / (273 + isInnerTemp);
   const deltaP = 0.55 * isHeight * (yOuter - yInner) + 0.03 * yOuter * isCityProp.v ** 2;
   const gU = deltaP / rU;
-  onGu(gU);
+  onFinalValues({ r1: rRed, r2: rObl, e1: eOut, e2: outE, g1: gU, g2: gObl });
 
-  // const dkValues = useMemo(() => {
-  //   return {
-  //     d: d,
-  //     k: kAir,
-  //   };
-  // }, [d, kAir]);
   const brackets = () =>
     Object.entries(isBracketResult)
       .map(
