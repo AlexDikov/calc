@@ -1,123 +1,178 @@
-import { Button, Col, Form, Row } from 'react-bootstrap';
+import { Button, Form, Row } from 'react-bootstrap';
 import SystInput from './SystInput';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { covers } from './App';
+import { DefaultContext } from '../contexts/DefaultContext';
+import LinearLossCalc from './LinearLossCalc';
+import DkCalc from './DkCalc';
 
-export default function CoverData(props) {
+export default function CoverData({
+  isCover,
+  isCoverName,
+  isCoverThickness,
+  isHeight,
+  isOwnCover,
+  isVentIn,
+  isVentMed,
+  isVentOut,
+  isVentHeight,
+  onCoverLambda,
+  onCoverName,
+  onCoverThickness,
+  onCoverVapor,
+  onHeight,
+  onMetallCover,
+  onVentHeight,
+  onVentIn,
+  onVentMed,
+  onVentOut,
+  onOwnCover,
+}) {
   const navigate = useNavigate();
 
-  const [insSp, setInsSp] = useState();
-
-  const toggleIns = () => setInsSp((value) => !value);
-
   return (
-    <div>
-      <div>
-        <SystInput text="Ширина вентилируемого зазора на входе, мм" method={props.onVentIn} />
-        <SystInput text="Средняя ширина вентилируемого зазора, мм" method={props.onVentMed} />
-        <SystInput text="Ширина вентилируемого зазора на выходе, мм" method={props.onVentOut} />
-        <SystInput text="Высота наибольшего зазора, м" method={props.onVentHeight}>
-          <button
-            className="i-btn"
-            data-bs-toggle="tooltip"
-            data-bs-placement="right"
-            title="Высота наибольшего неприрывного участка между входным и выходным зазорами"
-          ></button>
-        </SystInput>
-        <SystInput text="Высота объекта, м" method={props.onHeight} />
-        <Row>
-          <Form.Check
-            className="mt-3 ms-2"
-            id="own-cover"
-            label="Своя облицовка"
-            onChange={props.onOwnCover}
-          ></Form.Check>
-          {props.isOwnCover ? (
-            <Form.Control
-              className="w-25 ms-2"
-              id="covers-list"
-              placeholder="Название облицовки"
-              onChange={props.onCoverName}
-            />
-          ) : (
-            <Form.Select className="w-25 ms-2" type="text" onChange={props.onCoverName}>
-              <option>Тип облицовки</option>
-              <option value={{ r: 0.001, c: 0.05, l: 221 }}>Алюминий</option>
-              <option value={{ r: 0.008, c: 5.3, l: 3.49 }}>Гранит, гнейс, базальт</option>
-              <option value={{ r: 0.06, c: 5.3, l: 1.28 }}>Известняк</option>
-              <option value={{ r: 0.11, c: 5.3, l: 0.81 }}>Клинкер</option>
-              <option value={{ r: 0.001, c: 0.05, l: 407 }}>Медь</option>
-              <option value={{ r: 0.008, c: 5.3, l: 2.91 }}>Мрамор</option>
-              <option value={{ r: 0.001, c: 5.3, l: 0.76 }}>Стекло</option>
-              <option value={{ r: 0.03, c: 5.3, l: 0.52 }}>Фиброцемент</option>
-            </Form.Select>
-          )}
-        </Row>
-        {props.isOwnCover ? (
-          <Row>
-            <Form.Check
-              className="mt-3 ms-2"
-              id="mtel-cover"
-              label="Металлическая"
-              onChange={props.oтMetallCover}
-            ></Form.Check>
-          </Row>
-        ) : null}
-        {props.isOwnCover ? (
-          <Row>
-            <Col xs={4}>
-              <Form.Label className="mt-3">Толщина облицовки, мм</Form.Label>
-            </Col>
-            <Col>
-              <Form.Label className="mt-3">5</Form.Label>{' '}
-            </Col>
-          </Row>
-        ) : (
+    <DefaultContext.Consumer>
+      {(context) => (
+        <div>
           <div>
-            <SystInput text="Толщина облицовки, мм" method={props.onCoverThickness} />
-          </div>
-        )}
-        {props.isOwnCover ? (
-          <SystInput text="Теплопроводность облицовки, Вт/м&#178;С&#176;" iValue={props.isCoverName.l} />
-        ) : (
-          <SystInput text="Теплопроводность облицовки, Вт/м&#178;С&#176;" method={props.onCoverLambda} />
-        )}
-        {props.isOwnCover ? (
-          <Row>
-            <Col xs={4}>
-              <Form.Label className="mt-3">
-                Коэффициент паропроницания облицовки, мг/м<sup>2</sup>∙ч∙Па
-              </Form.Label>
-            </Col>
-            <Col>
-              <Form.Label className="mt-3">5</Form.Label>
-            </Col>
-          </Row>
-        ) : (
-          <SystInput text="Коэффициент паропроницания облицовки, мг/м∙ч∙Па" method={props.onCoverVapor} />
-        )}
-      </div>
+            <SystInput
+              id={'ventin'}
+              text="Ширина вентилируемого зазора на входе, мм"
+              iValue={context.ventIn * 1000}
+              method={context.handleVentIn}
+            />
+            <SystInput
+              id={'ventin'}
+              text="Средняя ширина вентилируемого зазора, мм"
+              iValue={context.ventMed * 1000}
+              method={context.handleVentMed}
+            />
+            <SystInput
+              id={'ventin'}
+              text="Ширина вентилируемого зазора на выходе, мм"
+              iValue={context.ventOut * 1000}
+              method={context.handleVentOut}
+            />
+            <SystInput
+              id={'ventin'}
+              text="Высота наибольшего зазора, м"
+              iValue={context.ventHeight}
+              method={context.handleVentHeight}
+            >
+              <button
+                className="i-btn"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                title="Высота наибольшего неприрывного участка между входным и выходным зазорами"
+              ></button>
+            </SystInput>
+            <SystInput id={'height'} text="Высота объекта, м" iValue={context.height} method={context.handleHeight} />
+            <Row>
+              <Form.Check
+                className="mt-3 ms-2"
+                id="own-cover"
+                label="Своя облицовка"
+                onChange={context.toggleOwnCover}
+              ></Form.Check>
+              {context.ownCover ? (
+                <Form.Control
+                  className="w-25 ms-2"
+                  id="covers-list"
+                  placeholder="Название облицовки"
+                  onChange={context.handleCoverName}
+                />
+              ) : (
+                <Form.Select
+                  id="cover-name"
+                  className="w-25 ms-2"
+                  type="text"
+                  value={context.coverName}
+                  onChange={context.handleCoverName}
+                >
+                  <option>Тип облицовки</option>
+                  {Object.entries(covers).map(([key, value]) => {
+                    return (
+                      <option key={key} value={key}>
+                        {key}
+                      </option>
+                    );
+                  })}
+                </Form.Select>
+              )}
+            </Row>
+            {context.ownCover ? (
+              <Row>
+                <Form.Check
+                  className="mt-3 ms-2"
+                  id="mtel-cover"
+                  label="Металлическая"
+                  onChange={context.handleMetallCover}
+                ></Form.Check>
+              </Row>
+            ) : null}
 
-      <Button
-        className="btn-previous"
-        variant="outline-secondary"
-        size="sm"
-        onClick={() => {
-          navigate('/bracketdata');
-        }}
-      >
-        Назад
-      </Button>
-      <Button
-        className="btn-next"
-        variant="outline-secondary"
-        size="sm"
-        onClick={() => {
-          navigate('/final');
-        }}
-      >
-        Далее
-      </Button>
-    </div>
+            <SystInput
+              id="cover-thickness"
+              text="Толщина облицовки, мм"
+              iValue={context.coverThickness}
+              method={context.handleCoverThickness}
+            />
+
+            {context.ownCover ? (
+              <SystInput
+                id="cover-sp-lambda"
+                text="Теплопроводность облицовки, Вт/м&#178;С&#176;"
+                iValue={context.coverLambda}
+                method={context.handleCoverLambda}
+              />
+            ) : (
+              <SystInput
+                id="cover-lambda"
+                text="Теплопроводность облицовки, Вт/м&#178;С&#176;"
+                iValue={context.cover ? context.cover.l : null}
+                method={context.handleCoverLambda}
+              />
+            )}
+            {context.ownCover ? (
+              <SystInput
+                id="cover-sp-vapor"
+                text="Коэффициент паропроницания облицовки, мг/м&#178;∙ч∙Па"
+                method={context.handleCoverVapor}
+              />
+            ) : (
+              <SystInput
+                id="cover-vapor"
+                text="Коэффициент паропроницания облицовки, мг/м&#178;∙ч∙Па"
+                iValue={context.cover ? context.cover.r : null}
+                method={context.handleCoverVapor}
+              />
+            )}
+          </div>
+
+          <Button
+            className="btn-previous"
+            variant="outline-secondary"
+            size="sm"
+            onClick={() => {
+              navigate('/bracketdata');
+            }}
+          >
+            Назад
+          </Button>
+          <Button
+            className="btn-next"
+            variant="outline-secondary"
+            size="sm"
+            onClick={() => {
+              navigate('/final');
+            }}
+          >
+            Далее
+          </Button>
+          <LinearLossCalc />
+          <DkCalc />
+        </div>
+      )}
+    </DefaultContext.Consumer>
   );
 }

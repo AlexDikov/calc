@@ -1,15 +1,15 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { bracketData } from './brackets';
+import { DefaultContext } from '../contexts/DefaultContext';
 
 export default function PointLossCalc(props) {
   const { isBracket, ukey, isBracketPcs, isBracketType, isBracketWeight, isWallType } = props;
+  const context = useContext(DefaultContext);
   useEffect(() => {
-    const insValue = props.isSecondLayer
-      ? 0.001 /
-        ((props.isInsThickness / (props.isInsThickness + props.isSecondInsThickness)) * props.isInsLambda +
-          (props.isSecondInsThickness / (props.isInsThickness + props.isSecondInsThickness)) * props.isSecondInsLambda)
-      : props.isInsThickness / props.isInsLambda;
-    const wallValue = props.isBuildingType === 1 ? props.isConcreteLambda : props.isBrickLambda;
+    const insValue = context.secondIns
+      ? context.insThickness / context.insLambda + context.secondInsThickness / context.secondInsLambda
+      : context.insThickness / context.insLambda;
+    const wallValue = props.isBracketType === true ? context.concreteLambda : context.brickLambda;
 
     const ins = () => {
       let ins1, ins2;
@@ -80,7 +80,7 @@ export default function PointLossCalc(props) {
 
       const final = pre1 + ((insValue - insX1()) * (pre2 - pre1)) / (insX2() - insX1());
 
-      props.onBracketResult({
+      context.handleBracketResult({
         index: ukey,
         value: final,
         bracket: isBracket,

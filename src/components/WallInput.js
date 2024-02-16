@@ -1,29 +1,36 @@
 import { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { materials } from './materials';
+import { DefaultContext } from '../contexts/DefaultContext';
 
 export default function WallInput({
-  isCityProp,
+  isAir,
+  isDensity,
   isId,
+  isLambda,
+  isMaterial,
   isName,
+  isThickness,
   isSpAir,
+  isSpData,
   isSpDensity,
   isSpLambda,
+  isSpMaterial,
   isSpVapor,
   isSecondIns,
-  onAddSecondIns,
+  isSp,
+  isVapor,
+
   onAir,
-  onDeleteSecondIns,
+
   onDensity,
   onLambda,
+  onName,
   onSpMaterial,
+  onSp,
   onThickness,
   onVapor,
 }) {
-  const [sp, setSp] = useState(false);
-  const [spMaterial, setSpMaterial] = useState('');
-  const [spValue, setSpValue] = useState('');
-
   const materialList = () => {
     if (isId === 'brick')
       return materials.brick.map((item) => (
@@ -54,138 +61,145 @@ export default function WallInput({
     return null;
   };
 
-  function handleSpValue(event) {
-    const selectedDensity = event.target.value;
-    const selectedMaterial = materials[isId === 'ins-1' || isId === 'ins-2' ? 'ins' : 'brick'].find(
-      (item) => item.d[selectedDensity]
-    );
-    if (selectedMaterial) {
-      setSpValue(selectedMaterial.d[selectedDensity]);
-    }
-  }
-
-  const toggleSp = () => setSp((value) => !value);
-
   return (
-    <div className="wallInput" id={isId}>
-      <div className="wallInputList">
-        {isSecondIns && isId === 'ins-2' ? <button className="wallCloseBtn" onClick={onDeleteSecondIns} /> : null}
-        <h3 className="wallInputHeader">
-          {isName}{' '}
-          {isSecondIns ? <p className="wallInputSub">{isId === 'ins-1' ? 'нижний слой' : 'верхний слой'}</p> : null}
-        </h3>
-        {isId === 'concrete' ? <br /> : null}
-        <div className="wallInputUnit">
-          {sp && isId !== 'concrete' ? (
+    <DefaultContext.Consumer>
+      {(context) => (
+        <div className="wallInput" id={isId}>
+          <div className="wallInputList">
+            {context.secondIns && isId === 'ins-2' ? (
+              <button className="wallCloseBtn" onClick={context.handleDeleteSecondIns} />
+            ) : null}
+            <h3 className="wallInputHeader">
+              {isName}{' '}
+              {isSecondIns ? <p className="wallInputSub">{isId === 'ins-1' ? 'нижний слой' : 'верхний слой'}</p> : null}
+            </h3>
+            {isId === 'concrete' ? <br /> : null}
             <div className="wallInputUnit">
-              {sp ? (
-                isId !== 'concrete' ? (
-                  <div>
-                    <Form.Select
-                      className="mb-1 wall-font"
-                      id="ins-type"
-                      onChange={(e) => {
-                        setSpMaterial(e.target.value);
-                      }}
-                    >
-                      <option>Тип заполнения</option>
-                      {materialList()}
-                    </Form.Select>
-                    <Form.Select className="mb-1 w-50 wall-font " id="ins-sp-d" onChange={handleSpValue}>
-                      <option>
-                        Плотность, кг/м<sup>3</sup>
-                      </option>
-                      {densityList(spMaterial)}
-                    </Form.Select>
-                  </div>
+              {isSp && isId !== 'concrete' ? (
+                <div className="wallInputUnit">
+                  {isSp && isId !== 'concrete' ? (
+                    <div>
+                      <Form.Select className="mb-1 wall-font" id="ins-type" value={isMaterial} onChange={onName}>
+                        <option>Тип заполнения</option>
+                        {materialList()}
+                      </Form.Select>
+                      <Form.Select
+                        className="mb-1 w-50 wall-font "
+                        id="ins-sp-d"
+                        value={isSpDensity}
+                        onChange={onDensity}
+                      >
+                        <option>Плотность, кг/м³</option>
+                        {densityList(isMaterial)}
+                      </Form.Select>
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
+            {isId === 'concrete' || isSp ? null : (
+              <Form.Control
+                placeholder="Название"
+                id={`${isId}-n`}
+                className="h-50 mb-4 mt-3"
+                onChange={onName}
+              ></Form.Control>
+            )}
+            <div className="wallInputUnit">
+              <li className="wall-p">
+                Толщина
+                <br />
+                мм
+              </li>
+              <input
+                className="wallInputValue"
+                id={`${isId}-t`}
+                value={isThickness ? isThickness * 1000 : null}
+                onChange={onThickness}
+              ></input>
+            </div>
+            <div className="wallInputUnit">
+              <li className="wall-p">
+                Теплопроводность
+                <br />
+                Вт/м²С°
+              </li>
+              {isSp ? (
+                isId === 'concrete' ? (
+                  <input
+                    className="wallInputValue"
+                    id={`${isId}-sp-h`}
+                    defaultValue={context.cityProp.s === 'А' ? 1.92 : 2.04}
+                    onChange={onLambda}
+                  ></input>
                 ) : (
-                  <div>
-                    <li className="wall-p">
-                      Плотность
-                      <br />
-                      кг/м<sup>3</sup>
-                    </li>
-                    <input
-                      className="wallInputValue"
-                      id={`${isId}-sp-d`}
-                      defaultValue={isSpDensity}
-                      onChange={onDensity}
-                    ></input>
-                  </div>
+                  <input
+                    className="wallInputValue"
+                    id={`${isId}-sp-h`}
+                    defaultValue={
+                      isSpData
+                        ? context.cityProp.s
+                          ? context.cityProp.s === 'А'
+                            ? isSpData.la
+                            : isSpData.lb
+                          : isSpData.lb
+                        : null
+                    }
+                    onChange={onLambda}
+                  ></input>
                 )
               ) : (
-                <input className="wallInputValue" id={`${isId}-d`} defaultValue={null} onChange={onDensity}></input>
+                <input className="wallInputValue" id={`${isId}-h`} defaultValue={isLambda} onChange={onLambda}></input>
               )}
             </div>
-          ) : null}
+            <div className="wallInputUnit">
+              <li className="wall-p">
+                Паропроницаемость
+                <br />
+                мг/м<sup>2</sup>чПа
+              </li>
+              {isSp ? (
+                isId === 'concrete' ? (
+                  <input className="wallInputValue" id={`${isId}-sp-v`} defaultValue={0.03} onChange={onVapor}></input>
+                ) : (
+                  <input
+                    className="wallInputValue"
+                    id={`${isId}-sp-v`}
+                    defaultValue={isSpData ? isSpData.v : null}
+                    onChange={onVapor}
+                  ></input>
+                )
+              ) : (
+                <input className="wallInputValue" id={`${isId}-v`} defaultValue={isVapor} onChange={onVapor}></input>
+              )}
+            </div>
+            <div className="wallInputUnit">
+              <li className="wall-p">
+                Воздухороницаемость
+                <br />
+                м²чПа/кг
+              </li>
+              <input className="wallInputValue" id={`${isId}-a`} defaultValue={isAir} onChange={onAir}></input>
+            </div>
+            {!context.secondIns && isId === 'ins-1' ? (
+              <button className="wallAddIns" type="button" onClick={context.handleAddSecondIns}>
+                Добавить слой утеплителя
+              </button>
+            ) : null}
+            <div className="wallInputSP">
+              <Form>
+                <Form.Check
+                  type="switch"
+                  id={`${isId}-sp`}
+                  label="учитывать СП 50.133300.2012"
+                  checked={isSp}
+                  onChange={onSp}
+                />
+              </Form>
+            </div>
+          </div>
         </div>
-        {isId === 'concrete' || sp ? null : (
-          <Form.Control placeholder="Название" className="h-50 mb-4 mt-3"></Form.Control>
-        )}
-        <div className="wallInputUnit">
-          <li className="wall-p">
-            Толщина
-            <br />
-            мм
-          </li>
-          <input className="wallInputValue" id={`${isId}-t`} onChange={onThickness}></input>
-        </div>
-        <div className="wallInputUnit">
-          <li className="wall-p">
-            Теплопроводность
-            <br />
-            Вт/м<sup>2</sup>С<sup>o</sup>
-          </li>
-          {sp ? (
-            <input
-              className="wallInputValue"
-              id={`${isId}-sp-h`}
-              defaultValue={isCityProp.s === 'А' ? spValue.la : spValue.lb}
-              onChange={onLambda}
-            ></input>
-          ) : (
-            <input className="wallInputValue" id={`${isId}-h`} defaultValue={spValue.la} onChange={onLambda}></input>
-          )}
-        </div>
-        <div className="wallInputUnit">
-          <li className="wall-p">
-            Паропроницаемость
-            <br />
-            мг/м<sup>2</sup>чПа
-          </li>
-          {sp ? (
-            <input className="wallInputValue" id={`${isId}-sp-v`} defaultValue={spValue.v} onChange={onVapor}></input>
-          ) : (
-            <input className="wallInputValue" id={`${isId}-v`} defaultValue={null} onChange={onVapor}></input>
-          )}
-        </div>
-        <div className="wallInputUnit">
-          <li className="wall-p">
-            Воздухороницаемость
-            <br />м<sup>2</sup>чПа/кг
-          </li>
-          {sp ? (
-            <input className="wallInputValue" id={`${isId}-sp-a`} defaultValue={null} onChange={onAir}></input>
-          ) : (
-            <input className="wallInputValue" id={`${isId}-a`} defaultValue={null} onChange={onAir}></input>
-          )}
-        </div>
-        {!isSecondIns && isId === 'ins-1' ? (
-          <button className="wallAddIns" type="button" onClick={onAddSecondIns}>
-            Добавить слой утеплителя
-          </button>
-        ) : null}
-        <div className="wallInputSP">
-          <Form>
-            <Form.Check // prettier-ignore
-              type="switch"
-              id={`${isId}-sp`}
-              label="учитывать СП 50.133300.2012"
-              onChange={toggleSp}
-            />
-          </Form>
-        </div>
-      </div>
-    </div>
+      )}
+    </DefaultContext.Consumer>
   );
 }

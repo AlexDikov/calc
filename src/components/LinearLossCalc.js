@@ -1,19 +1,25 @@
+import { useEffect } from 'react';
 import { windows } from './windows';
+import { useContext } from 'react';
+import { DefaultContext } from '../contexts/DefaultContext';
 
-export default function LinearLossCalc(props) {
-  const insValue = props.isSecondLayer
+export default function LinearLossCalc() {
+  const context = useContext(DefaultContext);
+
+  useEffect(() => finalValue(), []);
+  const insValue = context.secondIns
     ? 0.001 /
-      ((props.isInsThickness / (props.isInsThickness + props.isSecondInsThickness)) * props.isInsLambda +
-        (props.isSecondInsThickness / (props.isInsThickness + props.isSecondInsThickness)) * props.isSecondInsLambda)
-    : props.isInsThickness / props.isInsLambda;
-  const wallValue = props.isBuildingType === 1 ? props.isConcreteLambda : props.isBrickLambda;
+      ((context.insThickness / (context.insThickness + context.secondInsThickness)) * context.insLambda +
+        (context.secondInsThickness / (context.insThickness + context.secondInsThickness)) * context.secondInsLambda)
+    : context.insThickness / context.insLambda;
+  const wallValue = context.buildingType === 1 ? context.concreteLambda : context.brickLambda;
   const ins = () => {
     let ins1, ins2;
     let heatItem;
     let preItem;
 
-    preItem = windows.find((item) => item.name === props.isWindowDepth);
-    heatItem = Object.values(preItem[props.isWindowHeight]);
+    preItem = windows.find((item) => item.name === context.windowDepth);
+    heatItem = Object.values(preItem[context.windowHeight]);
 
     if (1.5 < insValue && insValue < 3) {
       ins1 = heatItem[0];
@@ -77,9 +83,8 @@ export default function LinearLossCalc(props) {
     const pre1 = wallResult[0] + ((wallValue - wallX1()) * (wallResult[1] - wallResult[0])) / (wallX2() - wallX1());
     const pre2 = wallResult[2] + ((wallValue - wallX1()) * (wallResult[3] - wallResult[2])) / (wallX2() - wallX1());
 
-    const final = pre1 + ((insValue - insX1()) * (pre2 - pre1)) / (insX2() - insX1());
+    const final = pre1 + ((insValue - insX1()) * (pre2 - pre1)) / (insX2() - insX1()) + 1;
 
-    props.onWindowLoss(final);
+    context.handleWindowLoss(final);
   };
-  finalValue();
 }

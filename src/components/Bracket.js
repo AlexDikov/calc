@@ -1,12 +1,13 @@
 import { Col, Form, Row } from 'react-bootstrap';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { brackets } from './brackets';
 import PointLossCalc from './PointLossCalc';
+import { DefaultContext } from '../contexts/DefaultContext';
 
 export default function Bracket(props) {
-  const [bracketType, setBracketType] = useState('');
-  const [bracketWeight, setBracketWeight] = useState('');
-  const [wallType, setWallType] = useState('');
+  const [bracketType, setBracketType] = useState(false);
+  const [bracketWeight, setBracketWeight] = useState(false);
+  const [wallType, setWallType] = useState(false);
   const [result, setResult] = useState();
   const [bracket, setBracket] = useState('MFT-MF HS');
   const [bracketPcs, setBracketPcs] = useState('');
@@ -39,6 +40,8 @@ export default function Bracket(props) {
     return null;
   });
 
+  const context = useContext(DefaultContext);
+
   function handleBracket(e) {
     setBracket(e.target.options[e.target.selectedIndex].text);
   }
@@ -47,7 +50,7 @@ export default function Bracket(props) {
   }
   const handleResult = (item) => {
     setResult(item);
-    props.onBracketResult(item);
+    context.handleBracketResult(item);
   };
   const setAluminium = () => {
     setBracketType(true);
@@ -135,32 +138,6 @@ export default function Bracket(props) {
             {bracketList}
           </Form.Select>
         </Col>
-        <Col>
-          <Form>
-            {['radio'].map((type) => (
-              <div key={`inline-${type}`} className="mb-3">
-                <Form.Check
-                  key={`${props.ukey}-1w`}
-                  label="бетон"
-                  name="group1"
-                  type={type}
-                  id={`${props.ukey}-1w`}
-                  htmlFor={`${props.ukey}-1w`}
-                  onClick={setConcrete}
-                />
-                <Form.Check
-                  key={`${props.ukey}-2w`}
-                  label="кладка"
-                  name="group1"
-                  type={type}
-                  id={`${props.ukey}-2w`}
-                  htmlFor={`${props.ukey}-2w`}
-                  onClick={setBrick}
-                />
-              </div>
-            ))}
-          </Form>
-        </Col>
         <Col xs={3}>
           <Form.Control
             placeholder="Количество"
@@ -170,24 +147,41 @@ export default function Bracket(props) {
             onChange={handleBracketPcs}
           />
         </Col>
+        <Col>
+          {props.isBuildingType === '2' ? (
+            <Form>
+              {['radio'].map((type) => (
+                <div key={`inline-${type}`} className="mb-3">
+                  <Form.Check
+                    key={`${props.ukey}-1w`}
+                    label="бетон"
+                    name="group1"
+                    type={type}
+                    id={`${props.ukey}-1w`}
+                    htmlFor={`${props.ukey}-1w`}
+                    onClick={setConcrete}
+                  />
+                  <Form.Check
+                    key={`${props.ukey}-2w`}
+                    label="кладка"
+                    name="group1"
+                    type={type}
+                    id={`${props.ukey}-2w`}
+                    htmlFor={`${props.ukey}-2w`}
+                    onClick={setBrick}
+                  />
+                </div>
+              ))}
+            </Form>
+          ) : null}
+        </Col>
       </Row>
       <PointLossCalc
         ukey={props.ukey}
-        isArrayType={props.isArrayType}
-        wallValue={props.wallValue}
-        insValue={props.insValue}
         isBracket={bracket}
         isBracketPcs={bracketPcs}
         isBracketType={bracketType}
         isBracketWeight={bracketWeight}
-        isSecondLayer={props.isSecondLayer}
-        isInsThickness={props.isInsThickness}
-        isSecondInsThickness={props.isSecondInsThickness}
-        isInsLambda={props.isInsLambda}
-        isSecondInsLambda={props.isSecondInsLambda}
-        isBuildingType={props.isBuildingType}
-        isConcreteLambda={props.isConcreteLambda}
-        isBrickLambda={props.isBrickLambda}
         isWallType={wallType}
         onBracketResult={handleResult}
       />

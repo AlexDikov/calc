@@ -9,14 +9,32 @@ import BracketData from './BracketData';
 import Calculator from './Calculator';
 import CoverData from './CoverData';
 import { cities } from './cities';
+import LinearLossCalc from './LinearLossCalc';
+import DkCalc from './DkCalc';
+import { DefaultContext } from '../contexts/DefaultContext';
+import { materials } from './materials';
+
+export const covers = {
+  Алюминий: { r: 0.001, c: 0.05, l: 221 },
+  'Гранит, гнейс, базальт': { r: 0.008, c: 5.3, l: 3.49 },
+  Известняк: { r: 0.06, c: 5.3, l: 1.28 },
+  Клинкер: { r: 0.11, c: 5.3, l: 0.81 },
+  Медь: { r: 0.001, c: 0.05, l: 407 },
+  Мрамор: { r: 0.008, c: 5.3, l: 2.91 },
+  Стекло: { r: 0.001, c: 5.3, l: 0.76 },
+  Фиброцемент: { r: 0.03, c: 5.3, l: 0.52 },
+};
 
 export default function App(props) {
+  const [addBracket, setAddBracket] = useState([]);
   const [bracketResult, setBracketResult] = useState({});
   const [brickAir, setBrickAir] = useState(1);
   const [brickArea, setBrickArea] = useState('');
-  const [brickDensity, setBrickDensity] = useState(1);
+  const [brickData, setBrickData] = useState('');
+  const [brickDensity, setBrickDensity] = useState('');
+  const [brickMaterial, setBrickMaterial] = useState('');
   const [brickLambda, setBrickLambda] = useState(0.81);
-  const [brickThickness, setBrickThickness] = useState(0.1);
+  const [brickThickness, setBrickThickness] = useState('');
   const [brickVapor, setBrickVapor] = useState(0.155);
   const [buildingAim, setBuildingAim] = useState('');
   const [buildingType, setBuildingType] = useState('');
@@ -27,26 +45,32 @@ export default function App(props) {
   const [concreteDensity, setConcreteDensity] = useState(1);
   const [concreteLambda, setConcreteLambda] = useState(2.04);
   const [concreteSpLambda, setConcreteSpLambda] = useState(2.04);
-  const [concreteThickness, setConcreteThickness] = useState(0.1);
+  const [concreteThickness, setConcreteThickness] = useState('');
   const [concreteVapor, setConcreteVapor] = useState(0.03);
   const [concreteWall, setConcreteWall] = useState(false);
-  const [coverData, setCoverData] = useState({ r: 0.014, c: 5.3, l: 0.81 });
-  const [coverLambda, setCoverLambda] = useState(1);
-  const [coverName, setCoverName] = useState({});
-  const [coverThickness, setCoverThickness] = useState(0.01);
-  const [coverVapor, setCoverVapor] = useState(1);
+  const [coverLambda, setCoverLambda] = useState('');
+  const [cover, setCover] = useState({});
+  const [coverName, setCoverName] = useState('');
+  const [coverThickness, setCoverThickness] = useState('');
+  const [coverVapor, setCoverVapor] = useState('');
+  const [d, setD] = useState(0.1);
+  const [dk, setDk] = useState(0.1);
   const [finalValues, setFinalValues] = useState({});
   const [grib, setGrib] = useState('');
   const [gribDepth, setGribDepth] = useState(0.006);
   const [gribPcs, setGribPcs] = useState('');
-  const [height, setHeight] = useState(140);
+  const [height, setHeight] = useState('');
   const [humidity, setHumidity] = useState(50);
   const [innerTemp, setInnerTemp] = useState(20);
   const [insAir, setInsAir] = useState('');
-  const [insDensity, setInsDensity] = useState(1);
+  const [insData, setInsData] = useState('');
+  const [insDensity, setInsDensity] = useState('');
+  const [insMaterial, setInsMaterial] = useState('');
   const [insLambda, setInsLambda] = useState(0.05);
-  const [insThickness, setInsThickness] = useState(0.1);
+  const [insThickness, setInsThickness] = useState('');
   const [insVapor, setInsVapor] = useState(0.5);
+  const [k, setK] = useState(0.1);
+  const [metalCover, setMetallCover] = useState(false);
   const [mr, setMr] = useState(0.63);
   const [objName, setObjName] = useState('');
   const [objAddress, setObjAddress] = useState('');
@@ -54,20 +78,29 @@ export default function App(props) {
   const [plaster, setPlaster] = useState(true);
   const [secondIns, setSecondIns] = useState(false);
   const [secondInsAir, setSecondInsAir] = useState(0.5);
-  const [secondInsDensity, setSecondInsDensity] = useState(1);
+  const [secondInsData, setSecondInsData] = useState(0.5);
+  const [secondInsDensity, setSecondInsDensity] = useState('');
+  const [secondInsMaterial, setSecondInsMaterial] = useState('');
   const [secondInsLambda, setSecondInsLambda] = useState(0.05);
-  const [secondInsThickness, setSecondInsThickness] = useState(0.1);
+  const [secondInsThickness, setSecondInsThickness] = useState('');
   const [secondInsVapor, setSecondInsVapor] = useState(1);
+  const [brickSp, setBrickSp] = useState(false);
+  const [concreteSp, setConcreteSp] = useState(false);
+  const [insSp, setInsSp] = useState(false);
+  const [secondInsSp, setSecondInsSp] = useState(false);
   const [vaporMembraneR, setVaporMembraneR] = useState(0.1);
-  const [ventHeight, setVentHeight] = useState(140);
-  const [ventIn, setVentIn] = useState(0.03);
-  const [ventMed, setVentMed] = useState(0.06);
-  const [ventOut, setVentOut] = useState(0.03);
-  const [windMembraneR, setWindMembraneR] = useState(0.1);
+  const [ventHeight, setVentHeight] = useState('');
+  const [ventIn, setVentIn] = useState('');
+  const [ventMed, setVentMed] = useState('');
+  const [ventOut, setVentOut] = useState('');
+  const [vaporMembrane, setVaporMembrane] = useState(false);
+  const [windMembrane, setWindMembrane] = useState(false);
+  const [windMembraneR, setWindMembraneR] = useState('');
   const [windowLength, setWindowLength] = useState('');
-  const [windowLambdaLoss, setWindowLoss] = useState(1);
   const [windowHeight, setWindowHeight] = useState('1');
   const [windowDepth, setWindowDepth] = useState('1');
+  const [windowLoss, setWindowLoss] = useState('');
+  const [uKey, setUKey] = useState(1);
 
   function handleAddSecondIns() {
     setSecondIns(true);
@@ -84,11 +117,19 @@ export default function App(props) {
   function handleBrickArea(changeEvent) {
     setBrickArea(changeEvent.target.value);
   }
-  function handleBrickDensity(changeEvent) {
-    setBrickDensity(changeEvent.target.value);
+  function handleBrickDensity(event) {
+    setBrickDensity(event.target.value);
+    const selectedDensity = event.target.value;
+    const selectedMaterial = materials['brick'].find((item) => item.d[selectedDensity]);
+    if (selectedMaterial) {
+      setBrickData(selectedMaterial.d[selectedDensity]);
+    }
   }
   function handleBrickLambda(changeEvent) {
     setBrickLambda(changeEvent.target.value);
+  }
+  function handleBrickMaterial(changeEvent) {
+    setBrickMaterial(changeEvent.target.value);
   }
   function handleBrickThickness(changeEvent) {
     setBrickThickness(changeEvent.target.value * 0.001);
@@ -129,29 +170,33 @@ export default function App(props) {
   function handleConcreteVapor(changeEvent) {
     setConcreteVapor(changeEvent.target.value);
   }
+  function handleCoverName(e) {
+    setCoverName(e.target.options[e.target.selectedIndex].text);
 
+    setCover(covers[e.target.options[e.target.selectedIndex].text]);
+  }
   function handleCoverLambda(changeEvent) {
     setCoverLambda(changeEvent.target.value);
   }
-  function handleCoverName(e) {
-    setCoverName(e.target.value);
-  }
+
   function handleCoverThickness(changeEvent) {
     setCoverThickness(changeEvent.target.value);
   }
   function handleCoverVapor(changeEvent) {
     setCoverVapor(changeEvent.target.value);
   }
+  function handleD() {
+    setD();
+  }
+  function handleDk() {
+    setDk();
+  }
   function handleDeleteSecondIns() {
     setSecondIns(false);
   }
 
-  function handleCoverData(changeEvent) {
-    setCoverData(changeEvent.target.value);
-  }
-
-  function handleFinalValues() {
-    setFinalValues();
+  function handleFinalValues(value) {
+    setFinalValues(value);
   }
   function handleGrib(e) {
     setGrib(e.target.options[e.target.selectedIndex].text);
@@ -161,7 +206,7 @@ export default function App(props) {
     setGribPcs(changeEvent.target.value);
   }
   function handleHeight(changeEvent) {
-    setHeight(changeEvent.target.value * 0.001);
+    setHeight(changeEvent.target.value);
   }
   function handleHumidity(changeEvent) {
     setHumidity(changeEvent.target.value);
@@ -169,17 +214,29 @@ export default function App(props) {
   function handleInsAir(changeEvent) {
     setInsAir(changeEvent.target.value);
   }
-  function handleInsDensity(changeEvent) {
-    setInsDensity(changeEvent.target.value);
+
+  function handleInsDensity(event) {
+    setInsDensity(event.target.value);
+    const selectedDensity = event.target.value;
+    const selectedMaterial = materials['ins'].find((item) => item.d[selectedDensity]);
+    if (selectedMaterial) {
+      setInsData(selectedMaterial.d[selectedDensity]);
+    }
   }
   function handleInsLambda(changeEvent) {
     setInsLambda(changeEvent.target.value);
+  }
+  function handleInsMaterial(changeEvent) {
+    setInsMaterial(changeEvent.target.value);
   }
   function handleInsThickness(changeEvent) {
     setInsThickness(changeEvent.target.value * 0.001);
   }
   function handleInsVapor(changeEvent) {
     setInsVapor(changeEvent.target.value);
+  }
+  function handleK() {
+    setK();
   }
   function handleMr(changeEvent) {
     setMr(changeEvent.target.value);
@@ -194,11 +251,19 @@ export default function App(props) {
   function handleSecondInsThickness(changeEvent) {
     setSecondInsThickness(changeEvent.target.value * 0.001);
   }
-  function handleSecondInsDensity(changeEvent) {
-    setSecondInsDensity(changeEvent.target.value);
+  function handleSecondInsDensity(event) {
+    setSecondInsDensity(event.target.value);
+    const selectedDensity = event.target.value;
+    const selectedMaterial = materials['ins'].find((item) => item.d[selectedDensity]);
+    if (selectedMaterial) {
+      setSecondInsData(selectedMaterial.d[selectedDensity]);
+    }
   }
   function handleSecondInsLambda(changeEvent) {
     setSecondInsLambda(changeEvent.target.value);
+  }
+  function handleSecondInsMaterial(changeEvent) {
+    setSecondInsMaterial(changeEvent.target.value);
   }
   function handleSecondInsVapor(changeEvent) {
     setSecondInsVapor(changeEvent.target.value);
@@ -210,7 +275,7 @@ export default function App(props) {
     setObjName(e.target.value);
   }
   function handleVentHeight(changeEvent) {
-    setVentHeight(changeEvent.target.value * 0.001);
+    setVentHeight(changeEvent.target.value);
   }
   function handleVentIn(changeEvent) {
     setVentIn(changeEvent.target.value * 0.001);
@@ -237,205 +302,209 @@ export default function App(props) {
     setVaporMembraneR(changeEvent.target.value);
   }
 
+  function handleWindowLoss(value) {
+    setWindowLoss(value);
+  }
+
   function toggleOwnCover() {
     setOwnCover((value) => !value);
+  }
+
+  function toggleMetallCover() {
+    setMetallCover((value) => !value);
   }
 
   function toggleConcreteWall() {
     setConcreteWall(!concreteWall);
   }
 
+  function toggleConcreteSp() {
+    setConcreteSp(!concreteSp);
+  }
+  function toggleBrickSp() {
+    setBrickSp(!brickSp);
+  }
+  function toggleInsSp() {
+    setInsSp(!insSp);
+  }
+  function togglePlaster() {
+    setPlaster(!plaster);
+  }
+  function toggleSecondInsSp() {
+    setSecondInsSp(!secondInsSp);
+  }
+
+  function handleVaporMembrane() {
+    setVaporMembrane(!vaporMembrane);
+  }
+
+  function handleWindMembrane() {
+    setWindMembrane(!windMembrane);
+  }
+
   return (
     <div className="page">
-      <Header />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <ObjData
-              isBuildingAim={buildingAim}
-              isBuildingType={buildingType}
-              isCityProp={cityProp}
-              isCityValue={cityValue}
-              isConcreteWall={concreteWall}
-              isInnerTemp={innerTemp}
-              isHumidity={humidity}
-              isMr={mr}
-              isObjName={objName || ''}
-              isObjAddress={objAddress || ''}
-              onBuildingAim={handleBuildingAim}
-              onBuildingType={handleBuildingType}
-              onCityValue={handleCityValue}
-              onConcreteWall={toggleConcreteWall}
-              onInnerTemp={handleInnerTemp}
-              onHumidity={handleHumidity}
-              onMr={handleMr}
-              onObjAddress={handleObjAddress}
-              onObjName={handleObjName}
-            />
-          }
-        ></Route>
-        <Route
-          path="/walldata"
-          element={
-            <WallData
-              isBuildingType={buildingType}
-              isCityProp={cityProp}
-              isSecondIns={secondIns}
-              onAddSecondIns={handleAddSecondIns}
-              onBrickAir={handleBrickAir}
-              onBrickDensity={handleBrickDensity}
-              onBrickLambda={handleBrickLambda}
-              onBrickThickness={handleBrickThickness}
-              onBrickVapor={handleBrickVapor}
-              onDeleteSecondIns={handleDeleteSecondIns}
-              onConcreteAir={handleConcreteAir}
-              onConcreteDensity={handleConcreteDensity}
-              onConcreteLambda={handleConcreteLambda}
-              onConcreteThickness={handleConcreteThickness}
-              onConcreteVapor={handleConcreteVapor}
-              onInsAir={handleInsAir}
-              onInsDensity={handleInsDensity}
-              onInsLambda={handleInsLambda}
-              onInsThickness={handleInsThickness}
-              onInsVapor={handleInsVapor}
-              onSecondInsAir={handleSecondInsAir}
-              onSecondInsDensity={handleSecondInsDensity}
-              onSecondInsLambda={handleSecondInsLambda}
-              onSecondInsThickness={handleSecondInsThickness}
-              onSecondInsVapor={handleSecondInsVapor}
-            />
-          }
-        ></Route>
-        <Route
-          path="/systdata"
-          element={
-            <SystData
-              isBrickArea={brickArea}
-              isBrickLambda={brickLambda}
-              isBuildingType={buildingType}
-              isConcreteArea={concreteArea}
-              isConcreteLambda={concreteLambda}
-              isGribPcs={gribPcs}
-              isInsLambda={insLambda}
-              isInsThickness={insThickness}
-              isSecondInsThickness={secondInsThickness}
-              isSecondInsLambda={secondInsLambda}
-              isSecondIns={secondIns}
-              isWindowDepth={windowDepth}
-              isWindowHeight={windowHeight}
-              isWindowLength={windowLength}
-              onBrickArea={handleBrickArea}
-              onConcreteArea={handleConcreteArea}
-              onGrib={handleGrib}
-              onGribPcs={handleGribPcs}
-              onWindowLength={handleWindowLength}
-              onWindowHeight={handleWindowHeight}
-              onWindowDepth={handleWindowDepth}
-            />
-          }
-        ></Route>
-        <Route
-          path="/bracketdata"
-          element={
-            <BracketData
-              isBuildingType={buildingType}
-              isBrickLambda={brickLambda}
-              isConcreteLambda={concreteLambda}
-              isInsLambda={insLambda}
-              isInsThickness={insThickness}
-              isSecondIns={secondIns}
-              isSecondInsThickness={secondInsThickness}
-              isSecondInsLambda={secondInsLambda}
-              onBracketResult={handleBracketResult}
-            />
-          }
-        ></Route>
-        <Route
-          path="/coverdata"
-          element={
-            <CoverData
-              isCoverName={coverName}
-              isOwnCover={ownCover}
-              onCoverData={handleCoverData}
-              onCoverLambda={handleCoverLambda}
-              onCoverName={handleCoverName}
-              onCoverThickness={handleCoverThickness}
-              onCoverVapor={handleCoverVapor}
-              onHeight={handleHeight}
-              onVentHeight={handleVentHeight}
-              onVentIn={handleVentIn}
-              onVentMed={handleVentMed}
-              onVentOut={handleVentOut}
-              onOwnCover={toggleOwnCover}
-            />
-          }
-        ></Route>
-        <Route path="/final" element={<Final isFinalValues={finalValues} />}></Route>
+      <DefaultContext.Provider
+        value={{
+          addBracket,
+          bracketResult,
+          brickAir,
+          brickArea,
+          brickData,
+          brickDensity,
+          brickMaterial,
+          brickLambda,
+          brickThickness,
+          brickVapor,
+          buildingAim,
+          buildingType,
+          cityProp,
+          cityValue,
+          concreteAir,
+          concreteArea,
+          concreteDensity,
+          concreteLambda,
+          concreteSpLambda,
+          concreteThickness,
+          concreteVapor,
+          concreteWall,
+          coverLambda,
+          cover,
+          coverName,
+          coverThickness,
+          coverVapor,
+          d,
+          dk,
+          finalValues,
+          grib,
+          gribDepth,
+          gribPcs,
+          height,
+          humidity,
+          innerTemp,
+          insAir,
+          insData,
+          insDensity,
+          insMaterial,
+          insLambda,
+          insThickness,
+          insVapor,
+          k,
+          metalCover,
+          mr,
+          objName,
+          objAddress,
+          ownCover,
+          plaster,
+          secondIns,
+          secondInsAir,
+          secondInsData,
+          secondInsDensity,
+          secondInsMaterial,
+          secondInsLambda,
+          secondInsThickness,
+          secondInsVapor,
+          setAddBracket,
+          setUKey,
+          brickSp,
+          concreteSp,
+          insSp,
+          secondInsSp,
+          vaporMembrane,
+          vaporMembraneR,
+          ventHeight,
+          ventIn,
+          ventMed,
+          ventOut,
+          windMembrane,
+          windMembraneR,
+          windowLength,
+          windowHeight,
+          windowDepth,
+          windowLoss,
+          handleAddSecondIns,
+          handleBracketResult,
+          handleBrickAir,
+          handleBrickArea,
+          handleBrickDensity,
+          handleBrickLambda,
+          handleBrickThickness,
+          handleBrickVapor,
+          handleBuildingAim,
+          handleBuildingType,
+          handleCityValue,
+          handleConcreteAir,
+          handleConcreteArea,
+          handleConcreteDensity,
+          handleConcreteLambda,
+          handleConcreteSpLambda,
+          handleConcreteThickness,
+          handleConcreteVapor,
+          handleCoverName,
+          handleCoverLambda,
+          handleCoverThickness,
+          handleCoverVapor,
+          handleD,
+          handleDk,
+          handleDeleteSecondIns,
+          handleFinalValues,
+          handleGrib,
+          handleGribPcs,
+          handleHeight,
+          handleHumidity,
+          handleInsAir,
+          handleInsDensity,
+          handleInsLambda,
+          handleInsThickness,
+          handleInsVapor,
+          handleK,
+          handleMr,
+          handleInnerTemp,
+          handleSecondInsAir,
+          handleSecondInsThickness,
+          handleSecondInsDensity,
+          handleSecondInsLambda,
+          handleSecondInsVapor,
+          handleObjAddress,
+          handleObjName,
+          handleVentHeight,
+          handleVentIn,
+          handleVentMed,
+          handleVentOut,
+          handleWindowLength,
+          handleWindowHeight,
+          handleWindowDepth,
+          handleWindMembraneR,
+          handleVaporMembraneR,
+          handleWindowLoss,
+          toggleOwnCover,
+          toggleMetallCover,
+          toggleConcreteWall,
+          toggleConcreteSp,
+          toggleBrickSp,
+          toggleInsSp,
+          togglePlaster,
+          toggleSecondInsSp,
+          handleBrickMaterial,
+          handleInsMaterial,
+          handleSecondInsMaterial,
+          handleVaporMembrane,
+          handleWindMembrane,
+          uKey,
+        }}
+      >
+        <Header />
+        <Routes>
+          <Route path="/" element={<ObjData />}></Route>
+          <Route path="/walldata" element={<WallData />}></Route>
+          <Route path="/systdata" element={<SystData />}></Route>
+          <Route path="/bracketdata" element={<BracketData />}></Route>
+          <Route path="/coverdata" element={<CoverData />}></Route>
+          <Route path="/final" element={<Final />}></Route>
 
-        <Route
-          path="/pz"
-          element={
-            <Calculator
-              isBracketResult={bracketResult}
-              isBrickArea={brickArea}
-              isBrickThickness={brickThickness}
-              isBrickDensity={brickDensity}
-              isBrickLambda={brickLambda}
-              isBrickVapor={brickVapor}
-              isBrickAir={brickAir}
-              isBuildingAim={buildingAim}
-              isBuildingType={buildingType}
-              isHumidity={humidity}
-              isInnerTemp={innerTemp}
-              isConcreteAir={concreteAir}
-              isConcreteArea={concreteArea}
-              isConcreteDensity={concreteDensity}
-              isConcreteLambda={concreteLambda}
-              isConcreteThickness={concreteThickness}
-              isConcreteSpLambda={concreteSpLambda}
-              isConcreteVapor={concreteVapor}
-              isConcreteWall={concreteWall}
-              isCoverData={coverData}
-              isCoverLambda={coverLambda}
-              isCoverName={coverName}
-              isCoverThickness={coverThickness}
-              isCoverVapor={coverVapor}
-              isCityProp={cityProp}
-              isGrib={grib}
-              isGribDepth={gribDepth}
-              isGribPcs={gribPcs}
-              isHeight={height}
-              isInsThickness={insThickness}
-              isInsDensity={insDensity}
-              isInsLambda={insLambda}
-              isInsVapor={insVapor}
-              isInsAir={insAir}
-              isMr={mr}
-              isObjAddress={objAddress}
-              isObjName={objName}
-              isPlaster={plaster}
-              isSecondIns={secondIns}
-              isSecondInsAir={secondInsAir}
-              isSecondInsThickness={secondInsThickness}
-              isSecondInsDensity={secondInsDensity}
-              isSecondInsLambda={secondInsLambda}
-              isSecondInsVapor={secondInsVapor}
-              isVaporMembraneR={vaporMembraneR}
-              isVentIn={ventIn}
-              isVentMed={ventMed}
-              isVentOut={ventOut}
-              isVentHeight={ventHeight}
-              isWindMembraneR={windMembraneR}
-              isWindowLength={windowLength}
-              isWindowLambdaLoss={windowLambdaLoss}
-              isWindowHeight={windowHeight}
-              isWindowDepth={windowDepth}
-              onFinalValues={handleFinalValues}
-            />
-          }
-        ></Route>
-      </Routes>
+          <Route path="/pz" element={<Calculator />}></Route>
+        </Routes>
+      </DefaultContext.Provider>
     </div>
   );
 }

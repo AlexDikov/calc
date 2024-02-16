@@ -1,16 +1,19 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Badge, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { DefaultContext } from '../contexts/DefaultContext';
 
-export default function Final({ isFinalValues }) {
+export default function Final() {
   const [firstOk, setFirstOk] = useState(false);
   const [secondOk, setSecondOk] = useState(false);
   const [thirdOk, setThirdOk] = useState(false);
 
+  const context = useContext(DefaultContext);
+
   const checkValues = () => {
-    if (isFinalValues.r1 < isFinalValues.r2) setFirstOk(true);
-    if (isFinalValues.e1 < isFinalValues.e2) setSecondOk(true);
-    if (isFinalValues.g1 < isFinalValues.g2) setThirdOk(true);
+    if (context.finalValues.r1 < context.finalValues.r2) setFirstOk(true);
+    if (context.finalValues.e1 < context.finalValues.e2) setSecondOk(true);
+    if (context.finalValues.g1 < context.finalValues.g2) setThirdOk(true);
   };
   checkValues();
 
@@ -24,7 +27,7 @@ export default function Final({ isFinalValues }) {
               R<sub>у</sub> {'<'} R<sub>тр</sub>
             </Badge>
           </h1>
-          <h1>Условие выполнено!</h1>
+          <h1>Условие выполнено</h1>
         </div>
       ) : (
         <div>
