@@ -1,17 +1,15 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { materials } from './materials';
 import { DefaultContext } from '../contexts/DefaultContext';
 
 export default function WallInput({
   isAir,
-  isDensity,
   isId,
   isLambda,
   isMaterial,
   isName,
   isThickness,
-  isSpAir,
   isSpData,
   isSpDensity,
   isSpLambda,
@@ -20,17 +18,18 @@ export default function WallInput({
   isSecondIns,
   isSp,
   isVapor,
-
   onAir,
-
   onDensity,
   onLambda,
   onName,
+  onName2,
   onSpMaterial,
   onSp,
   onThickness,
   onVapor,
 }) {
+  const context = useContext(DefaultContext);
+
   const materialList = () => {
     if (isId === 'brick')
       return materials.brick.map((item) => (
@@ -79,7 +78,7 @@ export default function WallInput({
                 <div className="wallInputUnit">
                   {isSp && isId !== 'concrete' ? (
                     <div>
-                      <Form.Select className="mb-1 wall-font" id="ins-type" value={isMaterial} onChange={onName}>
+                      <Form.Select className="mb-1 wall-font" id="mat-type" value={isMaterial} onChange={onName}>
                         <option>Тип заполнения</option>
                         {materialList()}
                       </Form.Select>
@@ -102,7 +101,7 @@ export default function WallInput({
                 placeholder="Название"
                 id={`${isId}-n`}
                 className="h-50 mb-4 mt-3"
-                onChange={onName}
+                onChange={onName2}
               ></Form.Control>
             )}
             <div className="wallInputUnit">
@@ -136,15 +135,7 @@ export default function WallInput({
                   <input
                     className="wallInputValue"
                     id={`${isId}-sp-h`}
-                    defaultValue={
-                      isSpData
-                        ? context.cityProp.s
-                          ? context.cityProp.s === 'А'
-                            ? isSpData.la
-                            : isSpData.lb
-                          : isSpData.lb
-                        : null
-                    }
+                    value={isSpData ? (context.cityProp.s === 'А' ? isSpData.la : isSpData.lb) : null}
                     onChange={onLambda}
                   ></input>
                 )
@@ -179,7 +170,7 @@ export default function WallInput({
                 <br />
                 м²чПа/кг
               </li>
-              <input className="wallInputValue" id={`${isId}-a`} defaultValue={isAir} onChange={onAir}></input>
+              <input className="wallInputValue" id={`${isId}-a`} value={isAir} onChange={onAir}></input>
             </div>
             {!context.secondIns && isId === 'ins-1' ? (
               <button className="wallAddIns" type="button" onClick={context.handleAddSecondIns}>

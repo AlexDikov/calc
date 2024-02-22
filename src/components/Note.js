@@ -1,508 +1,81 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
 import { DefaultContext } from '../contexts/DefaultContext';
-import { Badge, Button, Col, Form, Row } from 'react-bootstrap';
-import ReactToPrint, { useReactToPrint } from 'react-to-print';
 
-export default function Calculator() {
-  const {
-    bracketResult,
-    brickAir,
-    brickArea,
-    brickDensity,
-    brickLambda,
-    brickMaterial,
-    brickName,
-    brickOrConcrete,
-    brickThickness,
-    brickVapor,
-    buildingAim,
-    buildingType,
-    cityProp,
-    concreteAir,
-    concreteArea,
-    concreteDensity,
-    concreteLambda,
-    concreteThickness,
-    concreteVapor,
-    concreteWall,
-    cover,
-    coverName,
-    coverThickness,
-    coverVapor,
-    dk,
-    grib,
-    gribDepth,
-    gribPcs,
-    handleInsThickness,
-    handleD,
-    handleK,
-    handleSecondInsThickness,
-    handlePlasterValue,
-    handleVaporMembraneAir,
-    handleVaporMembraneR,
-    handleVentHeight,
-    handleVentIn,
-    handleVentMed,
-    handleVentOut,
-    height,
-    humidity,
-    innerTemp,
-    insAir,
-    insDensity,
-    insLambda,
-    insName,
-    insThickness,
-    insVapor,
-    mr,
-    objAddress,
-    objName,
-    plaster,
-    plasterValue,
-    secondIns,
-    secondInsAir,
-    secondInsDensity,
-    secondInsLambda,
-    secondInsThickness,
-    secondInsVapor,
-    vaporMembrane,
-    vaporMembraneAir,
-    vaporMembraneR,
-    ventHeight,
-    ventIn,
-    ventMed,
-    ventOut,
-    windMembraneR,
-    windowBrickLength,
-    windowConcreteLength,
-    windowLength,
-    windowLoss,
-    windowLossConcrete,
-    windMembrane,
-  } = useContext(DefaultContext);
-
-  const [pz, setPz] = useState(false);
-
-  function togglePz() {
-    setPz(!pz);
-  }
-
-  const k = 1.3;
-
-  const b = () => {
-    if (buildingAim === '1') return 1.4;
-    if (buildingAim === '2') return 1.2;
-    if (buildingAim === '3') return 1;
-  };
-  const a = () => {
-    if (buildingAim === '1') return 0.00035;
-    if (buildingAim === '2') return 0.0003;
-    if (buildingAim === '3') return 0.0002;
-  };
-  const gsop =
-    buildingAim === '2' ? (innerTemp - cityProp.t8) * cityProp.z8 : (innerTemp - cityProp.t10) * cityProp.z10;
-
-  const concreteQ = buildingType !== '3' ? parseFloat((concreteThickness / concreteLambda).toFixed(3)) : null;
-  const brickQ = buildingType !== '1' ? parseFloat((brickThickness / brickLambda).toFixed(3)) : null;
-  const insQ = parseFloat((insThickness / insLambda).toFixed(3));
-  const secondInsQ = secondIns ? parseFloat((secondInsThickness / secondInsLambda).toFixed(3)) : null;
-
-  const rObl = (a() * gsop + b()) * mr;
-  const preIns =
-    (k * rObl - concreteQ - brickQ - 1 / 8.7 - 1 / 12) *
-    (secondIns
-      ? (insThickness / (insThickness + secondInsThickness)) * insLambda +
-        (secondInsThickness / (insThickness + secondInsThickness)) * secondInsLambda
-      : insLambda);
-
-  const linearLoss = parseFloat(
-    (windowLoss * windowBrickLength) / brickArea +
-      concreteArea +
-      (windowLossConcrete * windowConcreteLength) / brickArea +
-      concreteArea
-  );
-
-  const pointLoss = () => {
-    let totalLoss = 0;
-
-    for (const key in bracketResult) {
-      const bracketData = bracketResult[key];
-      totalLoss += parseFloat(bracketData.value) * parseInt(bracketData.pcs);
-    }
-    return totalLoss;
-  };
-
-  const rCond1 = buildingType !== '3' ? 1 / 8.7 + concreteQ + insQ + secondInsQ + 1 / 12 : null;
-  const rCond2 = buildingType !== '1' ? 1 / 8.7 + brickQ + insQ + secondInsQ + 1 / 12 : null;
-
-  const u1 = buildingType !== '3' ? 1 / rCond1 : null;
-  const u2 = buildingType !== '1' ? 1 / rCond2 : null;
-
-  const rRed = u1 + u2 + linearLoss + pointLoss();
-  const rCond0 = 1 / 8.7 + rCond1 + rCond2 + 1 / 12;
-  const r = rRed / rCond0;
-
-  const tempGapInit = cityProp.tm + 1;
-  const epsilon = 1.2 * (ventMed / ventIn) ** 2 + (0.04 * ventHeight) / (2 * ventMed) + 1.2 * (ventMed / ventOut) ** 2;
-
-  const rOuter0 = 1 / 23 + 1 / 12 + cover.r;
-
-  const vVent0 = Math.sqrt((0.08 * ventHeight) / epsilon) * Math.sqrt(((innerTemp - cityProp.tm) * rOuter0) / rRed);
-  const x00 = (1005 * vVent0 * ventMed * (373 / (273 + tempGapInit))) / (1 / rRed + 1 / rOuter0);
-  const temp00 = (innerTemp / rRed + cityProp.tm / rOuter0) / (1 / rRed + 1 / rOuter0);
-  const tempGap0 = temp00 - (temp00 - cityProp.tm) * (x00 / ventHeight) * (1 - Math.exp(-ventHeight / x00));
-
-  function vVent(tempGap) {
-    return Math.sqrt((0.08 * ventHeight * (tempGap - cityProp.tm)) / epsilon);
-  }
-
-  const vVent1 = vVent(tempGap0);
-
-  function m(tempGap) {
-    return 0.04 * ((273 + tempGap) / 100) ** 3;
-  }
-  const m1 = m(tempGap0);
-
-  function alphaC(vVent) {
-    return 7.34 * vVent ** 0.656 + 3.78 * Math.E ** (-1.91 * vVent);
-  }
-  const alphaC1 = alphaC(vVent1);
-
-  function alphaR(m) {
-    return m / (1 / 4.4 + 1 / cover.c - 1 / 5.77);
-  }
-  const alphaR1 = alphaR(m1);
-
-  function alphaGap(alphaR, alphaC) {
-    return alphaC + 2 * alphaR;
-  }
-  const alphaGap1 = alphaGap(alphaR1, alphaC1);
-
-  function rOuter(alphaGap) {
-    return 1 / alphaGap + 1 / 12 + coverThickness / cover.l;
-  }
-  const rOuter1 = rOuter(alphaGap1);
-
-  function temp0(rOuter) {
-    return (innerTemp / rRed + cityProp.tm / rOuter) / (1 / rRed + 1 / rOuter);
-  }
-  const temp01 = temp0(rOuter1);
-
-  function x0(vVent, tempGap, rOuter) {
-    return (1005 * vVent * ventMed * (373 / (273 + tempGap))) / (1 / rRed + 1 / rOuter);
-  }
-  const x01 = x0(vVent1, tempGap0, rOuter1);
-
-  function tempGap(temp0, x0) {
-    return temp0 - (((temp0 - cityProp.tm) * x0) / height) * (1 - Math.exp(-height / x0));
-  }
-  const tempGap1 = tempGap(temp01, x01);
-
-  const vVent2 = vVent(tempGap1);
-  const m2 = m(vVent2);
-  const alphaC2 = alphaC(vVent2);
-  const alphaR2 = alphaR(m2);
-  const alphaGap2 = alphaGap(alphaR2, alphaC2);
-  const rOuter2 = rOuter(alphaGap2);
-  const temp02 = temp0(rOuter2);
-  const x02 = x0(vVent2, tempGap1, rOuter2);
-  const tempGap2 = tempGap(temp02, x02);
-
-  const vVent3 = vVent(tempGap2);
-  const m3 = m(vVent3);
-  const alphaC3 = alphaC(vVent3);
-  const alphaR3 = alphaR(m3);
-  const alphaGap3 = alphaGap(alphaR3, alphaC3);
-  const rOuter3 = rOuter(alphaGap3);
-  const temp03 = temp0(rOuter3);
-  const x03 = x0(vVent3, tempGap2, rOuter3);
-  const tempGap3 = tempGap(temp03, x03);
-
-  const vVent4 = vVent(tempGap3);
-  const m4 = m(vVent4);
-  const alphaC4 = alphaC(vVent4);
-  const alphaR4 = alphaR(m4);
-  const alphaGap4 = alphaGap(alphaR4, alphaC4);
-  const rOuter4 = rOuter(alphaGap4);
-  const temp04 = temp0(rOuter4);
-  const x04 = x0(vVent4, tempGap3, rOuter4);
-  const tempGap4 = tempGap(temp04, x04);
-
-  const vVent5 = parseFloat(vVent(tempGap4).toFixed(3));
-
-  const plasterV = () => {
-    if (plasterValue === '1') return 0;
-    if (plasterValue === '2') return 0.125;
-    if (plasterValue === '3') return 0.16667;
-  };
-  console.log(buildingType !== '3' ? concreteThickness / concreteVapor : 0);
-  console.log(buildingType !== '1' ? brickThickness / brickVapor : 0);
-  console.log(secondIns ? insThickness / insVapor + secondInsThickness / secondInsVapor : insThickness / insVapor);
-  console.log(plaster ? plasterV() : 0);
-  const rVaporWhole =
-    parseFloat(buildingType !== '3' ? concreteThickness / concreteVapor : 0) +
-    parseFloat(buildingType !== '1' ? brickThickness / brickVapor : 0) +
-    parseFloat(secondIns ? insThickness / insVapor + secondInsThickness / secondInsVapor : insThickness / insVapor) +
-    parseFloat(plaster ? plasterV() : 0);
-  const rVaporIns =
-    parseFloat(secondIns ? insThickness / insVapor + secondInsThickness / secondInsVapor : insThickness / insVapor) +
-    vaporMembrane
-      ? vaporMembraneR
-      : 0 + windMembrane
-      ? vaporMembraneR
-      : 0 + 0.02;
-  const outE = 1.84 * 10 ** 11 * Math.exp(-5330 / (273 + cityProp.tm));
-  const inE = 1.84 * 10 ** 11 * Math.exp(-5330 / (273 + innerTemp));
-  const eIn = (humidity / 100) * inE;
-  const qVapor = ((1 / 2) * rVaporWhole + (1 / 4) * rVaporIns) * (eIn - outE);
-
-  const eOut = (cityProp.w / 100) * outE;
-  const kVapor = qVapor / (eIn - outE);
-  const rEq = cover.r;
-  const e1 = (eOut + rEq * kVapor * eIn) / (kVapor * rEq + 1);
-  const x1 = (22100 * (vVent5 * ventMed * 1.005 * rEq)) / (kVapor * rEq + 1);
-  const eGap = e1 - (e1 - eOut) * Math.exp(-height / x1);
-  const rX = 1 / 8.7 + 1 / (concreteQ + brickQ + insQ + secondInsQ);
-  const tx = innerTemp - ((innerTemp - cityProp.tm) / (buildingType == '1' ? rCond1 : rCond2)) * rX;
-  const eCond = 1.84 * 10 ** 11 * Math.exp(-5330 / (273 + tx));
-  const rVaporOuter = windMembraneR + 1 / (1 / rEq + (28753 / (1 + tempGap4 / 273)) * (ventMed / ventHeight) * vVent5);
-  const kAir = rVaporOuter / rVaporWhole;
-  const d = (eCond - eOut) / (eIn - eOut);
-  handleD(kAir);
-  handleK(d);
-
-  const g = dk;
-  const gObl = g / (6.14 * rVaporWhole);
-
-  const rU = concreteAir + brickAir + insAir + secondInsAir + windMembraneR;
-  const yOuter = 3463 / (273 + cityProp.tm);
-  const yInner = 3463 / (273 + innerTemp);
-  const deltaP = 0.55 * height * (yOuter - yInner) + 0.03 * yOuter * cityProp.v ** 2;
-  const gU = deltaP / rU;
-
-  const wallType = (wall, item) => {
-    if (wall === '1') return concreteArea;
-    if (wall === '3') return brickArea;
-    if (wall === '2') return item.wallType ? concreteArea : brickArea;
-  };
-
-  const bracketDensity = () => {
-    let brackets = 0;
-    for (const key in bracketResult) {
-      const bracketData = bracketResult[key];
-      brackets += parseInt(bracketData.pcs);
-    }
-    return brackets / (brickArea + concreteArea);
-  };
-
-  const brackets = () =>
-    Object.entries(bracketResult).map(([key, item]) => (
-      <React.Fragment key={key}>
-        <br /> - {item.type ? 'алюминиевый' : 'стальной'} {item.weight ? 'межэтажный' : 'рядовой'} кронштейн{' '}
-        {item.bracket} - {item.pcs / wallType(buildingType, item)} шт/м²
-      </React.Fragment>
-    ));
-  const brackets2 = () =>
-    Object.entries(bracketResult).map(([key, item]) => (
-      <React.Fragment key={key}>
-        <br /> χᵏᵖ<sup>{parseInt(key) + 1}</sup> = {item.value.toFixed(4)} Вт/°С для кронштейна {item.bracket}{' '}
-        {buildingType === '2' ? 'крепление : '(item.wall ? 'бетон' : 'блок/кирпич') : null};
-      </React.Fragment>
-    ));
-  const brackets3 = () =>
-    Object.entries(bracketResult).map(([key, item]) => (
-      <React.Fragment key={key}>
-        <br /> - кронштейн {item.bracket} (точечный элемент {parseInt(key) + 2})
-      </React.Fragment>
-    ));
-  const qPercent = () => {
-    let brackets =
-      +(u1 * concreteArea) / (concreteArea + brickArea) +
-      (u2 * brickArea) / (concreteArea + brickArea) +
-      (windowLoss * windowBrickLength) / (concreteArea + brickArea) +
-      (windowLossConcrete * windowConcreteLength) / (concreteArea + brickArea) +
-      gribPcs * gribDepth;
-    for (const key in bracketResult) {
-      const item = bracketResult[key];
-      brackets += parseFloat((item.value * item.pcs) / (concreteArea + brickArea));
-    }
-    return brackets * 0.01;
-  };
-
-  const brackets4 = () =>
-    Object.entries(bracketResult).map(([key, item]) => (
-      <React.Fragment key={key}>
-        <tr key={184}>
-          <th scope="row">{buildingType === '2' ? parseInt(key) + 6 : parseInt(key) + 4}</th>
-          <td>
-            кронштейн <br />
-            {item.bracket}
-          </td>
-          <td>Точечный {parseInt(key) + 2}</td>
-          <td>{(item.pcs / (concreteArea + brickArea)).toFixed(3)}</td>
-          <td>{item.value.toFixed(4)}</td>
-          <td>{((item.value * item.pcs) / (concreteArea + brickArea)).toFixed(4)}</td>
-          <td>{((item.value * item.pcs) / (concreteArea + brickArea) / qPercent()).toFixed(1)}</td>
-        </tr>
-      </React.Fragment>
-    ));
-
-  const windowDepth = () => {
-    if (windowDepth === '1') return 'как для рам, утопленных в стену на 100 мм';
-    if (windowDepth === '2') return 'как для рам сразу за утеплителем';
-    if (windowDepth === '3') return 'как для рам, вынесенных за стену на 100мм';
-  };
-
-  const windowHeight = () => {
-    if (windowHeight === '1') return 'без нахлеста утеплителя на раму';
-    if (windowHeight === '2') return 'как сразу за утеплителем';
-    if (windowHeight === '3') return 'как вынесенным за стену на 100мм';
-  };
-
-  const contentToPrint = useRef(null);
-  const handlePrint = useReactToPrint({
-    content: () => contentToPrint.current,
-    removeAfterPrint: true,
-  });
-
+export default function Note() {
   return (
-    <>
-      <div className="final">
-        <div className="final-container">
-          {rRed > rObl ? (
-            <div className="final rounded shadow p-2 mb-2 bg-body-tertiary w-100">
-              <h4>
-                R<sub>у</sub> {'>'} R<sub>тр</sub>
-              </h4>
-              <h6>Условие выполнено</h6>
-            </div>
-          ) : (
-            <div className="final  rounded shadow p-2 mb-2 bg-body-tertiary w-100">
-              <h4>
-                R<sub>у</sub> {'<'} R<sub>тр</sub>
-              </h4>
-              <Row className="mx-auto">
-                <Col xs={7} className="mt-2">
-                  <p>Увеличьте слой утеплителя:</p>
-                </Col>
-                {secondIns ? (
-                  <Col xs={4}>
-                    <Form.Control
-                      className="w-25"
-                      placeholder="нижний слой, мм"
-                      value={insThickness ? insThickness * 1000 : null}
-                      onChange={handleInsThickness}
-                    ></Form.Control>
-                    <Form.Control
-                      className="w-25"
-                      placeholder="верхний слой, мм"
-                      value={secondInsThickness ? secondInsThickness * 1000 : null}
-                      onChange={handleSecondInsThickness}
-                    ></Form.Control>
-                  </Col>
-                ) : (
-                  <Col xs={2}>
-                    <Form.Control
-                      placeholder="мм"
-                      value={insThickness ? insThickness * 1000 : null}
-                      onChange={handleInsThickness}
-                    ></Form.Control>
-                  </Col>
-                )}
-              </Row>
-            </div>
-          )}
-          {eOut < outE ? (
-            <div class="final rounded shadow p-2 mb-2 bg-body-tertiary w-100">
-              <h4>
-                e<sub>пр</sub> {'<'} E<sub>н</sub>
-              </h4>
-              <h6>Условие выполнено</h6>
-            </div>
-          ) : (
-            <div className="final mt-1 rounded shadow p-3 mb-2 bg-body-tertiary ">
-              <h4>
-                e<sub>пр</sub> {'>'} E<sub>н</sub>
-              </h4>
-              <Row className="ms-auto">
-                <Col xs={7} className="mt-2">
-                  <p>Уменьшите высоту прослойки отсечкой: </p>
-                </Col>
-                <Col xs={2}>
-                  <Form.Control
-                    className=" ms-4"
-                    placeholder="м"
-                    value={ventHeight}
-                    onChange={handleVentHeight}
-                  ></Form.Control>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={14} className="mt-2">
-                  <Form.Label>Увеличьте ширину зазора или точек входа/выхода воздуха </Form.Label>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={3}>
-                  <Form.Control placeholder="вход, мм" value={ventIn} onChange={handleVentIn}></Form.Control>
-                </Col>
-                <Col xs={3} className="mx-auto">
-                  <Form.Control placeholder="ширина, мм" value={ventMed} onChange={handleVentMed}></Form.Control>
-                </Col>
-                <Col xs={3}>
-                  <Form.Control placeholder="выход, мм" value={ventOut} onChange={handleVentOut}></Form.Control>
-                </Col>
-              </Row>
-            </div>
-          )}
-          {gU < gObl ? (
-            <div class="border border-secondary">
-              G<sub>у</sub> {'<'} G<sub>тр</sub>
-              <h6>Условие выполнено</h6>
-            </div>
-          ) : (
-            <div className="final rounded shadow p-3 mb-5 bg-body-tertiary ">
-              <h4>
-                G<sub>у</sub> {'>'} G<sub>тр</sub>
-              </h4>
-              <p>Добавьте штукатурку или пароизоляцию</p>
-              <Row>
-                <Col>
-                  <Form.Select id="plaster" className=" mx-auto" onChange={handlePlasterValue}>
-                    <option>Штукатурка изнутри</option>
-                    <option value={1}>Нет</option>
-                    <option value={2}>Гипсовая</option>
-                    <option value={3}>Цементная</option>
-                  </Form.Select>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={11}>
-                  <Form.Control
-                    id="vapor-membrane-air"
-                    placeholder="Сопротивление воздухопроницанию, м²чПа/кг"
-                    value={vaporMembraneAir}
-                    onChange={handleVaporMembraneAir}
-                  />
-                </Col>
-                <Col xs={11}>
-                  <Form.Control
-                    id="vapor-membrane-r"
-                    placeholder="Сопротивление паропроницанию, м²чПа/мг"
-                    value={vaporMembraneR}
-                    onChange={handleVaporMembraneR}
-                  />
-                </Col>
-              </Row>
-            </div>
-          )}
-        </div>
-      </div>
-      <Button size="sm" variant="outline-secondary" className="btn-pz" onClick={handlePrint}>
-        Пояснительная записка
-      </Button>
-
-      <>
-        <div ref={contentToPrint}>
+    <DefaultContext.Consumer>
+      {({
+        bracketResult,
+        brickAir,
+        brickArea,
+        brickDensity,
+        brickLambda,
+        brickMaterial,
+        brickThickness,
+        brickVapor,
+        buildingAim,
+        buildingType,
+        cityProp,
+        concreteAir,
+        concreteArea,
+        concreteDensity,
+        concreteLambda,
+        concreteThickness,
+        concreteVapor,
+        concreteWall,
+        cover,
+        coverName,
+        coverThickness,
+        coverVapor,
+        dk,
+        grib,
+        gribDepth,
+        gribPcs,
+        handleInsThickness,
+        handleD,
+        handleK,
+        handleSecondInsThickness,
+        handlePlasterValue,
+        handleVaporMembraneAir,
+        handleVaporMembraneR,
+        handleVentHeight,
+        handleVentIn,
+        handleVentMed,
+        handleVentOut,
+        height,
+        humidity,
+        innerTemp,
+        insAir,
+        insDensity,
+        insLambda,
+        insThickness,
+        insVapor,
+        mr,
+        objAddress,
+        objName,
+        plaster,
+        plasterValue,
+        secondIns,
+        secondInsAir,
+        secondInsDensity,
+        secondInsLambda,
+        secondInsThickness,
+        secondInsVapor,
+        vaporMembrane,
+        vaporMembraneAir,
+        vaporMembraneR,
+        ventHeight,
+        ventIn,
+        ventMed,
+        ventOut,
+        windMembraneR,
+        windowBrickLength,
+        windowConcreteLength,
+        windowLength,
+        windowLoss,
+        windowLossConcrete,
+        windMembrane,
+      }) => (
+        <>
           <h2>Пояснительная записка к расчету энергоэффективности ограждающей конструкции с системой НВФ</h2>
           <h2>
             Объект : {objName}, расположенный по адресу : {objAddress}
@@ -543,8 +116,7 @@ export default function Calculator() {
             ) : null}
             {buildingType !== '1' ? (
               <div>
-                - {brickName}
-                плотностью {brickDensity} кг/м³, толщиной {brickThickness * 1000} мм
+                - {brickMaterial} плотностью {brickDensity} кг/м³, толщиной {brickThickness * 1000} мм
               </div>
             ) : null}
             {secondIns ? (
@@ -554,7 +126,7 @@ export default function Calculator() {
               </div>
             ) : (
               <div>
-                - {insName} плотностью {insDensity} кг/м³, толщиной {insThickness * 1000} мм
+                - слой теплоизоляции плотностью {insDensity} кг/м³, толщиной {insThickness * 1000} мм
               </div>
             )}
             <br />
@@ -576,20 +148,25 @@ export default function Calculator() {
                 <br /> - коэффициент воздухопроницаемости ί = {brickAir} кг/(м∙ч∙Па);
               </div>
             ) : null}
-            <>
-              {secondIns ? 'Внутренний слой утеплителя' : 'Утеплитель'} :
-              <br /> - коэффициент теплопроводности материала λ = {insLambda} Вт/(м°С);
-              <br /> - коэффициент паропроницаемости материала μ = {insVapor} мг/(м∙ч∙Па);
-              <br />- коэффициент воздухопроницаемости ί = {insAir} кг/(м∙ч∙Па);
-              <br />
-            </>
-            {secondIns && (
-              <>
+            {secondIns ? (
+              <div>
+                Внутренний слой утеплителя:
+                <br /> - коэффициент теплопроводности материала λ = {insLambda} Вт/(м°С);
+                <br /> - коэффициент паропроницаемости материала μ = {insVapor} мг/(м∙ч∙Па);
+                <br />- коэффициент воздухопроницаемости ί = 0,1 кг/(м∙ч∙Па);
+                <br />
                 Внешний слой утеплителя:
                 <br /> - коэффициент теплопроводности материала λ = {secondInsLambda} Вт/(м°С);
                 <br /> - коэффициент паропроницаемости материала μ = {insVapor} мг/(м∙ч∙Па);
-                <br />- коэффициент воздухопроницаемости ί = {secondInsAir} кг/(м∙ч∙Па);
-              </>
+                <br />- коэффициент воздухопроницаемости ί = 0,1 кг/(м∙ч∙Па);
+              </div>
+            ) : (
+              <div>
+                Утеплитель :
+                <br /> - коэффициент теплопроводности материала λ = {insLambda} Вт/(м°С);
+                <br /> - коэффициент паропроницаемости материала μ = {insVapor} мг/(м∙ч∙Па);
+                <br />- коэффициент воздухопроницаемости ί = 0,1 кг/(м∙ч∙Па);{' '}
+              </div>
             )}
             {plaster ? (
               <>
@@ -602,7 +179,7 @@ export default function Calculator() {
             ) : null}
             <br /> <b>Характеристики элементов НФС:</b>
             <br />
-            Высота здания H = {height} м
+            Высота здания h = {height} м
             <br />
             Ширина вентилируемого зазора на входе δ<sub>вх</sub> = {ventIn * 1000} мм <br />
             Ширина вентилируемого зазора на выходе δ<sub>вых</sub> = {ventOut * 1000} мм
@@ -618,18 +195,15 @@ export default function Calculator() {
             <br /> Облицовка - {coverName} толщиной {coverThickness} мм
             <br />
             <br /> <h5>2. Требуемое сопротивление теплопередаче.</h5>
-            Градусо-сутки отопительного периода для рассматриваемого случая составляют: ГСОП = (t<sub>в</sub> - t
-            {buildingAim === 2 ? <sub>8</sub> : <sub>10</sub>}) ∙ z{buildingAim === 2 ? <sub>8</sub> : <sub>10</sub>}= (
-            {innerTemp} -(
+            Градусо-сутки отопительного периода для рассматриваемого случая составляют: ГСОП = ({innerTemp} -(
             {buildingAim === 2 ? cityProp.t8 : cityProp.t10})) ∙ {buildingAim === 2 ? cityProp.z8 : cityProp.z10}={' '}
             {gsop.toFixed(0)}
             °С∙сут. <br />
-            Минимально требуемое приведенное сопротивление теплопередаче стен по СП 50.13330.2012 составляет <br />R =
-            (a + ГСОП ∙ b) ∙ m<sub>r</sub> = ({a()} ∙ {gsop.toFixed(0)} +{b()}) ∙ {mr} = {rObl.toFixed(2)} м²°С/Вт.
+            Минимально требуемое приведенное сопротивление теплопередаче стен по СП 50.13330.2012 составляет R = ({a()}{' '}
+            ∙ {gsop.toFixed(0)} +{b()}) ∙ {mr} = {rObl.toFixed(2)} м²°С/Вт.
             <br /> <br />
             <h5>3. Минимально необходимая толщина утеплителя.</h5>
-            Приближенная толщина утеплителя : δ = (k ∙ R<sub>тр</sub> - δ<sub>к</sub>/λ<sub>к</sub> - 1/α<sub>в</sub> -
-            1/α<sub>н</sub>)= ({k} ∙ {rObl.toFixed(2)}
+            Приближенная толщина утеплителя : δ = ({k} ∙ {rObl.toFixed(2)}
             {concreteQ ? ` - ${concreteQ}` : null}
             {brickQ ? ` - ${brickQ}` : null} - 1 / 8.7 - 1 / 12) ∙ (
             {secondIns
@@ -674,34 +248,26 @@ export default function Calculator() {
             <br /> <b>Геометрические характеристики проекций элементов.</b>
             <br /> Площадь поверхности фрагмента ограждающей конструкции для расчета R составляет: А ={' '}
             {concreteArea + brickArea} м²;
-            {buildingType === '2'
-              ? concreteWall
-                ? `Площадь стены с основанием из железобетона составляет: ${concreteArea}`
-                : `Суммарная площадь торцов перекрытий из монолитного железобетона (т.е. площадь проекции на поверхность фрагмента)
-        составляет ${concreteArea} м².`
-              : null}
+            <br />{' '}
+            {concreteWall
+              ? `Площадь стены с основанием из железобетона составляет: ${concreteArea}`
+              : `Суммарная площадь торцов перекрытий из монолитного железобетона (т.е. площадь проекции на поверхность фрагмента)
+      составляет ${concreteArea} м².`}
+            <br /> Доля этой площади от общей площади фрагмента ограждающей конструкции равна: а = {concreteArea}/
+            {concreteArea + brickArea} = {(concreteArea / (concreteArea + brickArea)).toFixed(2)}
+            .
+            <br />
+            {buildingType !== '1' ? `Площадь стены с основанием из блоков составляет ${brickArea} м².` : null}
+            <br /> Доля этой площади от общей площади фрагмента ограждающей конструкции равна а ={brickArea}/
+            {concreteArea + brickArea} = {(brickArea / (concreteArea + brickArea)).toFixed(2)};
+            <br />
             {buildingType === '2' ? (
               <>
-                <br /> Доля этой площади от общей площади фрагмента ограждающей конструкции равна: а = {concreteArea}/
-                {concreteArea + brickArea} = {(concreteArea / (concreteArea + brickArea)).toFixed(2)}
-                .
-                <br />
-                {brickOrConcrete === true ? `Площадь стены с основанием из блоков составляет ${brickArea} м².` : null}
-                <br /> Доля этой площади от общей площади фрагмента ограждающей конструкции равна а ={brickArea}/
-                {concreteArea + brickArea} = {(brickArea / (concreteArea + brickArea)).toFixed(2)};
-                <br />
                 Общая длина проекции оконного откоса, образованного железобетоном, утепленным слоем минераловатной
                 плиты, определяется по экспликации оконных проемов и равна: {windowLength} м.
                 <br />
-                Длина проекции откосов, приходящаяся на 1 м² площади фрагмента равна l = {windowBrickLength} /
-                {concreteArea + brickArea} = {(windowBrickLength / (concreteArea + brickArea)).toFixed(2)} м/м².
-                <br />
                 Общая длина проекции оконного откоса, образованного кладкой из блоков, утепленной слоем минераловатной
                 плиты, определяется по экспликации оконных проемов и равна: {windowLength} м.
-                <br />
-                Длина проекции откосов, приходящаяся на 1 м² площади фрагмента равна l = {windowConcreteLength} /
-                {concreteArea + brickArea} = {(windowConcreteLength / (concreteArea + brickArea)).toFixed(2)} м/м².
-                <br />
               </>
             ) : null}
             <br />
@@ -712,10 +278,9 @@ export default function Calculator() {
             <br /> Для плоского элемента {buildingType === '2' ? 1 : null} удельные потери теплоты определяются по
             формулам Е.6, Е.З СП 50.13330.2012:
             <br />R = 1/8.7 + {buildingType !== '3' ? concreteQ : brickQ} +{' '}
-            {secondIns ? `${insQ} + ${secondInsQ}` : insQ}+ 1/12 ={' '}
-            {buildingType !== '3' ? rCond1.toFixed(2) : rCond2.toFixed(2)} м²°С/Вт
-            <br />U{buildingType === '2' ? 1 : null} = 1/ {buildingType !== '3' ? rCond1.toFixed(2) : rCond2.toFixed(2)}{' '}
-            = {buildingType !== '3' ? u1.toFixed(3) : u2.toFixed(3)} Вт/(м²°С)
+            {secondIns ? `${insQ} + ${secondInsQ}` : insQ}+ 1/12 = {rCond1} м²°С/Вт
+            <br />
+            U1 = 1/ {rCond1} = {u1} Вт/(м²°С)
             <br />
             {buildingType === '2' ? (
               <>
@@ -757,8 +322,8 @@ export default function Calculator() {
                   <td>Плоский {buildingType === '2' ? 1 : null} </td>
                   <td>{(concreteArea / (concreteArea + brickArea)).toFixed(3)}</td>
                   <td>{u1.toFixed(3)}</td>
-                  <td>{((u1 * concreteArea) / (concreteArea + brickArea)).toFixed(3)}</td>
-                  <td>{((u1 * concreteArea) / (concreteArea + brickArea) / qPercent()).toFixed(1)}</td>
+                  <td>{(concreteQ * concreteArea).toFixed(3)}</td>
+                  <td>@mdo</td>
                 </tr>
               ) : null}
               {buildingType !== '1' ? (
@@ -768,8 +333,8 @@ export default function Calculator() {
                   <td>Плоский {buildingType === '2' ? 2 : null}</td>
                   <td>{(brickArea / (concreteArea + brickArea)).toFixed(3)}</td>
                   <td>{u2.toFixed(3)}</td>
-                  <td>{((u2 * brickArea) / (concreteArea + brickArea)).toFixed(3)}</td>
-                  <td>{((u2 * brickArea) / (concreteArea + brickArea) / qPercent()).toFixed(1)}</td>
+                  <td>{brickQ * brickArea}</td>
+                  <td>@mdo</td>
                 </tr>
               ) : null}
               <tr key={184}>
@@ -777,9 +342,9 @@ export default function Calculator() {
                 <td>Оконный откос</td>
                 <td>Линейный {buildingType === '2' ? 1 : null}</td>
                 <td>{(windowBrickLength / (concreteArea + brickArea)).toFixed(3)}</td>
-                <td>{windowLoss.toFixed(3)}</td>
-                <td>{((windowLoss * windowBrickLength) / (concreteArea + brickArea)).toFixed(3)}</td>
-                <td>{((windowLoss * windowBrickLength) / (concreteArea + brickArea) / qPercent()).toFixed(1)}</td>
+                <td>{brickQ}</td>
+                <td>{brickQ * brickArea}</td>
+                <td>@mdo</td>
               </tr>
               {buildingType === '2' ? (
                 <tr key={185}>
@@ -787,11 +352,9 @@ export default function Calculator() {
                   <td>Оконный откос</td>
                   <td>Линейный {buildingType === '2' ? 2 : null}</td>
                   <td>{(windowLength / (concreteArea + brickArea)).toFixed(3)}</td>
-                  <td>{windowLossConcrete}</td>
-                  <td>{((windowLossConcrete * windowConcreteLength) / (concreteArea + brickArea)).toFixed(4)}</td>
-                  <td>
-                    {((windowLossConcrete * windowConcreteLength) / (concreteArea + brickArea) / qPercent()).toFixed(1)}
-                  </td>
+                  <td>{windowLoss}</td>
+                  <td>{(windowLoss * (windowLength / (concreteArea + brickArea))).toFixed(4)}</td>
+                  <td>@mdo</td>
                 </tr>
               ) : null}
               <tr key={186}>
@@ -801,7 +364,7 @@ export default function Calculator() {
                 <td>{gribPcs}</td>
                 <td>{gribDepth}</td>
                 <td>{(gribPcs * gribDepth).toFixed(3)}</td>
-                <td>{((gribPcs * gribDepth) / qPercent()).toFixed(1)}</td>
+                <td>@mdo</td>
               </tr>
               {brackets4()}
             </tbody>
@@ -899,8 +462,8 @@ export default function Calculator() {
             приведенное сопротивление меньше требуемого, составляющего {rObl.toFixed(2)} м²˚С/Вт.
             <br /> <br />
           </div>
-        </div>
-      </>
-    </>
+        </>
+      )}
+    </DefaultContext.Consumer>
   );
 }

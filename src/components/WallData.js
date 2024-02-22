@@ -4,96 +4,173 @@ import WallInput from './WallInput';
 import { useState } from 'react';
 import { DefaultContext } from '../contexts/DefaultContext';
 
-export default function WallData({
-  isBuildingType,
-
-  onPlaster,
-
-  onWindMembraneR,
-}) {
+export default function WallData() {
   const navigate = useNavigate();
 
   return (
     <DefaultContext.Consumer>
-      {(context) => (
+      {({
+        brickAir,
+        brickData,
+        brickDensity,
+        brickLambda,
+        brickMaterial,
+        brickSp,
+        brickThickness,
+        buildingType,
+        concreteAir,
+        concreteLambda,
+        concreteSp,
+        cityProp,
+        concreteThickness,
+        insAir,
+        insData,
+        insDensity,
+        insLambda,
+        insMaterial,
+        insSp,
+        insThickness,
+        handleBrickAir,
+        handleBrickDensity,
+        handleBrickLambda,
+        handleBrickMaterial,
+        handleBrickName,
+        handleBrickThickness,
+        handleBrickVapor,
+        handleConcreteAir,
+        handleConcreteDensity,
+        handleConcreteLambda,
+        handleConcreteThickness,
+        handleConcreteVapor,
+        handleInsAir,
+        handleInsDensity,
+        handleInsLambda,
+        handleInsMaterial,
+        handleInsName,
+        handleInsThickness,
+        handleInsVapor,
+        handleAddSecondIns,
+        handleDeleteSecondIns,
+        handlePlaster,
+        handleSecondInsAir,
+        handleSecondInsDensity,
+        handleSecondInsLambda,
+        handleSecondInsMaterial,
+        handleSecondInsName,
+        handleSecondInsThickness,
+        handleSecondInsVapor,
+        handleVaporMembrane,
+        handleVaporMembraneAir,
+        handleVaporMembraneR,
+        handleWindMembrane,
+        handleWindMembraneR,
+        secondIns,
+        secondInsAir,
+        secondInsData,
+        secondInsDensity,
+        secondInsLambda,
+        secondInsMaterial,
+        secondInsSp,
+        secondInsThickness,
+        toggleBrickSp,
+        toggleConcreteSp,
+        toggleInsSp,
+        toggleSecondInsSp,
+        vaporMembrane,
+        vaporMembraneAir,
+        vaporMembraneR,
+        windMembrane,
+        windMembraneR,
+      }) => (
         <div className="wall">
           <div className="wallData">
-            {context.buildingType !== '3' ? (
+            {buildingType !== '3' ? (
               <WallInput
+                isAir={concreteAir}
                 isName="Железобетон"
                 isId="concrete"
-                isSp={context.concreteSp}
+                isLambda={concreteLambda}
+                isSp={concreteSp}
                 isSpAir={1}
-                isSpLambda={context.cityProp.s === 'A' ? 1.72 : 2.04}
+                isSpLambda={cityProp.s === 'A' ? 1.72 : 2.04}
                 isSpVapor={20000}
-                isThickness={context.concreteThickness}
-                onAir={context.handleconcreteAir}
-                onDensity={context.handleConcreteDensity}
-                onLambda={context.handleConcreteLambda}
-                onSp={context.toggleConcreteSp}
-                onThickness={context.handleConcreteThickness}
-                onVapor={context.handleConcreteVapor}
+                isThickness={concreteThickness}
+                onAir={handleConcreteAir}
+                onDensity={handleConcreteDensity}
+                onLambda={handleConcreteLambda}
+                onSp={toggleConcreteSp}
+                onThickness={handleConcreteThickness}
+                onVapor={handleConcreteVapor}
               />
             ) : null}
-            {context.buildingType !== '1' ? (
+            {buildingType !== '1' ? (
               <WallInput
+                isAir={brickAir}
                 isName="Кладка"
                 isId="brick"
-                isSp={context.brickSp}
-                isSpData={context.brickData}
-                isSpDensity={context.brickDensity}
-                isThickness={context.brickThickness}
-                isMaterial={context.brickMaterial}
-                onAir={context.handleBrickAir}
-                onDensity={context.handleBrickDensity}
-                onLambda={context.handleBrickLambda}
-                onSp={context.toggleBrickSp}
-                onThickness={context.handleBrickThickness}
-                onVapor={context.handleBrickVapor}
-                onName={context.handleBrickMaterial}
+                isLambda={brickLambda}
+                isSp={brickSp}
+                isSpData={brickData}
+                isSpDensity={brickDensity}
+                isThickness={brickThickness}
+                isMaterial={brickMaterial}
+                onAir={handleBrickAir}
+                onDensity={handleBrickDensity}
+                onLambda={handleBrickLambda}
+                onSp={toggleBrickSp}
+                onThickness={handleBrickThickness}
+                onVapor={handleBrickVapor}
+                onName={handleBrickMaterial}
+                onName2={handleBrickName}
               />
             ) : null}
             <WallInput
+              isAir={insAir}
               isId="ins-1"
               isName="Утеплитель"
-              isSp={context.insSp}
-              isSpData={context.insData}
-              isSpDensity={context.insDensity}
-              isThickness={context.insThickness}
-              isMaterial={context.insMaterial}
-              onAddSecondIns={context.handleAddSecondIns}
-              isSecondIns={context.secondIns}
-              onAir={context.handleInsAir}
-              onDensity={context.handleInsDensity}
-              onLambda={context.handleInsLambda}
-              onSp={context.toggleInsSp}
-              onThickness={context.handleInsThickness}
-              onVapor={context.handleInsVapor}
-              onName={context.handleInsMaterial}
+              isLambda={insLambda}
+              isSp={insSp}
+              isSpData={insData}
+              isSpDensity={insDensity}
+              isThickness={insThickness}
+              isMaterial={insMaterial}
+              onAddSecondIns={handleAddSecondIns}
+              isSecondIns={secondIns}
+              onAir={handleInsAir}
+              onDensity={handleInsDensity}
+              onLambda={handleInsLambda}
+              onSp={toggleInsSp}
+              onThickness={handleInsThickness}
+              onVapor={handleInsVapor}
+              onName={handleInsMaterial}
+              onName2={handleInsName}
             />
-            {context.secondIns ? (
+            {secondIns ? (
               <WallInput
+                isAir={secondInsAir}
                 isName="Утеплитель"
                 isId="ins-2"
-                isSp={context.secondInsSp}
-                isSpData={context.secondInsData}
-                isSpDensity={context.secondInsDensity}
-                isThickness={context.secondInsThickness}
-                isMaterial={context.secondInsMaterial}
-                onDeleteSecondIns={context.handleDeleteSecondIns}
-                isSecondIns={context.secondIns}
-                onAir={context.handleSecondInsAir}
-                onDensity={context.handleSecondInsDensity}
-                onLambda={context.handleSecondInsLambda}
-                onSp={context.toggleSecondInsSp}
-                onThickness={context.handleSecondInsThickness}
-                onVapor={context.handleSecondInsVapor}
-                onName={context.handleSecondInsMaterial}
+                isLambda={secondInsLambda}
+                isSp={secondInsSp}
+                isSpData={secondInsData}
+                isSpDensity={secondInsDensity}
+                isThickness={secondInsThickness}
+                isMaterial={secondInsMaterial}
+                onDeleteSecondIns={handleDeleteSecondIns}
+                isSecondIns={secondIns}
+                onAir={handleSecondInsAir}
+                onDensity={handleSecondInsDensity}
+                onLambda={handleSecondInsLambda}
+                onSp={toggleSecondInsSp}
+                onThickness={handleSecondInsThickness}
+                onVapor={handleSecondInsVapor}
+                onName={handleSecondInsMaterial}
+                onName2={handleSecondInsName}
               />
             ) : null}
           </div>
           <div className="wall-options">
-            <Form.Select id="plaster" onChange={onPlaster}>
+            <Form.Select id="plaster" onChange={handlePlaster}>
               <option>Штукатурка изнутри</option>
               <option value={1}>Нет</option>
               <option value={2}>Гипсовая</option>
@@ -103,20 +180,22 @@ export default function WallData({
               className="mt-3 ms-2"
               id="vapor-membrane"
               label="Пароизоляция"
-              onChange={context.handleVaporMembrane}
+              checked={vaporMembrane}
+              onChange={handleVaporMembrane}
             ></Form.Check>
-            {context.vaporMembrane ? (
+            {vaporMembrane ? (
               <>
                 <Form.Control
                   id="vapor-membrane-r"
                   placeholder="Сопротивление паропроницанию, м²чПа/мг"
-                  value={context.VaporMembraneR}
-                  onChange={context.handleVaporMembraneR}
+                  value={vaporMembraneR}
+                  onChange={handleVaporMembraneR}
                 />
                 <Form.Control
                   id="vapor-membrane-air"
                   placeholder="Сопротивление воздухопроницанию, м²чПа/кг"
-                  onChange={context.handleVaporMembraneAir}
+                  value={vaporMembraneAir}
+                  onChange={handleVaporMembraneAir}
                 />
               </>
             ) : null}
@@ -124,14 +203,15 @@ export default function WallData({
               className="mt-3 ms-2"
               id="wind-membrane"
               label="Ветрозащита"
-              onChange={context.handleWindMembrane}
+              checked={windMembrane}
+              onChange={handleWindMembrane}
             ></Form.Check>
-            {context.windMembrane ? (
+            {windMembrane ? (
               <Form.Control
                 id="wind-membrane-r"
                 placeholder="Сопротивление паропроницанию, м²чПа/мг"
-                value={context.windMembraneR}
-                onChange={onWindMembraneR}
+                value={windMembraneR}
+                onChange={handleWindMembraneR}
               />
             ) : null}
           </div>

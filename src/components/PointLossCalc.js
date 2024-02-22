@@ -9,7 +9,8 @@ export default function PointLossCalc(props) {
     const insValue = context.secondIns
       ? context.insThickness / context.insLambda + context.secondInsThickness / context.secondInsLambda
       : context.insThickness / context.insLambda;
-    const wallValue = props.isBracketType === true ? context.concreteLambda : context.brickLambda;
+
+    const wallValue = props.isWallType === true ? context.concreteLambda : context.brickLambda;
 
     const ins = () => {
       let ins1, ins2;

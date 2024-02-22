@@ -5,60 +5,60 @@ import { covers } from './App';
 import { DefaultContext } from '../contexts/DefaultContext';
 import LinearLossCalc from './LinearLossCalc';
 import DkCalc from './DkCalc';
+import LinearLossCalcConcrete from './LinearLossCalcConcrete';
 
-export default function CoverData({
-  isCover,
-  isCoverName,
-  isCoverThickness,
-  isHeight,
-  isOwnCover,
-  isVentIn,
-  isVentMed,
-  isVentOut,
-  isVentHeight,
-  onCoverLambda,
-  onCoverName,
-  onCoverThickness,
-  onCoverVapor,
-  onHeight,
-  onMetallCover,
-  onVentHeight,
-  onVentIn,
-  onVentMed,
-  onVentOut,
-  onOwnCover,
-}) {
+export default function CoverData() {
   const navigate = useNavigate();
 
   return (
     <DefaultContext.Consumer>
-      {(context) => (
+      {({
+        concreteWall,
+        cover,
+        coverLambda,
+        coverName,
+        coverThickness,
+        coverVapor,
+        height,
+        metallCover,
+        ownCover,
+        ventHeight,
+        ventIn,
+        ventMed,
+        ventOut,
+        handleCoverLambda,
+        handleCoverName,
+        handleCoverVapor,
+        handleCoverThickness,
+        handleHeight,
+        handleMetallCover,
+        handleVentHeight,
+        handleVentIn,
+        handleVentMed,
+        handleVentOut,
+        toggleOwnCover,
+      }) => (
         <div>
           <div>
             <SystInput
               id={'ventin'}
               text="Ширина вентилируемого зазора на входе, мм"
-              iValue={context.ventIn * 1000}
-              method={context.handleVentIn}
+              iValue={ventIn ? ventIn * 1000 : null}
+              method={handleVentIn}
             />
             <SystInput
               id={'ventin'}
               text="Средняя ширина вентилируемого зазора, мм"
-              iValue={context.ventMed * 1000}
-              method={context.handleVentMed}
+              iValue={ventMed ? ventMed * 1000 : null}
+              method={handleVentMed}
             />
             <SystInput
               id={'ventin'}
               text="Ширина вентилируемого зазора на выходе, мм"
-              iValue={context.ventOut * 1000}
-              method={context.handleVentOut}
+              iValue={ventOut ? ventOut * 1000 : null}
+              method={handleVentOut}
             />
-            <SystInput
-              id={'ventin'}
-              text="Высота наибольшего зазора, м"
-              iValue={context.ventHeight}
-              method={context.handleVentHeight}
-            >
+            <SystInput id={'ventin'} text="Высота наибольшего зазора, м" iValue={ventHeight} method={handleVentHeight}>
               <button
                 className="i-btn"
                 data-bs-toggle="tooltip"
@@ -66,28 +66,28 @@ export default function CoverData({
                 title="Высота наибольшего неприрывного участка между входным и выходным зазорами"
               ></button>
             </SystInput>
-            <SystInput id={'height'} text="Высота объекта, м" iValue={context.height} method={context.handleHeight} />
+            <SystInput id={'height'} text="Высота объекта, м" iValue={height} method={handleHeight} />
             <Row>
               <Form.Check
                 className="mt-3 ms-2"
                 id="own-cover"
                 label="Своя облицовка"
-                onChange={context.toggleOwnCover}
+                onChange={toggleOwnCover}
               ></Form.Check>
-              {context.ownCover ? (
+              {ownCover ? (
                 <Form.Control
                   className="w-25 ms-2"
                   id="covers-list"
                   placeholder="Название облицовки"
-                  onChange={context.handleCoverName}
+                  onChange={handleCoverName}
                 />
               ) : (
                 <Form.Select
                   id="cover-name"
                   className="w-25 ms-2"
                   type="text"
-                  value={context.coverName}
-                  onChange={context.handleCoverName}
+                  value={coverName}
+                  onChange={handleCoverName}
                 >
                   <option>Тип облицовки</option>
                   {Object.entries(covers).map(([key, value]) => {
@@ -100,13 +100,14 @@ export default function CoverData({
                 </Form.Select>
               )}
             </Row>
-            {context.ownCover ? (
+            {ownCover ? (
               <Row>
                 <Form.Check
                   className="mt-3 ms-2"
                   id="mtel-cover"
                   label="Металлическая"
-                  onChange={context.handleMetallCover}
+                  checked={metallCover}
+                  onChange={handleMetallCover}
                 ></Form.Check>
               </Row>
             ) : null}
@@ -114,37 +115,38 @@ export default function CoverData({
             <SystInput
               id="cover-thickness"
               text="Толщина облицовки, мм"
-              iValue={context.coverThickness}
-              method={context.handleCoverThickness}
+              iValue={coverThickness}
+              method={handleCoverThickness}
             />
 
-            {context.ownCover ? (
+            {ownCover ? (
               <SystInput
                 id="cover-sp-lambda"
                 text="Теплопроводность облицовки, Вт/м&#178;С&#176;"
-                iValue={context.coverLambda}
-                method={context.handleCoverLambda}
+                iValue={coverLambda}
+                method={handleCoverLambda}
               />
             ) : (
               <SystInput
                 id="cover-lambda"
                 text="Теплопроводность облицовки, Вт/м&#178;С&#176;"
-                iValue={context.cover ? context.cover.l : null}
-                method={context.handleCoverLambda}
+                iValue={cover ? cover.l : null}
+                method={handleCoverLambda}
               />
             )}
-            {context.ownCover ? (
+            {ownCover ? (
               <SystInput
                 id="cover-sp-vapor"
                 text="Коэффициент паропроницания облицовки, мг/м&#178;∙ч∙Па"
-                method={context.handleCoverVapor}
+                iValue={coverVapor}
+                method={handleCoverVapor}
               />
             ) : (
               <SystInput
                 id="cover-vapor"
                 text="Коэффициент паропроницания облицовки, мг/м&#178;∙ч∙Па"
-                iValue={context.cover ? context.cover.r : null}
-                method={context.handleCoverVapor}
+                iValue={cover ? cover.r : null}
+                method={handleCoverVapor}
               />
             )}
           </div>
@@ -164,12 +166,13 @@ export default function CoverData({
             variant="outline-secondary"
             size="sm"
             onClick={() => {
-              navigate('/final');
+              navigate('/pz');
             }}
           >
             Далее
           </Button>
           <LinearLossCalc />
+          {concreteWall ? <LinearLossCalcConcrete /> : null}
           <DkCalc />
         </div>
       )}

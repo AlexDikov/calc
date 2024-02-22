@@ -2,7 +2,7 @@
   "name": "calc",
   "version": "0.1.0",
   "private": true,
-  "homepage":"https://alexdikov.github.io/calc",
+  "homepage": "https://alexdikov.github.io/calc",
   "dependencies": {
     "@floating-ui/react": "^0.26.6",
     "@testing-library/jest-dom": "^5.17.0",
@@ -17,6 +17,7 @@
     "react-papaparse": "^4.4.0",
     "react-router-dom": "^6.21.0",
     "react-scripts": "5.0.1",
+    "react-to-print": "^2.15.1",
     "react-tooltip": "^5.25.1",
     "web-vitals": "^2.1.4"
   },

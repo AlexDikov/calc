@@ -50,3 +50,7 @@
   bottom: 40px;
   left: 40px;
 }
+.btn-pz {
+  max-width: 400px;
+  align-self: center;
+}
