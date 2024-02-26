@@ -10,17 +10,7 @@ import CoverData from './CoverData';
 import { cities } from './cities';
 import { DefaultContext } from '../contexts/DefaultContext';
 import { materials } from './materials';
-
-export const covers = {
-  Алюминий: { r: 0.001, c: 0.05, l: 221 },
-  'Гранит, гнейс, базальт': { r: 0.008, c: 5.3, l: 3.49 },
-  Известняк: { r: 0.06, c: 5.3, l: 1.28 },
-  Клинкер: { r: 0.11, c: 5.3, l: 0.81 },
-  Медь: { r: 0.001, c: 0.05, l: 407 },
-  Мрамор: { r: 0.008, c: 5.3, l: 2.91 },
-  Стекло: { r: 0.001, c: 5.3, l: 0.76 },
-  Фиброцемент: { r: 0.03, c: 5.3, l: 0.52 },
-};
+import { covers } from './covers';
 
 export default function App(props) {
   const [addBracket, setAddBracket] = useState([]);
@@ -56,6 +46,7 @@ export default function App(props) {
   const [finalValues, setFinalValues] = useState({});
   const [grib, setGrib] = useState('');
   const [gribDepth, setGribDepth] = useState(0.006);
+  const [gribConcretePcs, setGribConcretePcs] = useState('');
   const [gribPcs, setGribPcs] = useState('');
   const [height, setHeight] = useState('');
   const [humidity, setHumidity] = useState(50);
@@ -119,7 +110,7 @@ export default function App(props) {
     setBrickAir(e.target.value);
   }
   function handleBrickArea(e) {
-    setBrickArea(e.target.value);
+    setBrickArea(parseFloat(e.target.value));
   }
   function handleBrickDensity(event) {
     setBrickDensity(event.target.value);
@@ -164,7 +155,7 @@ export default function App(props) {
     setConcreteAir(e.target.value);
   }
   function handleConcreteArea(e) {
-    setConcreteArea(e.target.value);
+    setConcreteArea(parseFloat(e.target.value));
   }
   function handleConcreteDensity(e) {
     setConcreteDensity(e.target.value);
@@ -174,7 +165,7 @@ export default function App(props) {
   }
 
   function handleConcreteSpLambda() {
-    setConcreteSpLambda(cityProp.s === 'А' ? 1.72 : 2.04);
+    setConcreteLambda(cityProp.s === 'А' ? 1.72 : 2.04);
   }
   function handleConcreteThickness(e) {
     setConcreteThickness(e.target.value * 0.001);
@@ -187,21 +178,16 @@ export default function App(props) {
 
     setCover(covers[e.target.options[e.target.selectedIndex].text]);
   }
-  function handleCoverLambda(e) {
-    setCoverLambda(e.target.value);
-  }
 
   function handleCoverThickness(e) {
     setCoverThickness(e.target.value);
   }
-  function handleCoverVapor(e) {
-    setCoverVapor(e.target.value);
-  }
+
   function handleD() {
     setD();
   }
-  function handleDk() {
-    setDk();
+  function handleDk(value) {
+    setDk(value);
   }
   function handleDeleteSecondIns() {
     setSecondIns(false);
@@ -216,6 +202,9 @@ export default function App(props) {
   }
   function handleGribPcs(e) {
     setGribPcs(e.target.value);
+  }
+  function handleGribConcretePcs(e) {
+    setGribConcretePcs(e.target.value);
   }
   function handleHeight(e) {
     setHeight(e.target.value);
@@ -360,6 +349,7 @@ export default function App(props) {
   }
 
   function toggleConcreteSp() {
+    setConcreteLambda(concreteSp ? '' : cityProp.s === 'А' ? 1.92 : 2.04);
     setConcreteSp(!concreteSp);
   }
   function toggleBrickSp() {
@@ -396,7 +386,6 @@ export default function App(props) {
           brickMaterial,
           brickName,
           brickLambda,
-
           brickThickness,
           brickVapor,
           buildingAim,
@@ -421,6 +410,7 @@ export default function App(props) {
           finalValues,
           grib,
           gribDepth,
+          gribConcretePcs,
           gribPcs,
           height,
           humidity,
@@ -491,14 +481,14 @@ export default function App(props) {
           handleConcreteThickness,
           handleConcreteVapor,
           handleCoverName,
-          handleCoverLambda,
           handleCoverThickness,
-          handleCoverVapor,
           handleD,
           handleDk,
+
           handleDeleteSecondIns,
           handleFinalValues,
           handleGrib,
+          handleGribConcretePcs,
           handleGribPcs,
           handleHeight,
           handleHumidity,

@@ -27,11 +27,13 @@ export default function SystData() {
         concreteWall,
         gribDepth,
         gribPcs,
+        gribConcretePcs,
         windowBrickLength,
         windowConcreteLength,
         handleBrickArea,
         handleConcreteArea,
         handleGrib,
+        handleGribConcretePcs,
         handleGribPcs,
         handleWindowDepth,
         handleWindowHeight,
@@ -58,7 +60,6 @@ export default function SystData() {
                 </Col>
               </Row>
             ) : null}
-
             {buildingType !== '3' ? (
               <Row className="mt-3">
                 <Col xs={4}>
@@ -81,7 +82,23 @@ export default function SystData() {
                 </Col>
               </Row>
             ) : null}
-            {buildingType !== '1' ? (
+            {buildingType === '1' ? (
+              <Row className="mt-3">
+                <Col xs={4}>
+                  <Form.Label htmlFor="window-concrete-length" className="mt-2">
+                    Длина оконных откосов, м
+                  </Form.Label>
+                </Col>
+                <Col xs={3}>
+                  <Form.Control
+                    id="window-length"
+                    className="w-25"
+                    value={windowConcreteLength}
+                    onChange={handleWindowConcreteLength}
+                  ></Form.Control>
+                </Col>
+              </Row>
+            ) : (
               <Row className="mt-3">
                 <Col xs={4}>
                   <Form.Label htmlFor="window-brick-length" className="mt-2">
@@ -97,30 +114,13 @@ export default function SystData() {
                   ></Form.Control>
                 </Col>
               </Row>
-            ) : null}
+            )}
 
-            {buildingType === '2' && concreteWall ? (
+            {concreteWall ? (
               <Row className="mt-3">
                 <Col xs={4}>
                   <Form.Label htmlFor="window-concrete-length" className="mt-2">
-                    Длина оконных откосов, образованных ж/б стеной м
-                  </Form.Label>
-                </Col>
-                <Col xs={3}>
-                  <Form.Control
-                    id="window-length"
-                    className="w-25"
-                    value={windowConcreteLength}
-                    onChange={handleWindowConcreteLength}
-                  ></Form.Control>
-                </Col>
-              </Row>
-            ) : null}
-            {buildingType === '1' ? (
-              <Row className="mt-3">
-                <Col xs={4}>
-                  <Form.Label htmlFor="window-concrete-length" className="mt-2">
-                    Длина оконных откосов, м
+                    Длина оконных откосов, образованных ж/б стеной, м
                   </Form.Label>
                 </Col>
                 <Col xs={3}>
@@ -153,7 +153,12 @@ export default function SystData() {
                   </Form.Label>
                 </Col>
                 <Col xs={3}>
-                  <Form.Control id="grib-pcs" className="w-25" value={gribPcs} onChange={handleGribPcs}></Form.Control>
+                  <Form.Control
+                    id="grib-pcs"
+                    className="w-25"
+                    value={gribConcretePcs}
+                    onChange={handleGribConcretePcs}
+                  ></Form.Control>
                 </Col>
               </Row>
             ) : null}

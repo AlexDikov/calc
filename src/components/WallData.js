@@ -145,6 +145,13 @@ export default function WallData() {
               onName={handleInsMaterial}
               onName2={handleInsName}
             />
+            {/* ({k} ∙ {rObl.toFixed(2)}
+            {concreteThickness ? concreteThickness / concreteLambda : null}
+            {brickThickness ? brickThickness / brickLambda : null} - 1 / 8.7 - 1 / 12) ∙ (
+            {secondIns
+              ? (insThickness / (insThickness + secondInsThickness)) * insLambda +
+                (secondInsThickness / (insThickness + secondInsThickness)) * secondInsLambda
+              : insLambda} */}
             {secondIns ? (
               <WallInput
                 isAir={secondInsAir}

@@ -16,9 +16,15 @@ export default function BracketData(props) {
       React.cloneElement(<Bracket />, {
         key: context.uKey,
         ukey: context.uKey,
+        onDelete: handleDeleteBracket(),
       }),
     ]);
     context.setUKey((prevKey) => prevKey + 1);
+  }
+  function handleDeleteBracket(indexToRemove) {
+    context.setAddBracket((prevBrackets) => {
+      return prevBrackets.filter((_, index) => index !== indexToRemove);
+    });
   }
 
   return (

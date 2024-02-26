@@ -8,9 +8,11 @@ export default function LinearLossCalc() {
     brickLambda,
     buildingType,
     concreteLambda,
+    concreteWall,
     insLambda,
     insThickness,
     handleWindowLoss,
+    handleWindowLossConcrete,
     secondIns,
     secondInsLambda,
     secondInsThickness,
@@ -50,14 +52,16 @@ export default function LinearLossCalc() {
 
     const wall = () => {
       const { ins1, ins2 } = ins();
-
-      if (0.04 < wallValue && wallValue < 0.2) {
+      if (0 < wallValue && wallValue <= 0.04) {
         return [ins1.l1, ins1.l2, ins2.l1, ins2.l2];
-      } else if (0.2 < wallValue && wallValue < 0.6) {
+      }
+      if (0.04 < wallValue && wallValue <= 0.2) {
+        return [ins1.l1, ins1.l2, ins2.l1, ins2.l2];
+      } else if (0.2 < wallValue && wallValue <= 0.6) {
         return [ins1.l2, ins1.l3, ins2.l2, ins2.l3];
-      } else if (0.6 < wallValue && wallValue < 1.8) {
+      } else if (0.6 < wallValue && wallValue <= 1.8) {
         return [ins1.l3, ins1.l4, ins2.l3, ins2.l4];
-      } else if (1.8 < wallValue && wallValue < 2.1) {
+      } else if (1.8 < wallValue && wallValue <= 2.1) {
         return [ins1.l4, ins1.l5, ins2.l4, ins2.l3];
       }
     };
@@ -98,7 +102,8 @@ export default function LinearLossCalc() {
 
       const final = pre1 + ((insValue - insX1()) * (pre2 - pre1)) / (insX2() - insX1());
 
-      handleWindowLoss(final);
+      buildingType === '1' ? handleWindowLossConcrete(final) : handleWindowLoss(final);
+      concreteWall && handleWindowLossConcrete(final);
     };
     finalValue();
   }, []);

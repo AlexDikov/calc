@@ -71,6 +71,13 @@ export default function Bracket(props) {
     setWallType(false);
   };
 
+  function handleDeleteBracket(indexToRemove) {
+    context.setAddBracket(() => {
+      return context.addBracket.filter((item) => parseInt(item.key) !== indexToRemove);
+    });
+  }
+  const bKey = props.ukey;
+
   return (
     <div className="bracket-box" key={props.ukey}>
       <Row>
@@ -148,7 +155,7 @@ export default function Bracket(props) {
           />
         </Col>
         <Col>
-          {props.isBuildingType === '2' ? (
+          {context.buildingType === '2' ? (
             <Form>
               {['radio'].map((type) => (
                 <div key={`inline-${type}`} className="mb-3">
@@ -174,6 +181,10 @@ export default function Bracket(props) {
               ))}
             </Form>
           ) : null}
+        </Col>
+        <Col>
+          {' '}
+          <button className="add-bracket" key="add-btn" onClick={() => handleDeleteBracket(bKey)}></button>
         </Col>
       </Row>
       <PointLossCalc

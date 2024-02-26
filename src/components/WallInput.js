@@ -128,7 +128,7 @@ export default function WallInput({
                   <input
                     className="wallInputValue"
                     id={`${isId}-sp-h`}
-                    defaultValue={context.cityProp.s === 'А' ? 1.92 : 2.04}
+                    value={context.concreteLambda}
                     onChange={onLambda}
                   ></input>
                 ) : (
@@ -170,7 +170,12 @@ export default function WallInput({
                 <br />
                 м²чПа/кг
               </li>
-              <input className="wallInputValue" id={`${isId}-a`} value={isAir} onChange={onAir}></input>
+              <input
+                className="wallInputValue"
+                id={`${isId}-a`}
+                value={isSp && isId === 'concrete' ? 0.00004 : isAir}
+                onChange={onAir}
+              ></input>
             </div>
             {!context.secondIns && isId === 'ins-1' ? (
               <button className="wallAddIns" type="button" onClick={context.handleAddSecondIns}>

@@ -1,7 +1,7 @@
 import { Button, Form, Row } from 'react-bootstrap';
 import SystInput from './SystInput';
 import { useNavigate } from 'react-router-dom';
-import { covers } from './App';
+import { covers } from './covers';
 import { DefaultContext } from '../contexts/DefaultContext';
 import LinearLossCalc from './LinearLossCalc';
 import DkCalc from './DkCalc';
@@ -13,6 +13,7 @@ export default function CoverData() {
   return (
     <DefaultContext.Consumer>
       {({
+        buildingType,
         concreteWall,
         cover,
         coverLambda,
@@ -145,7 +146,7 @@ export default function CoverData() {
               <SystInput
                 id="cover-vapor"
                 text="Коэффициент паропроницания облицовки, мг/м&#178;∙ч∙Па"
-                iValue={cover ? cover.r : null}
+                iValue={cover ? cover.v : null}
                 method={handleCoverVapor}
               />
             )}
@@ -172,8 +173,6 @@ export default function CoverData() {
             Далее
           </Button>
           <LinearLossCalc />
-          {concreteWall ? <LinearLossCalcConcrete /> : null}
-          <DkCalc />
         </div>
       )}
     </DefaultContext.Consumer>
