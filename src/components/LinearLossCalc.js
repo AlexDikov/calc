@@ -22,11 +22,9 @@ export default function LinearLossCalc() {
 
   useEffect(() => {
     const insValue = secondIns
-      ? 0.001 /
-        ((insThickness / (insThickness + secondInsThickness)) * insLambda +
-          (secondInsThickness / (insThickness + secondInsThickness)) * secondInsLambda)
+      ? insThickness / insLambda + secondInsThickness / secondInsLambda
       : insThickness / insLambda;
-    const wallValue = buildingType === '1' ? concreteLambda : brickLambda;
+    const wallValue = buildingType === 1 ? concreteLambda : brickLambda;
 
     const ins = () => {
       let ins1, ins2;
@@ -36,6 +34,10 @@ export default function LinearLossCalc() {
       preItem = windows.find((item) => item.name === windowDepth);
       heatItem = Object.values(preItem[windowHeight]);
 
+      if (0 < wallValue && wallValue <= 0.04) {
+        ins1 = heatItem[0];
+        ins2 = heatItem[1];
+      }
       if (1.5 < insValue && insValue < 3) {
         ins1 = heatItem[0];
         ins2 = heatItem[1];

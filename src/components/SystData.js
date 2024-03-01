@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { Button, Col, Form, Image, Row } from 'react-bootstrap';
+import { Button, Col, Form, Image, ProgressBar, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import winOne from '../images/win1.png';
 import winTwo from '../images/win2.png';
@@ -41,6 +41,7 @@ export default function SystData() {
         handleWindowConcreteLength,
       }) => (
         <div>
+          <ProgressBar variant="secondary" now={60} label={`${60}%`} />
           <div className="systData">
             {/* <Image src={windowDepthPic()} alt="a" className="systdata-img " /> */}
             {buildingType !== '1' ? (

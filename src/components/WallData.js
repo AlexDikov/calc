@@ -1,249 +1,280 @@
-import { Button, Col, Form } from 'react-bootstrap';
+import { Button, Col, Form, ProgressBar } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import WallInput from './WallInput';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { DefaultContext } from '../contexts/DefaultContext';
 
 export default function WallData() {
   const navigate = useNavigate();
 
+  const {
+    brickAir,
+    brickData,
+    brickDensity,
+    brickLambda,
+    brickMaterial,
+    brickSp,
+    brickThickness,
+    buildingAim,
+    buildingType,
+    concreteAir,
+    concreteLambda,
+    concreteSp,
+    cityProp,
+    concreteThickness,
+    innerTemp,
+    insAir,
+    insData,
+    insDensity,
+    insLambda,
+    insMaterial,
+    insSp,
+    insThickness,
+    handleBrickAir,
+    handleBrickDensity,
+    handleBrickLambda,
+    handleBrickMaterial,
+    handleBrickName,
+    handleBrickThickness,
+    handleBrickVapor,
+    handleConcreteAir,
+    handleConcreteDensity,
+    handleConcreteLambda,
+    handleConcreteThickness,
+    handleConcreteVapor,
+    handleInsAir,
+    handleInsDensity,
+    handleInsLambda,
+    handleInsMaterial,
+    handleInsName,
+    handleInsThickness,
+    handleInsVapor,
+    handleAddSecondIns,
+    handleDeleteSecondIns,
+    handlePlaster,
+    handleSecondInsAir,
+    handleSecondInsDensity,
+    handleSecondInsLambda,
+    handleSecondInsMaterial,
+    handleSecondInsName,
+    handleSecondInsThickness,
+    handleSecondInsVapor,
+    handleVaporMembrane,
+    handleVaporMembraneAir,
+    handleVaporMembraneR,
+    handleWindMembrane,
+    handleWindMembraneR,
+    mr,
+    secondIns,
+    secondInsAir,
+    secondInsData,
+    secondInsDensity,
+    secondInsLambda,
+    secondInsMaterial,
+    secondInsSp,
+    secondInsThickness,
+    toggleBrickSp,
+    toggleConcreteSp,
+    toggleInsSp,
+    toggleSecondInsSp,
+    vaporMembrane,
+    vaporMembraneAir,
+    vaporMembraneR,
+    windMembrane,
+    windMembraneR,
+  } = useContext(DefaultContext);
+
+  const b = () => {
+    if (buildingAim === 1) return 1.4;
+    if (buildingAim === 2) return 1.2;
+    if (buildingAim === 3) return 1;
+  };
+  const a = () => {
+    if (buildingAim === 1) return 0.00035;
+    if (buildingAim === 2) return 0.0003;
+    if (buildingAim === 3) return 0.0002;
+  };
+  const gsop = buildingAim === 2 ? (innerTemp - cityProp.t8) * cityProp.z8 : (innerTemp - cityProp.t10) * cityProp.z10;
+
+  const k = () => {
+    if (buildingType === 1) return 1.3;
+    if (buildingType === 2) return 1.35;
+    if (buildingType === 3) return 1.4;
+  };
+
+  const rObl = (a() * gsop + b()) * mr;
+  const preIns =
+    (k() * rObl - concreteThickness / concreteLambda - brickThickness / brickLambda - 1 / 8.7 - 1 / 12) *
+    (secondIns
+      ? (insThickness / (insThickness + secondInsThickness)) * insLambda +
+        (secondInsThickness / (insThickness + secondInsThickness)) * secondInsLambda
+      : insLambda);
+
   return (
-    <DefaultContext.Consumer>
-      {({
-        brickAir,
-        brickData,
-        brickDensity,
-        brickLambda,
-        brickMaterial,
-        brickSp,
-        brickThickness,
-        buildingType,
-        concreteAir,
-        concreteLambda,
-        concreteSp,
-        cityProp,
-        concreteThickness,
-        insAir,
-        insData,
-        insDensity,
-        insLambda,
-        insMaterial,
-        insSp,
-        insThickness,
-        handleBrickAir,
-        handleBrickDensity,
-        handleBrickLambda,
-        handleBrickMaterial,
-        handleBrickName,
-        handleBrickThickness,
-        handleBrickVapor,
-        handleConcreteAir,
-        handleConcreteDensity,
-        handleConcreteLambda,
-        handleConcreteThickness,
-        handleConcreteVapor,
-        handleInsAir,
-        handleInsDensity,
-        handleInsLambda,
-        handleInsMaterial,
-        handleInsName,
-        handleInsThickness,
-        handleInsVapor,
-        handleAddSecondIns,
-        handleDeleteSecondIns,
-        handlePlaster,
-        handleSecondInsAir,
-        handleSecondInsDensity,
-        handleSecondInsLambda,
-        handleSecondInsMaterial,
-        handleSecondInsName,
-        handleSecondInsThickness,
-        handleSecondInsVapor,
-        handleVaporMembrane,
-        handleVaporMembraneAir,
-        handleVaporMembraneR,
-        handleWindMembrane,
-        handleWindMembraneR,
-        secondIns,
-        secondInsAir,
-        secondInsData,
-        secondInsDensity,
-        secondInsLambda,
-        secondInsMaterial,
-        secondInsSp,
-        secondInsThickness,
-        toggleBrickSp,
-        toggleConcreteSp,
-        toggleInsSp,
-        toggleSecondInsSp,
-        vaporMembrane,
-        vaporMembraneAir,
-        vaporMembraneR,
-        windMembrane,
-        windMembraneR,
-      }) => (
-        <div className="wall">
-          <div className="wallData">
-            {buildingType !== '3' ? (
-              <WallInput
-                isAir={concreteAir}
-                isName="Железобетон"
-                isId="concrete"
-                isLambda={concreteLambda}
-                isSp={concreteSp}
-                isSpAir={1}
-                isSpLambda={cityProp.s === 'A' ? 1.72 : 2.04}
-                isSpVapor={20000}
-                isThickness={concreteThickness}
-                onAir={handleConcreteAir}
-                onDensity={handleConcreteDensity}
-                onLambda={handleConcreteLambda}
-                onSp={toggleConcreteSp}
-                onThickness={handleConcreteThickness}
-                onVapor={handleConcreteVapor}
-              />
-            ) : null}
-            {buildingType !== '1' ? (
-              <WallInput
-                isAir={brickAir}
-                isName="Кладка"
-                isId="brick"
-                isLambda={brickLambda}
-                isSp={brickSp}
-                isSpData={brickData}
-                isSpDensity={brickDensity}
-                isThickness={brickThickness}
-                isMaterial={brickMaterial}
-                onAir={handleBrickAir}
-                onDensity={handleBrickDensity}
-                onLambda={handleBrickLambda}
-                onSp={toggleBrickSp}
-                onThickness={handleBrickThickness}
-                onVapor={handleBrickVapor}
-                onName={handleBrickMaterial}
-                onName2={handleBrickName}
-              />
-            ) : null}
+    <>
+      <ProgressBar variant="secondary" now={40} label={`${40}%`} />
+      <div className="wall">
+        <div className="wallData">
+          {buildingType !== 3 ? (
             <WallInput
-              isAir={insAir}
-              isId="ins-1"
-              isName="Утеплитель"
-              isLambda={insLambda}
-              isSp={insSp}
-              isSpData={insData}
-              isSpDensity={insDensity}
-              isThickness={insThickness}
-              isMaterial={insMaterial}
-              onAddSecondIns={handleAddSecondIns}
-              isSecondIns={secondIns}
-              onAir={handleInsAir}
-              onDensity={handleInsDensity}
-              onLambda={handleInsLambda}
-              onSp={toggleInsSp}
-              onThickness={handleInsThickness}
-              onVapor={handleInsVapor}
-              onName={handleInsMaterial}
-              onName2={handleInsName}
+              isAir={concreteAir}
+              isName="Железобетон"
+              isId="concrete"
+              isLambda={concreteLambda}
+              isSp={concreteSp}
+              isSpAir={1}
+              isSpLambda={cityProp.s === 'A' ? 1.72 : 2.04}
+              isSpVapor={20000}
+              isThickness={concreteThickness}
+              onAir={handleConcreteAir}
+              onDensity={handleConcreteDensity}
+              onLambda={handleConcreteLambda}
+              onSp={toggleConcreteSp}
+              onThickness={handleConcreteThickness}
+              onVapor={handleConcreteVapor}
             />
-            {/* ({k} ∙ {rObl.toFixed(2)}
+          ) : null}
+          {buildingType !== 1 ? (
+            <WallInput
+              isAir={brickAir}
+              isName="Кладка"
+              isId="brick"
+              isLambda={brickLambda}
+              isSp={brickSp}
+              isSpData={brickData}
+              isSpDensity={brickDensity}
+              isThickness={brickThickness}
+              isMaterial={brickMaterial}
+              onAir={handleBrickAir}
+              onDensity={handleBrickDensity}
+              onLambda={handleBrickLambda}
+              onSp={toggleBrickSp}
+              onThickness={handleBrickThickness}
+              onVapor={handleBrickVapor}
+              onName={handleBrickMaterial}
+              onName2={handleBrickName}
+            />
+          ) : null}
+          <WallInput
+            isPreIns={preIns}
+            isAir={insAir}
+            isId="ins-1"
+            isName="Утеплитель"
+            isLambda={insLambda}
+            isSp={insSp}
+            isSpData={insData}
+            isSpDensity={insDensity}
+            isThickness={insThickness}
+            isMaterial={insMaterial}
+            onAddSecondIns={handleAddSecondIns}
+            isSecondIns={secondIns}
+            onAir={handleInsAir}
+            onDensity={handleInsDensity}
+            onLambda={handleInsLambda}
+            onSp={toggleInsSp}
+            onThickness={handleInsThickness}
+            onVapor={handleInsVapor}
+            onName={handleInsMaterial}
+            onName2={handleInsName}
+          />
+          {/* ({k} ∙ {rObl.toFixed(2)}
             {concreteThickness ? concreteThickness / concreteLambda : null}
             {brickThickness ? brickThickness / brickLambda : null} - 1 / 8.7 - 1 / 12) ∙ (
             {secondIns
               ? (insThickness / (insThickness + secondInsThickness)) * insLambda +
                 (secondInsThickness / (insThickness + secondInsThickness)) * secondInsLambda
               : insLambda} */}
-            {secondIns ? (
-              <WallInput
-                isAir={secondInsAir}
-                isName="Утеплитель"
-                isId="ins-2"
-                isLambda={secondInsLambda}
-                isSp={secondInsSp}
-                isSpData={secondInsData}
-                isSpDensity={secondInsDensity}
-                isThickness={secondInsThickness}
-                isMaterial={secondInsMaterial}
-                onDeleteSecondIns={handleDeleteSecondIns}
-                isSecondIns={secondIns}
-                onAir={handleSecondInsAir}
-                onDensity={handleSecondInsDensity}
-                onLambda={handleSecondInsLambda}
-                onSp={toggleSecondInsSp}
-                onThickness={handleSecondInsThickness}
-                onVapor={handleSecondInsVapor}
-                onName={handleSecondInsMaterial}
-                onName2={handleSecondInsName}
-              />
-            ) : null}
-          </div>
-          <div className="wall-options">
-            <Form.Select id="plaster" onChange={handlePlaster}>
-              <option>Штукатурка изнутри</option>
-              <option value={1}>Нет</option>
-              <option value={2}>Гипсовая</option>
-              <option value={3}>Цементная</option>
-            </Form.Select>
-            <Form.Check
-              className="mt-3 ms-2"
-              id="vapor-membrane"
-              label="Пароизоляция"
-              checked={vaporMembrane}
-              onChange={handleVaporMembrane}
-            ></Form.Check>
-            {vaporMembrane ? (
-              <>
-                <Form.Control
-                  id="vapor-membrane-r"
-                  placeholder="Сопротивление паропроницанию, м²чПа/мг"
-                  value={vaporMembraneR}
-                  onChange={handleVaporMembraneR}
-                />
-                <Form.Control
-                  id="vapor-membrane-air"
-                  placeholder="Сопротивление воздухопроницанию, м²чПа/кг"
-                  value={vaporMembraneAir}
-                  onChange={handleVaporMembraneAir}
-                />
-              </>
-            ) : null}
-            <Form.Check
-              className="mt-3 ms-2"
-              id="wind-membrane"
-              label="Ветрозащита"
-              checked={windMembrane}
-              onChange={handleWindMembrane}
-            ></Form.Check>
-            {windMembrane ? (
-              <Form.Control
-                id="wind-membrane-r"
-                placeholder="Сопротивление паропроницанию, м²чПа/мг"
-                value={windMembraneR}
-                onChange={handleWindMembraneR}
-              />
-            ) : null}
-          </div>
-          <Button
-            className="btn-previous"
-            variant="outline-secondary"
-            size="sm"
-            onClick={() => {
-              navigate('/');
-            }}
-          >
-            Назад
-          </Button>
-          <Button
-            className="btn-next"
-            variant="outline-secondary"
-            size="sm"
-            onClick={() => {
-              navigate('/systdata');
-            }}
-          >
-            Далее
-          </Button>
+          {secondIns ? (
+            <WallInput
+              isAir={secondInsAir}
+              isName="Утеплитель"
+              isId="ins-2"
+              isLambda={secondInsLambda}
+              isSp={secondInsSp}
+              isSpData={secondInsData}
+              isSpDensity={secondInsDensity}
+              isThickness={secondInsThickness}
+              isMaterial={secondInsMaterial}
+              onDeleteSecondIns={handleDeleteSecondIns}
+              isSecondIns={secondIns}
+              onAir={handleSecondInsAir}
+              onDensity={handleSecondInsDensity}
+              onLambda={handleSecondInsLambda}
+              onSp={toggleSecondInsSp}
+              onThickness={handleSecondInsThickness}
+              onVapor={handleSecondInsVapor}
+              onName={handleSecondInsMaterial}
+              onName2={handleSecondInsName}
+            />
+          ) : null}
         </div>
-      )}
-    </DefaultContext.Consumer>
+        <div className="wall-options">
+          <Form.Select id="plaster" onChange={handlePlaster}>
+            <option>Штукатурка изнутри</option>
+            <option value={1}>Нет</option>
+            <option value={2}>Гипсовая</option>
+            <option value={3}>Цементная</option>
+          </Form.Select>
+          <Form.Check
+            className="mt-3 ms-2"
+            id="vapor-membrane"
+            label="Пароизоляция"
+            checked={vaporMembrane}
+            onChange={handleVaporMembrane}
+          ></Form.Check>
+          {vaporMembrane ? (
+            <>
+              <Form.Control
+                id="vapor-membrane-r"
+                placeholder="Сопротивление паропроницанию, м²чПа/мг"
+                value={vaporMembraneR}
+                onChange={handleVaporMembraneR}
+              />
+              <Form.Control
+                id="vapor-membrane-air"
+                placeholder="Сопротивление воздухопроницанию, м²чПа/кг"
+                value={vaporMembraneAir}
+                onChange={handleVaporMembraneAir}
+              />
+            </>
+          ) : null}
+          <Form.Check
+            className="mt-3 ms-2"
+            id="wind-membrane"
+            label="Ветрозащита"
+            checked={windMembrane}
+            onChange={handleWindMembrane}
+          ></Form.Check>
+          {windMembrane ? (
+            <Form.Control
+              id="wind-membrane-r"
+              placeholder="Сопротивление паропроницанию, м²чПа/мг"
+              value={windMembraneR}
+              onChange={handleWindMembraneR}
+            />
+          ) : null}
+        </div>
+        <Button
+          className="btn-previous"
+          variant="outline-secondary"
+          size="sm"
+          onClick={() => {
+            navigate('/');
+          }}
+        >
+          Назад
+        </Button>
+        <Button
+          className="btn-next"
+          variant="outline-secondary"
+          size="sm"
+          onClick={() => {
+            navigate('/systdata');
+          }}
+        >
+          Далее
+        </Button>
+      </div>
+    </>
   );
 }

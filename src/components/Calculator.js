@@ -59,7 +59,6 @@ export default function Calculator() {
     objAddress,
     objName,
     plaster,
-    plasterValue,
     secondIns,
     secondInsAir,
     secondInsDensity,
@@ -93,20 +92,19 @@ export default function Calculator() {
   const k = 1.3;
 
   const b = () => {
-    if (buildingAim === '1') return 1.4;
-    if (buildingAim === '2') return 1.2;
-    if (buildingAim === '3') return 1;
+    if (buildingAim === 1) return 1.4;
+    if (buildingAim === 2) return 1.2;
+    if (buildingAim === 3) return 1;
   };
   const a = () => {
-    if (buildingAim === '1') return 0.00035;
-    if (buildingAim === '2') return 0.0003;
-    if (buildingAim === '3') return 0.0002;
+    if (buildingAim === 1) return 0.00035;
+    if (buildingAim === 2) return 0.0003;
+    if (buildingAim === 3) return 0.0002;
   };
-  const gsop =
-    buildingAim === '2' ? (innerTemp - cityProp.t8) * cityProp.z8 : (innerTemp - cityProp.t10) * cityProp.z10;
+  const gsop = buildingAim === 2 ? (innerTemp - cityProp.t10) * cityProp.z10 : (innerTemp - cityProp.t8) * cityProp.z8;
 
-  const concreteQ = buildingType !== '3' ? parseFloat((concreteThickness / concreteLambda).toFixed(3)) : null;
-  const brickQ = buildingType !== '1' ? parseFloat((brickThickness / brickLambda).toFixed(3)) : null;
+  const concreteQ = buildingType !== 3 ? parseFloat((concreteThickness / concreteLambda).toFixed(3)) : null;
+  const brickQ = buildingType !== 1 ? parseFloat((brickThickness / brickLambda).toFixed(3)) : null;
   const insQ = parseFloat((insThickness / insLambda).toFixed(3));
   const secondInsQ = secondIns ? parseFloat((secondInsThickness / secondInsLambda).toFixed(3)) : null;
 
@@ -133,13 +131,18 @@ export default function Calculator() {
     return totalLoss;
   };
 
-  const rCond1 = buildingType !== '3' ? 1 / 8.7 + concreteQ + insQ + secondInsQ + 1 / 12 : null;
-  const rCond2 = buildingType !== '1' ? 1 / 8.7 + brickQ + insQ + secondInsQ + 1 / 12 : null;
+  const rCond1 = buildingType !== 3 ? 1 / 8.7 + concreteQ + insQ + secondInsQ + 1 / 12 : null;
+  const rCond2 = buildingType !== 1 ? 1 / 8.7 + brickQ + insQ + secondInsQ + 1 / 12 : null;
 
-  const u1 = buildingType !== '3' ? 1 / rCond1 : null;
-  const u2 = buildingType !== '1' ? 1 / rCond2 : null;
+  const u1 = buildingType !== 3 ? 1 / rCond1 : null;
+  const u2 = buildingType !== 1 ? 1 / rCond2 : null;
 
-  const rRed = u1 + u2 + linearLoss + pointLoss();
+  const rRed =
+    1 /
+    ((buildingType !== 3 && u1 * (concreteArea / (brickArea + concreteArea))) +
+      (buildingType !== 1 ? u2 * (brickArea / (brickArea + concreteArea)) : 0) +
+      linearLoss +
+      pointLoss());
   const rCond0 = 1 / 8.7 + rCond1 + rCond2 + 1 / 12;
   const r = rRed / rCond0;
 
@@ -232,9 +235,9 @@ export default function Calculator() {
   const vVent5 = parseFloat(vVent(tempGap4).toFixed(3));
 
   const plasterV = () => {
-    if (plasterValue === '1') return 0;
-    if (plasterValue === '2') return 0.125;
-    if (plasterValue === '3') return 0.16667;
+    if (plaster === 1) return 0;
+    if (plaster === 2) return 142;
+    if (plaster === 3) return 373;
   };
 
   const rVaporWhole =
@@ -268,25 +271,22 @@ export default function Calculator() {
   const g = DkCalc({ d: d, k: kAir });
   const gObl = g / (6.14 * rVaporWhole);
 
-  const rU = concreteAir
-    ? concreteThickness / concreteAir
-    : null + brickAir
-    ? brickThickness / brickAir
-    : null + insThickness / insAir + secondInsAir
-    ? secondInsAir
-    : null + windMembraneR
-    ? windMembraneR
-    : null;
+  const rU =
+    (concreteAir ? concreteThickness / concreteAir : null) +
+    (brickAir ? brickThickness / brickAir : null) +
+    (insThickness / insAir + secondInsAir ? secondInsAir : null) +
+    (windMembraneR ? windMembraneR : null) +
+    plasterV();
   const yOuter = 3463 / (273 + cityProp.tm);
   const yInner = 3463 / (273 + innerTemp);
   const deltaP = 0.55 * height * (yOuter - yInner) + 0.03 * yOuter * cityProp.v ** 2;
   const gU = deltaP / rU;
 
-  const wallType = (wall, item) => {
-    if (wall === '1') return concreteArea;
-    if (wall === '3') return brickArea;
-    if (wall === '2') return item.wallType ? concreteArea : brickArea;
-  };
+  // const wallType = (wall, item) => {
+  //   if (wall === 1) return concreteArea;
+  //   if (wall === 3) return brickArea;
+  //   if (wall === 2) return item.wallType ? concreteArea : brickArea;
+  // };
 
   const bracketDensity = () => {
     let brackets = 0;
@@ -301,14 +301,14 @@ export default function Calculator() {
     Object.entries(bracketResult).map(([key, item]) => (
       <React.Fragment key={key}>
         <br /> - {item.type ? 'алюминиевый' : 'стальной'} {item.weight ? 'межэтажный' : 'рядовой'} кронштейн{' '}
-        {item.bracket} - {(item.pcs / wallType(buildingType, item)).toFixed(1)} шт/м²
+        {item.bracket} - {(item.pcs / (concreteArea + brickArea)).toFixed(1)} шт/м²
       </React.Fragment>
     ));
   const brackets2 = () =>
     Object.entries(bracketResult).map(([key, item]) => (
       <React.Fragment key={key}>
         <br /> χᵏᵖ<sup>{parseInt(key) + 1}</sup> = {item.value.toFixed(4)} Вт/°С для кронштейна {item.bracket}{' '}
-        {buildingType === '2' ? `крепление : ${item.wall ? 'бетон' : 'блок/кирпич'}` : null};
+        {buildingType === 2 ? `крепление : ${item.wall ? 'бетон' : 'блок/кирпич'}` : null};
       </React.Fragment>
     ));
   const brackets3 = () =>
@@ -337,7 +337,7 @@ export default function Calculator() {
       <React.Fragment key={key}>
         <tr key={184}>
           <th scope="row">
-            {concreteWall ? parseInt(key) + 7 : buildingType === '2' ? parseInt(key) + 5 : parseInt(key) + 4}
+            {concreteWall ? parseInt(key) + 7 : buildingType === 2 ? parseInt(key) + 5 : parseInt(key) + 4}
           </th>
           <td>кронштейн {item.bracket}</td>
           <td>Точечный {parseInt(key) + 2}</td>
@@ -374,14 +374,14 @@ export default function Calculator() {
           {rRed > rObl ? (
             <div className="final rounded shadow p-2 mb-2 bg-body-tertiary w-100">
               <h4>
-                R<sub>у</sub> {'>'} R<sub>тр</sub>
+                R<sub>у({rRed.toFixed(2)})</sub> {'>'} R<sub>тр({rObl.toFixed(2)})</sub>
               </h4>
               <h6>Условие выполнено</h6>
             </div>
           ) : (
             <div className="final  rounded shadow p-2 mb-2 bg-body-tertiary w-100">
               <h4>
-                R<sub>у</sub> {'<'} R<sub>тр</sub>
+                R<sub>у({rRed.toFixed(2)})</sub> {'<'} R<sub>тр({rObl.toFixed(2)})</sub>
               </h4>
               <Row className="mx-auto">
                 <Col xs={7} className="mt-2">
@@ -417,14 +417,14 @@ export default function Calculator() {
           {eGap < outE ? (
             <div class="final rounded shadow p-2 mb-2 bg-body-tertiary w-100">
               <h4>
-                e<sub>пр</sub> {'<'} E<sub>н</sub>
+                e<sub>пр({eGap.toFixed(0)})</sub> {'<'} E<sub>н({outE.toFixed(0)})</sub>
               </h4>
               <h6>Условие выполнено</h6>
             </div>
           ) : (
             <div className="final mt-1 rounded shadow p-3 mb-2 bg-body-tertiary ">
               <h4>
-                e<sub>пр</sub> {'>'} E<sub>н</sub>
+                e<sub>пр({eGap.toFixed(0)})</sub> {'>'} E<sub>н({outE.toFixed(0)})</sub>
               </h4>
               <Row className="ms-auto">
                 <Col xs={7} className="mt-2">
@@ -459,13 +459,13 @@ export default function Calculator() {
           )}
           {gU < gObl ? (
             <div class="border border-secondary">
-              G<sub>у</sub> {'<'} G<sub>тр</sub>
+              G<sub>у({gU.toFixed(3)})</sub> {'<'} G<sub>тр({gObl.toFixed(3)})</sub>
               <h6>Условие выполнено</h6>
             </div>
           ) : (
             <div className="final rounded shadow p-3 mb-5 bg-body-tertiary ">
               <h4>
-                G<sub>у</sub> {'>'} G<sub>тр</sub>
+                G<sub>у({gU.toFixed(3)})</sub> {'>'} G<sub>тр({gObl.toFixed(3)})</sub>
               </h4>
               <p>Добавьте штукатурку или пароизоляцию</p>
               <Row>
@@ -517,10 +517,10 @@ export default function Calculator() {
             Климатические данные принимаются по таблице 3.1 СП 131.13330.2020 и пункту 5.7 СП 50.13330.2012; <br />-
             средняя температура наиболее холодной пятидневки, с обеспеченностью 0,92: t = {cityProp.t} °С;
             <br />- средняя температура наиболее холодного месяца: t<sub>м</sub> = {cityProp.tm} °С; <br />- средняя
-            температура отопительного периода: t<sub>{buildingAim === '2' ? '8' : '10'}</sub> ={' '}
-            {buildingAim === '2' ? cityProp.t8 : cityProp.t10} °С;
-            <br />- продолжительность отопительного периода: z<sub>{buildingAim === '2' ? '8' : '10'}</sub> ={' '}
-            {buildingAim === '2' ? cityProp.z8 : cityProp.z10} сут;
+            температура отопительного периода: t<sub>{buildingAim === 2 ? '10' : '8'}</sub> ={' '}
+            {buildingAim === 2 ? cityProp.t10 : cityProp.t8} °С;
+            <br />- продолжительность отопительного периода: z<sub>{buildingAim === 2 ? '10' : '8'}</sub> ={' '}
+            {buildingAim === 2 ? cityProp.z10 : cityProp.z8} сут;
             <br />- максимальная из скоростей ветра по румбам за январь: ν = {cityProp.v} м/c;
             <br />- расчетная относительная влажность внутреннего воздуха: φ = {humidity} %; <br />
             <br />
@@ -529,38 +529,45 @@ export default function Calculator() {
             {cityProp.w} %.
             <br />
             <br /> <b>Состав стены:</b>
-            {buildingType !== '3' ? (
-              buildingType === '2' ? (
+            {buildingType !== 3 ? (
+              buildingType === 2 ? (
                 concreteWall ? (
-                  <div>- монолитный железобетон толщиной {concreteThickness * 1000} мм</div>
+                  <div>- монолитный железобетон толщиной {concreteThickness * 1000} мм;</div>
                 ) : (
                   <div>
                     - монолитный железобетон, для расчета требуемого сопротивления перекрытия толщину принимаем{' '}
-                    {brickThickness * 1000} мм
+                    {brickThickness * 1000} мм;
                   </div>
                 )
               ) : (
-                <div>- монолитный железобетон толщиной {concreteThickness * 1000} мм</div>
+                <div>- монолитный железобетон толщиной {concreteThickness * 1000} мм;</div>
               )
             ) : null}
-            {buildingType !== '1' ? (
+            {buildingType !== 1 ? (
               <div>
-                - {brickName} плотностью {brickDensity} кг/м³, толщиной {brickThickness * 1000} мм
+                - {brickName} плотностью {brickDensity} кг/м³, толщиной {brickThickness * 1000} мм;
               </div>
             ) : null}
             {secondIns ? (
               <div>
-                - внутренний слой теплоизоляции плотностью {insDensity} кг/м³, толщиной {insThickness * 1000} мм <br />-
-                внешний слой теплоизоляции плотностью {secondInsDensity} кг/м³, толщиной {secondInsThickness * 1000} мм
+                - внутренний слой теплоизоляции плотностью {insDensity} кг/м³, толщиной {insThickness * 1000} мм; <br />
+                - внешний слой теплоизоляции плотностью {secondInsDensity} кг/м³, толщиной {secondInsThickness * 1000}{' '}
+                мм;
               </div>
             ) : (
               <div>
-                - {insName} плотностью {insDensity} кг/м³, толщиной {insThickness * 1000} мм
+                - утеплитель {insName} плотностью {insDensity} кг/м³, толщиной {insThickness * 1000} мм;
               </div>
             )}
+            {plaster
+              ? `- ${
+                  plaster == 2 ? 'гипсовая' : 'цементная'
+                } штукатурка средней толщиной 15мм с внутренней стороны стены.`
+              : null}
+            <br />
             <br />
             <b>Расчетные характеристики материалов:</b> <br />
-            {buildingType !== '3' ? (
+            {buildingType !== 3 ? (
               <div>
                 {' '}
                 Железобетон : <br />- коэффициент теплопроводности материала λ = {concreteLambda} Вт/(м°С);
@@ -568,7 +575,7 @@ export default function Calculator() {
                 <br /> - коэффициент воздухопроницаемости ί = {concreteAir} кг/(м∙ч∙Па);
               </div>
             ) : null}
-            {buildingType !== '1' ? (
+            {buildingType !== 1 ? (
               <div>
                 {' '}
                 Кладка :
@@ -592,12 +599,12 @@ export default function Calculator() {
                 <br />- коэффициент воздухопроницаемости ί = {secondInsAir} кг/(м∙ч∙Па);
               </>
             )}
-            {plaster ? (
+            {plaster !== 1 ? (
               <>
                 Штукатурка :
-                <br /> - коэффициент теплопроводности материала λ = {plaster === '3' ? '0,93' : '0.81'} Вт/(м°С);
-                <br /> - коэффициент паропроницаемости материала μ = {plaster === '3' ? '0,93' : '0.81'} мг/(м∙ч∙Па);
-                <br /> - коэффициент воздухопроницаемости ί = {plaster === '3' ? '0,93' : '0.81'} кг/(м∙ч∙Па);
+                <br /> - коэффициент теплопроводности материала λ = {plaster === 3 ? '0.93' : '0.81'} Вт/(м°С);
+                <br /> - коэффициент паропроницаемости материала μ = {plaster === 3 ? '0.09' : '0.12'} мг/(м∙ч∙Па);
+                <br /> - коэффициент воздухопроницаемости ί = {plaster === 3 ? '0.00004' : '0.00004'} кг/(м∙ч∙Па);
                 <br />
               </>
             ) : null}
@@ -629,9 +636,9 @@ export default function Calculator() {
             <br />
             <br /> <h5>2. Требуемое сопротивление теплопередаче.</h5>
             Градусо-сутки отопительного периода для рассматриваемого случая составляют: ГСОП = (t<sub>в</sub> - t
-            {buildingAim === 2 ? <sub>8</sub> : <sub>10</sub>}) ∙ z{buildingAim === 2 ? <sub>8</sub> : <sub>10</sub>}= (
+            {buildingAim === 2 ? <sub>10</sub> : <sub>8</sub>}) ∙ z{buildingAim === 2 ? <sub>10</sub> : <sub>8</sub>}= (
             {innerTemp} -(
-            {buildingAim === 2 ? cityProp.t8 : cityProp.t10})) ∙ {buildingAim === 2 ? cityProp.z8 : cityProp.z10}={' '}
+            {buildingAim === 2 ? cityProp.t10 : cityProp.t8})) ∙ {buildingAim === 2 ? cityProp.z10 : cityProp.z8}={' '}
             {gsop.toFixed(0)}
             °С∙сут. <br />
             Минимально требуемое приведенное сопротивление теплопередаче стен по СП 50.13330.2012 составляет <br />R
@@ -663,7 +670,7 @@ export default function Calculator() {
             Для учета всех теплотехнических неоднородностей фрагмента стены с НФС необходимо оценить фрагмент
             теплозащитной оболочки здания с НФС в целом. Перечисление элементов составляющих ограждающую конструкцию:
             <br />
-            {buildingType === '2' ? (
+            {buildingType === 2 ? (
               <>
                 - заполнение стены со слоем теплоизоляции (плоский элемент 1)
                 <br /> - железобетонное перекрытие со слоем теплоизоляции (плоский элемент 2)
@@ -672,7 +679,7 @@ export default function Calculator() {
               <>- стена со слоем теплоизоляции (плоский элемент 1)</>
             )}
             <br />
-            {buildingType !== '2' ? (
+            {buildingType !== 2 ? (
               '- оконный откос (линейный элемент 1)'
             ) : (
               <>
@@ -687,13 +694,13 @@ export default function Calculator() {
             <br /> Площадь поверхности фрагмента ограждающей конструкции для расчета R составляет: А ={' '}
             {concreteArea + brickArea} м²;
             <br />
-            {buildingType === '2'
+            {buildingType === 2
               ? concreteWall
                 ? `Площадь стены с основанием из железобетона составляет: ${concreteArea} м²`
                 : `Суммарная площадь торцов перекрытий из монолитного железобетона (т.е. площадь проекции на поверхность фрагмента)
         составляет ${concreteArea} м².`
               : null}
-            {buildingType === '2' ? (
+            {buildingType === 2 ? (
               <>
                 <br /> Доля этой площади от общей площади фрагмента ограждающей конструкции равна: а = {concreteArea}/
                 {concreteArea + brickArea} = {(concreteArea / (concreteArea + brickArea)).toFixed(2)}
@@ -723,11 +730,11 @@ export default function Calculator() {
               <>
                 <br />
                 Общая длина проекции оконного откоса, образованного cтеной с утеплителем, определяется по экспликации
-                оконных проемов и равна: {buildingType === '1' ? windowConcreteLength : windowBrickLength} м.
+                оконных проемов и равна: {buildingType === 1 ? windowConcreteLength : windowBrickLength} м.
                 <br />
                 Длина проекции откосов, приходящаяся на 1 м² площади фрагмента равна l ={' '}
-                {buildingType === '1' ? windowConcreteLength : windowBrickLength} /{concreteArea + brickArea} ={' '}
-                {buildingType === '1'
+                {buildingType === 1 ? windowConcreteLength : windowBrickLength} /{concreteArea + brickArea} ={' '}
+                {buildingType === 1
                   ? windowConcreteLength
                   : (windowBrickLength / (concreteArea + brickArea)).toFixed(2)}{' '}
                 м/м².
@@ -735,18 +742,18 @@ export default function Calculator() {
             )}
             <br />
             <br /> <b>Расчет удельных потерь теплоты, обусловленных элементами.</b>
-            <br /> Для плоского элемента {buildingType === '2' ? 1 : null} удельные потери теплоты определяются по
+            <br /> Для плоского элемента {buildingType === 2 ? 1 : null} удельные потери теплоты определяются по
             формулам Е.6, Е.З СП 50.13330.2012:
-            <br />R<sub>{buildingType === '2' ? 1 : null}</sub>
+            <br />R<sub>{buildingType === 2 ? 1 : null}</sub>
             <sup>усл</sup> = 1/α<sub>в</sub> + ∑R
-            <sub>s</sub> + 1/α<sub>пр0</sub> = 1/8.7 + {buildingType !== '3' ? concreteQ : brickQ} +{' '}
+            <sub>s</sub> + 1/α<sub>пр0</sub> = 1/8.7 + {buildingType !== 3 ? concreteQ : brickQ} +{' '}
             {secondIns ? `${insQ} + ${secondInsQ}` : insQ}+ 1/12 ={' '}
-            {buildingType !== '3' ? rCond1.toFixed(2) : rCond2.toFixed(2)} м²°С/Вт
-            <br />U<sub>{buildingType === '2' ? 1 : null}</sub> = 1/R<sub>{buildingType === '2' ? 1 : null}</sub>
-            <sup>усл</sup> = 1/ {buildingType !== '3' ? rCond1.toFixed(2) : rCond2.toFixed(2)} ={' '}
-            {buildingType !== '3' ? u1.toFixed(3) : u2.toFixed(3)} Вт/(м²°С)
+            {buildingType !== 3 ? rCond1.toFixed(2) : rCond2.toFixed(2)} м²°С/Вт
+            <br />U<sub>{buildingType === 2 ? 1 : null}</sub> = 1/R<sub>{buildingType === 2 ? 1 : null}</sub>
+            <sup>усл</sup> = 1/ {buildingType !== 3 ? rCond1.toFixed(2) : rCond2.toFixed(2)} ={' '}
+            {buildingType !== 3 ? u1.toFixed(3) : u2.toFixed(3)} Вт/(м²°С)
             <br />
-            {buildingType === '2' ? (
+            {buildingType === 2 ? (
               <>
                 Для плоского элемента 2 удельные потери теплоты определяются аналогично: <br />R<sub>2</sub>
                 <sup>усл</sup> = 1/8.7 + {brickQ} + {secondIns ? `${insQ}+${secondInsQ}` : `${insQ}`} + 1/12 ={' '}
@@ -788,22 +795,22 @@ export default function Calculator() {
               </tr>
             </thead>
             <tbody>
-              {buildingType !== '3' ? (
+              {buildingType !== 3 ? (
                 <tr key={182}>
                   <th scope="row">1</th>
                   <td>{concreteWall ? 'Перекрытие' : 'Стена'}</td>
-                  <td>Плоский {buildingType === '2' ? 1 : null} </td>
+                  <td>Плоский {buildingType === 2 ? 1 : null} </td>
                   <td>{(concreteArea / (concreteArea + brickArea)).toFixed(3)}</td>
                   <td>{u1.toFixed(3)}</td>
                   <td>{((u1 * concreteArea) / (concreteArea + brickArea)).toFixed(3)}</td>
                   <td>{((u1 * concreteArea) / (concreteArea + brickArea) / qPercent()).toFixed(1)}</td>
                 </tr>
               ) : null}
-              {buildingType !== '1' ? (
+              {buildingType !== 1 ? (
                 <tr key={183}>
-                  <th scope="row"> {buildingType !== '3' ? 2 : 1}</th>
+                  <th scope="row"> {buildingType !== 3 ? 2 : 1}</th>
                   <td>Стена</td>
-                  <td>Плоский {buildingType === '2' ? 2 : null}</td>
+                  <td>Плоский {buildingType === 2 ? 2 : null}</td>
                   <td>{(brickArea / (concreteArea + brickArea)).toFixed(3)}</td>
                   <td>{u2.toFixed(3)}</td>
                   <td>{((u2 * brickArea) / (concreteArea + brickArea)).toFixed(3)}</td>
@@ -811,31 +818,31 @@ export default function Calculator() {
                 </tr>
               ) : null}
               <tr key={184}>
-                <th scope="row">{buildingType !== '2' ? 2 : 3}</th>
+                <th scope="row">{buildingType !== 2 ? 2 : 3}</th>
                 <td>Оконный откос</td>
-                <td>Линейный {buildingType === '2' ? 1 : null}</td>
+                <td>Линейный {buildingType === 2 ? 1 : null}</td>
                 <td>
-                  {buildingType === '1'
+                  {buildingType === 1
                     ? (windowConcreteLength / (concreteArea + brickArea)).toFixed(3)
                     : (windowBrickLength / (concreteArea + brickArea)).toFixed(3)}
                 </td>
-                <td>{buildingType === '1' ? windowLossConcrete.toFixed(3) : windowLoss.toFixed(3)}</td>
+                <td>{buildingType === 1 ? windowLossConcrete.toFixed(3) : windowLoss.toFixed(3)}</td>
                 <td>
-                  {buildingType === '1'
+                  {buildingType === 1
                     ? ((windowLossConcrete * windowConcreteLength) / (concreteArea + brickArea)).toFixed(3)
                     : ((windowLoss * windowBrickLength) / (concreteArea + brickArea)).toFixed(3)}
                 </td>
                 <td>
-                  {buildingType === '1'
+                  {buildingType === 1
                     ? ((windowLossConcrete * windowConcreteLength) / (concreteArea + brickArea) / qPercent()).toFixed(1)
                     : ((windowLoss * windowBrickLength) / (concreteArea + brickArea) / qPercent()).toFixed(1)}
                 </td>
               </tr>
               {concreteWall ? (
                 <tr key={185}>
-                  <th scope="row">{buildingType !== '2' ? 3 : 4}</th>
+                  <th scope="row">{buildingType !== 2 ? 3 : 4}</th>
                   <td>Оконный откос</td>
-                  <td>Линейный {buildingType === '2' ? 2 : null}</td>
+                  <td>Линейный {buildingType === 2 ? 2 : null}</td>
                   <td>{(windowConcreteLength / (concreteArea + brickArea)).toFixed(3)}</td>
                   <td>{windowLossConcrete}</td>
                   <td>{((windowLossConcrete * windowConcreteLength) / (concreteArea + brickArea)).toFixed(4)}</td>
@@ -845,7 +852,7 @@ export default function Calculator() {
                 </tr>
               ) : null}
               <tr key={186}>
-                <th scope="row">{concreteWall ? 5 : buildingType === '2' ? 4 : 3}</th>
+                <th scope="row">{concreteWall ? 5 : buildingType === 2 ? 4 : 3}</th>
                 <td>Тарельчатый анкер</td>
                 <td>Точечный 1</td>
                 <td>{gribPcs}</td>
@@ -876,7 +883,7 @@ export default function Calculator() {
             Коэффициент теплотехнической однородности стены с НФС : r = {rRed.toFixed(3)}/{rCond0.toFixed(3)} ={' '}
             {r.toFixed(3)}
             <br />
-            {buildingType === '2' ? 'Общее приведенное сопротивление теплопередаче участка с НФС:' : null}
+            {buildingType === 2 ? 'Общее приведенное сопротивление теплопередаче участка с НФС:' : null}
             <br />
             <br />
             <h5>5. Воздухообмен в воздушной прослойке.</h5>
@@ -943,14 +950,15 @@ export default function Calculator() {
             Сопротивление влагообмену на наружной границе стены составляет:
             <br /> R<sub>н</sub>
             <sup>п</sup> = {windMembrane && `${windMembraneR} +`} 1 / (1 / {rEq.toFixed(3)} + (28753 / (1 +{' '}
-            {tempGap4.toFixed(1)} / 273)) ∙ ({ventMed} / {ventHeight}) ∙ {vVent5}) = {rVaporOuter} м² ∙ ч ∙ Па/мг
+            {tempGap4.toFixed(1)} / 273)) ∙ ({ventMed} / {ventHeight}) ∙ {vVent5}) ={' '}
+            {parseFloat(rVaporOuter).toFixed(3)} м² ∙ ч ∙ Па/мг
             <br />
             Вспомогательные величины:
-            <br />R<sub>x</sub> = 1/8.7+ {buildingType !== '3' ? concreteQ : brickQ} +{' '}
+            <br />R<sub>x</sub> = 1/8.7+ {buildingType !== 3 ? concreteQ : brickQ} +{' '}
             {secondIns ? `${insQ} + ${secondInsQ}` : insQ}+0.015/0.93 = {rX.toFixed(3)} м²°С/Вт
             <br />t<sub>x</sub> = t<sub>в</sub> - ((t<sub>в</sub> - t<sub>м</sub>) / R
-            {buildingType === '1' ? (
-              buildingType === '2' ? (
+            {buildingType === 1 ? (
+              buildingType === 2 ? (
                 <>
                   <sub>1</sub>
                   <sup>усл</sup>
@@ -963,9 +971,9 @@ export default function Calculator() {
               </>
             )}
             ) ∙ R<sub>х</sub>= {innerTemp} - ({innerTemp} - ({cityProp.tm})/
-            {buildingType === '1' ? rCond1.toFixed(3) : rCond2.toFixed(3)}) ∙ {rX.toFixed(3)} = {tx.toFixed(1)} °С
+            {buildingType === 1 ? rCond1.toFixed(3) : rCond2.toFixed(3)}) ∙ {rX.toFixed(3)} = {tx.toFixed(1)} °С
             <br />E = 1.84 ∙ 10^11 ∙ exp(-5330/(273 + t<sub>x</sub>)) = 1.84 ∙ 10^11 ∙ exp(-5330/(273 + ({tx.toFixed(1)}
-            ))) = {eOut.toFixed(1)} Па.
+            ))) = {eOut.toFixed(1)} Па
             <br />D = (e<sub>усл</sub> - e<sub>н</sub>) / (e<sub>в</sub> - e<sub>н</sub>)= ({eCond.toFixed(1)} -{' '}
             {eOut.toFixed(1)}) / ({eIn.toFixed(1)} - {eOut.toFixed(1)}) = {d.toFixed(2)}
             <br /> k = {kAir.toFixed(3)} <br />
@@ -973,7 +981,7 @@ export default function Calculator() {
             <br />
             Требуемая воздухопроницаемость стены с облицовкой на относе составляет: G<sub>тр</sub> = Г / 6.14 ∙ R
             <sub>0</sub>
-            <sup>п</sup> = {g.toFixed(2)} / 6.14 ∙ {rVaporWhole.toFixed(2)} = {gObl.toFixed(1)} Па
+            <sup>п</sup> = {g.toFixed(2)} / 6.14 ∙ {rVaporWhole.toFixed(2)} = {gObl.toFixed(3)} кг/м²ч
             <br />
             Сопротивление воздухопроницаемости исследуемой стены составляет: R = ∑R<sub>u</sub> ={' '}
             {concreteThickness
@@ -984,17 +992,19 @@ export default function Calculator() {
               ? `${brickThickness} /
             ${brickAir} + `
               : null}
-            {insThickness} / {insAir} +{' '}
+            {insThickness} / {insAir}
             {secondIns
-              ? `${secondInsThickness} /
-            ${secondInsAir} + `
+              ? ` + ${secondInsThickness} /
+            ${secondInsAir}`
               : null}
-            142/373 = {rU} м²∙ч∙Па/кг <br />
+            {plasterV() !== 0 ? ` + ${plasterV()}` : null} = {rU.toFixed(3)} м²∙ч∙Па/кг <br />
+            <br />
+            {concreteAir}
             Разность давлений на наружной и внутренней поверхностях ограждения: Δp = 0.55H(γ<sub>н</sub> - γ<sub>в</sub>
             ) + 0.03γ<sub>н</sub>ν<sup>2</sup> = 0.55 ∙ 48 ∙ ({yOuter.toFixed(1)} - {yInner.toFixed(1)}) + 0.03 ∙{' '}
             {yOuter.toFixed(1)} ∙ {cityProp.v}² = {deltaP.toFixed(1)} Па <br />
             Воздухопроницаемость данной конструкции составляет: G = Δp / R<sub>u</sub> = {deltaP.toFixed(1)}/
-            {rU.toFixed(2)} = {gU.toFixed(2)} кг/(м²∙ч)
+            {rU.toFixed(2)} = {gU.toFixed(2)} кг/м²ч
             <br />
             <br />
             Таким образом, все требования к стене с НФС для исследуемой конструкции выполняются, в доработках она не

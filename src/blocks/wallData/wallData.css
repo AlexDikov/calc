@@ -1,7 +1,7 @@
 .wallData {
     display: flex;
-    margin-top: 50px;
-    height: 46vh;
+    
+    margin-bottom: 20px;
     justify-content: center;
 }
 
@@ -12,7 +12,7 @@
     margin: 10px;
     position: relative;
     box-shadow: 1px 1px 11px 1px rgba(30, 31, 33, 0.2);
-    max-height: 300px
+    height: 300px
 }
 
 .wallInputList {

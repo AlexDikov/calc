@@ -1,4 +1,4 @@
-import { Button, Form, Row } from 'react-bootstrap';
+import { Button, Form, ProgressBar, Row } from 'react-bootstrap';
 import SystInput from './SystInput';
 import { useNavigate } from 'react-router-dom';
 import { covers } from './covers';
@@ -40,6 +40,7 @@ export default function CoverData() {
         toggleOwnCover,
       }) => (
         <div>
+          <ProgressBar variant="secondary" now={99} label={`${99}%`} />
           <div>
             <SystInput
               id={'ventin'}

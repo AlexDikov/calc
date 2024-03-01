@@ -57,7 +57,7 @@ export default function DkCalc(props) {
       return [ins1.l9, ins1.l10, ins2.l9, ins2.l10];
     } else if (0.1 < props.k && props.k <= 0.12) {
       return [ins1.l10, ins1.l11, ins2.l10, ins2.l11];
-    }
+    } else return [ins1.l10, ins1.l11, ins2.l10, ins2.l11];
   };
 
   const finalValue = () => {
@@ -73,6 +73,7 @@ export default function DkCalc(props) {
       if (0.14 < props.d && props.d <= 0.16) return 0.14;
       if (0.16 < props.d && props.d <= 0.18) return 0.16;
       if (0.18 < props.d && props.d <= 0.2) return 0.18;
+      else return 0.18;
     };
 
     const wallX2 = () => {
@@ -85,6 +86,7 @@ export default function DkCalc(props) {
       if (0.14 < props.d && props.d <= 0.16) return 0.16;
       if (0.16 < props.d && props.d <= 0.18) return 0.18;
       if (0.18 < props.d && props.d <= 0.2) return 0.2;
+      else return 0.2;
     };
     const insX1 = () => {
       if (0.001 < props.k && props.k <= 0.005) return 0.001;
@@ -96,6 +98,7 @@ export default function DkCalc(props) {
       if (0.06 < props.k && props.k <= 0.08) return 0.06;
       if (0.08 < props.k && props.k <= 0.1) return 0.08;
       if (0.1 < props.k && props.k <= 0.12) return 0.1;
+      else return 0.1;
     };
 
     const insX2 = () => {
@@ -109,6 +112,7 @@ export default function DkCalc(props) {
       if (0.06 < props.k && props.k <= 0.08) return 0.08;
       if (0.08 < props.k && props.k <= 0.1) return 0.1;
       if (0.1 < props.k && props.k <= 0.12) return 0.12;
+      else return 0.12;
     };
 
     const pre1 = wallResult[0] + ((props.d - wallX1()) * (wallResult[1] - wallResult[0])) / (wallX2() - wallX1());

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import Bracket from './Bracket';
-import { Button } from 'react-bootstrap';
+import { Button, ProgressBar } from 'react-bootstrap';
 import { useContext, useState } from 'react';
 import React from 'react';
 import { DefaultContext } from '../contexts/DefaultContext';
@@ -16,22 +16,17 @@ export default function BracketData(props) {
       React.cloneElement(<Bracket />, {
         key: context.uKey,
         ukey: context.uKey,
-        onDelete: handleDeleteBracket(),
       }),
     ]);
     context.setUKey((prevKey) => prevKey + 1);
-  }
-  function handleDeleteBracket(indexToRemove) {
-    context.setAddBracket((prevBrackets) => {
-      return prevBrackets.filter((_, index) => index !== indexToRemove);
-    });
   }
 
   return (
     <DefaultContext.Consumer>
       {(context) => (
         <div className="bracketData">
-          <Bracket ukey={0} />
+          <ProgressBar variant="secondary" now={80} label={`${80}%`} />
+          <Bracket ukey={0} hide={true} />
           {context.addBracket}
           <button className="add-bracket" key="add-btn" onClick={addBracketInput}></button>
 

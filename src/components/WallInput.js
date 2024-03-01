@@ -168,7 +168,7 @@ export default function WallInput({
               <li className="wall-p">
                 Воздухороницаемость
                 <br />
-                м²чПа/кг
+                кг/м²чПа
               </li>
               <input
                 className="wallInputValue"

@@ -19,9 +19,8 @@ export default function LinearLossCalcConcrete() {
 
   useEffect(() => {
     const insValue = secondIns
-      ? 0.001 /
-        ((insThickness / (insThickness + secondInsThickness)) * insLambda +
-          (secondInsThickness / (insThickness + secondInsThickness)) * secondInsLambda)
+      ? (insThickness / (insThickness + secondInsThickness)) * insLambda +
+        (secondInsThickness / (insThickness + secondInsThickness)) * secondInsLambda
       : insThickness / insLambda;
     const wallValue = concreteLambda;
 
@@ -32,7 +31,10 @@ export default function LinearLossCalcConcrete() {
 
       preItem = windows.find((item) => item.name === windowDepth);
       heatItem = Object.values(preItem[windowHeight]);
-
+      if (0 < wallValue && wallValue <= 0.04) {
+        ins1 = heatItem[0];
+        ins2 = heatItem[1];
+      }
       if (1.5 < insValue && insValue < 3) {
         ins1 = heatItem[0];
         ins2 = heatItem[1];

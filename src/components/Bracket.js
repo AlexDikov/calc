@@ -155,7 +155,7 @@ export default function Bracket(props) {
           />
         </Col>
         <Col>
-          {context.buildingType === '2' ? (
+          {context.buildingType === 2 ? (
             <Form>
               {['radio'].map((type) => (
                 <div key={`inline-${type}`} className="mb-3">
@@ -184,7 +184,12 @@ export default function Bracket(props) {
         </Col>
         <Col>
           {' '}
-          <button className="add-bracket" key="add-btn" onClick={() => handleDeleteBracket(bKey)}></button>
+          <button
+            className="delete-bracket"
+            key="del-btn"
+            hidden={props.hide}
+            onClick={() => handleDeleteBracket(bKey)}
+          ></button>
         </Col>
       </Row>
       <PointLossCalc

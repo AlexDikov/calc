@@ -15,86 +15,85 @@ import { covers } from './covers';
 export default function App(props) {
   const [addBracket, setAddBracket] = useState([]);
   const [bracketResult, setBracketResult] = useState({});
-  const [brickAir, setBrickAir] = useState('');
-  const [brickArea, setBrickArea] = useState('');
-  const [brickData, setBrickData] = useState('');
-  const [brickDensity, setBrickDensity] = useState('');
-  const [brickMaterial, setBrickMaterial] = useState('');
-  const [brickName, setBrickName] = useState('');
-  const [brickLambda, setBrickLambda] = useState('');
-  const [brickThickness, setBrickThickness] = useState('');
-  const [brickVapor, setBrickVapor] = useState('');
-  const [buildingAim, setBuildingAim] = useState('');
-  const [buildingType, setBuildingType] = useState('');
+  const [brickAir, setBrickAir] = useState(null);
+  const [brickArea, setBrickArea] = useState(null);
+  const [brickData, setBrickData] = useState(null);
+  const [brickDensity, setBrickDensity] = useState(null);
+  const [brickMaterial, setBrickMaterial] = useState(null);
+  const [brickName, setBrickName] = useState(null);
+  const [brickLambda, setBrickLambda] = useState(null);
+  const [brickSp, setBrickSp] = useState(false);
+  const [brickThickness, setBrickThickness] = useState(null);
+  const [brickVapor, setBrickVapor] = useState(null);
+  const [buildingAim, setBuildingAim] = useState(null);
+  const [buildingType, setBuildingType] = useState(null);
   const [cityProp, setCityProp] = useState({});
-  const [cityValue, setCityValue] = useState('');
-  const [concreteAir, setConcreteAir] = useState('');
-  const [concreteArea, setConcreteArea] = useState('');
-  const [concreteDensity, setConcreteDensity] = useState('');
-  const [concreteLambda, setConcreteLambda] = useState('');
-  const [concreteSpLambda, setConcreteSpLambda] = useState('');
-  const [concreteThickness, setConcreteThickness] = useState('');
-  const [concreteVapor, setConcreteVapor] = useState('');
+  const [cityValue, setCityValue] = useState(null);
+  const [concreteAir, setConcreteAir] = useState(null);
+  const [concreteArea, setConcreteArea] = useState(null);
+  const [concreteDensity, setConcreteDensity] = useState(null);
+  const [concreteLambda, setConcreteLambda] = useState(null);
+  const [concreteSpLambda, setConcreteSpLambda] = useState(null);
+  const [concreteSp, setConcreteSp] = useState(false);
+  const [concreteThickness, setConcreteThickness] = useState(null);
+  const [concreteVapor, setConcreteVapor] = useState(null);
   const [concreteWall, setConcreteWall] = useState(false);
-  const [coverLambda, setCoverLambda] = useState('');
+  const [coverLambda, setCoverLambda] = useState(null);
   const [cover, setCover] = useState({});
-  const [coverName, setCoverName] = useState('');
-  const [coverThickness, setCoverThickness] = useState('');
-  const [coverVapor, setCoverVapor] = useState('');
+  const [coverName, setCoverName] = useState(null);
+  const [coverThickness, setCoverThickness] = useState(null);
+  const [coverVapor, setCoverVapor] = useState(null);
   const [d, setD] = useState(0.1);
-  const [dk, setDk] = useState('');
+  const [dk, setDk] = useState(null);
   const [finalValues, setFinalValues] = useState({});
-  const [grib, setGrib] = useState('');
+  const [grib, setGrib] = useState(null);
   const [gribDepth, setGribDepth] = useState(0.006);
-  const [gribConcretePcs, setGribConcretePcs] = useState('');
-  const [gribPcs, setGribPcs] = useState('');
-  const [height, setHeight] = useState('');
+  const [gribConcretePcs, setGribConcretePcs] = useState(null);
+  const [gribPcs, setGribPcs] = useState(null);
+  const [height, setHeight] = useState(null);
   const [humidity, setHumidity] = useState(50);
   const [innerTemp, setInnerTemp] = useState(20);
-  const [insAir, setInsAir] = useState('');
-  const [insData, setInsData] = useState('');
-  const [insDensity, setInsDensity] = useState('');
-  const [insMaterial, setInsMaterial] = useState('');
-  const [insName, setInsName] = useState('');
-  const [insLambda, setInsLambda] = useState('');
-  const [insThickness, setInsThickness] = useState('');
-  const [insVapor, setInsVapor] = useState('');
+  const [insAir, setInsAir] = useState(null);
+  const [insData, setInsData] = useState(null);
+  const [insDensity, setInsDensity] = useState(null);
+  const [insMaterial, setInsMaterial] = useState(null);
+  const [insName, setInsName] = useState(null);
+  const [insLambda, setInsLambda] = useState(null);
+  const [insSp, setInsSp] = useState(false);
+  const [insThickness, setInsThickness] = useState(null);
+  const [insVapor, setInsVapor] = useState(null);
   const [k, setK] = useState(0.1);
   const [metalCover, setMetallCover] = useState(false);
   const [mr, setMr] = useState(0.63);
-  const [objName, setObjName] = useState('');
-  const [objAddress, setObjAddress] = useState('');
+  const [objName, setObjName] = useState(null);
+  const [objAddress, setObjAddress] = useState(null);
   const [ownCover, setOwnCover] = useState(false);
-  const [plaster, setPlaster] = useState(false);
-  const [plasterValue, setPlasterValue] = useState(false);
+  const [plaster, setPlaster] = useState(1);
   const [secondIns, setSecondIns] = useState(false);
-  const [secondInsAir, setSecondInsAir] = useState('');
-  const [secondInsData, setSecondInsData] = useState('');
-  const [secondInsDensity, setSecondInsDensity] = useState('');
-  const [secondInsMaterial, setSecondInsMaterial] = useState('');
-  const [secondInsName, setSecondInsName] = useState('');
-  const [secondInsLambda, setSecondInsLambda] = useState('');
-  const [secondInsThickness, setSecondInsThickness] = useState('');
-  const [secondInsVapor, setSecondInsVapor] = useState('');
-  const [brickSp, setBrickSp] = useState(false);
-  const [concreteSp, setConcreteSp] = useState(false);
-  const [insSp, setInsSp] = useState(false);
+  const [secondInsAir, setSecondInsAir] = useState(null);
+  const [secondInsData, setSecondInsData] = useState(null);
+  const [secondInsDensity, setSecondInsDensity] = useState(null);
+  const [secondInsMaterial, setSecondInsMaterial] = useState(null);
+  const [secondInsName, setSecondInsName] = useState(null);
+  const [secondInsLambda, setSecondInsLambda] = useState(null);
+  const [secondInsThickness, setSecondInsThickness] = useState(null);
+  const [secondInsVapor, setSecondInsVapor] = useState(null);
   const [secondInsSp, setSecondInsSp] = useState(false);
-  const [vaporMembraneR, setVaporMembraneR] = useState('');
-  const [ventHeight, setVentHeight] = useState('');
-  const [ventIn, setVentIn] = useState('');
-  const [ventMed, setVentMed] = useState('');
-  const [ventOut, setVentOut] = useState('');
+  const [vaporMembraneR, setVaporMembraneR] = useState(null);
+  const [ventHeight, setVentHeight] = useState(null);
+  const [ventIn, setVentIn] = useState(null);
+  const [ventMed, setVentMed] = useState(null);
+  const [ventOut, setVentOut] = useState(null);
   const [vaporMembrane, setVaporMembrane] = useState(false);
-  const [vaporMembraneAir, setVaporMembraneAir] = useState('');
+  const [vaporMembraneAir, setVaporMembraneAir] = useState(null);
   const [windMembrane, setWindMembrane] = useState(false);
-  const [windMembraneR, setWindMembraneR] = useState('');
-  const [windowBrickLength, setWindowBrickLength] = useState('');
-  const [windowConcreteLength, setWindowConcreteLength] = useState('');
+  const [windMembraneR, setWindMembraneR] = useState(null);
+  const [windowBrickLength, setWindowBrickLength] = useState(null);
+  const [windowConcreteLength, setWindowConcreteLength] = useState(null);
   const [windowHeight, setWindowHeight] = useState('1');
   const [windowDepth, setWindowDepth] = useState('1');
-  const [windowLoss, setWindowLoss] = useState('');
-  const [windowLossConcrete, setWindowLossConcrete] = useState('');
+  const [windowLoss, setWindowLoss] = useState(null);
+  const [windowLossConcrete, setWindowLossConcrete] = useState(null);
   const [uKey, setUKey] = useState(1);
 
   function handleAddSecondIns() {
@@ -141,10 +140,10 @@ export default function App(props) {
     setBrickVapor(e.target.value);
   }
   function handleBuildingAim(e) {
-    setBuildingAim(e.target.value);
+    setBuildingAim(parseInt(e.target.value));
   }
   function handleBuildingType(e) {
-    setBuildingType(e.target.value);
+    setBuildingType(parseInt(e.target.value));
   }
   function handleCityValue(e) {
     setCityValue(e.target.value);
@@ -253,7 +252,15 @@ export default function App(props) {
   function handleInnerTemp(e) {
     setInnerTemp(e.target.value);
   }
-
+  function handleObjAddress(e) {
+    setObjAddress(e.target.value);
+  }
+  function handleObjName(e) {
+    setObjName(e.target.value);
+  }
+  function handlePlaster(e) {
+    setPlaster(parseInt(e.target.value));
+  }
   function handleSecondInsAir(e) {
     setSecondInsAir(e.target.value);
   }
@@ -285,15 +292,7 @@ export default function App(props) {
   function handleSecondInsVapor(e) {
     setSecondInsVapor(e.target.value);
   }
-  function handleObjAddress(e) {
-    setObjAddress(e.target.value);
-  }
-  function handleObjName(e) {
-    setObjName(e.target.value);
-  }
-  function handlePlasterValue(e) {
-    setPlasterValue(e.target.value);
-  }
+
   function handleVaporMembraneAir(e) {
     setVaporMembraneAir(e.target.value);
   }
@@ -349,7 +348,8 @@ export default function App(props) {
   }
 
   function toggleConcreteSp() {
-    setConcreteLambda(concreteSp ? '' : cityProp.s === 'А' ? 1.92 : 2.04);
+    setConcreteLambda(concreteSp ? null : cityProp.s === 'А' ? 1.92 : 2.04);
+    setConcreteVapor(concreteSp ? null : 0.03);
     setConcreteSp(!concreteSp);
   }
   function toggleBrickSp() {
@@ -430,7 +430,6 @@ export default function App(props) {
           objAddress,
           ownCover,
           plaster,
-          plasterValue,
           secondIns,
           secondInsAir,
           secondInsData,
@@ -484,7 +483,6 @@ export default function App(props) {
           handleCoverThickness,
           handleD,
           handleDk,
-
           handleDeleteSecondIns,
           handleFinalValues,
           handleGrib,
@@ -501,6 +499,7 @@ export default function App(props) {
           handleK,
           handleMr,
           handleInnerTemp,
+          handlePlaster,
           handleSecondInsAir,
           handleSecondInsThickness,
           handleSecondInsDensity,
@@ -509,7 +508,6 @@ export default function App(props) {
           handleSecondInsVapor,
           handleObjAddress,
           handleObjName,
-          handlePlasterValue,
           handleVaporMembraneAir,
           handleVentHeight,
           handleVentIn,

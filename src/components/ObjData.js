@@ -2,7 +2,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { cities } from './cities';
 import Stack from 'react-bootstrap/Stack';
-import { Button, Col, Container } from 'react-bootstrap';
+import { Button, Col, Container, ProgressBar } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { DefaultContext } from '../contexts/DefaultContext';
@@ -47,6 +47,7 @@ export default function ObjData() {
         handleObjName,
       }) => (
         <div className="objPage">
+          <ProgressBar variant="secondary" now={20} label={`${20}%`} />
           <Row className="mb-5 mt-3">
             <Col>
               <Form.Control placeholder="Название объекта" value={objName} onChange={handleObjName} />
@@ -83,9 +84,9 @@ export default function ObjData() {
                     onChange={handleBuildingType}
                   >
                     <option>Тип конструкции</option>
-                    <option value="1">Монолитная</option>
-                    <option value="2">Монолитно-каркасная</option>
-                    <option value="3">Беcкаркасная</option>
+                    <option value={1}>Монолитная</option>
+                    <option value={2}>Монолитно-каркасная</option>
+                    <option value={3}>Беcкаркасная</option>
                   </Form.Select>
                   {buildingType === '2' ? (
                     <Form.Check
@@ -116,7 +117,7 @@ export default function ObjData() {
                     className="position-relative mt-3"
                     data-tooltip-content="коэф"
                   >
-                    Mr
+                    m<sub>r</sub>
                     <button
                       className="i-btn position-absolute"
                       data-bs-toggle="tooltip"
@@ -141,13 +142,13 @@ export default function ObjData() {
                   </div>
                   <div className="p-2">
                     {`Средняя температура отопительного периода: ${
-                      buildingAim === '2' ? cityProp.t10 || '' : cityProp.t8 || ''
+                      buildingAim === 2 ? cityProp.t10 || '' : cityProp.t8 || ''
                     }`}
                     <sup>o</sup>C
                   </div>
                   <div className="p-2">
                     {`Продолжительсность отопительного периода: ${
-                      buildingAim === '2' ? cityProp.z10 || '' : cityProp.z8 || ''
+                      buildingAim === 2 ? cityProp.z10 || '' : cityProp.z8 || ''
                     }`}
                     сут
                   </div>
@@ -160,6 +161,7 @@ export default function ObjData() {
             </Col>
           </Row>
           <div className="navbnt position-relative mt-3 mb-3"></div>
+
           <Button
             className="btn-next"
             variant="outline-secondary"
