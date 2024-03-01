@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/calc/static/css/main.1a300852.css",
-    "main.js": "/calc/static/js/main.58651dd0.js",
+    "main.css": "/calc/static/css/main.a686b686.css",
+    "main.js": "/calc/static/js/main.98605a14.js",
     "static/media/logo.png": "/calc/static/media/logo.b3a0c512be3f6d961ab7.png",
     "static/media/Inter-Medium.woff": "/calc/static/media/Inter-Medium.9053572c46aeb4b16caa.woff",
     "static/media/Inter-Black.woff": "/calc/static/media/Inter-Black.c6938660eec019fefd68.woff",
@@ -12,14 +12,15 @@
     "static/media/win1.png": "/calc/static/media/win1.b1788aa613c3b95acdad.png",
     "static/media/win2.png": "/calc/static/media/win2.80938b82bd6351cadc94.png",
     "static/media/win3.png": "/calc/static/media/win3.727b1c3207ded82ab81a.png",
+    "static/media/minus.svg": "/calc/static/media/minus.912dff0a5f16a08105d4.svg",
     "index.html": "/calc/index.html",
     "static/media/cross.svg": "/calc/static/media/cross.908972aa71c1d47bc1b3.svg",
     "static/media/plus.svg": "/calc/static/media/plus.cdabed8f886695a62625.svg",
-    "main.1a300852.css.map": "/calc/static/css/main.1a300852.css.map",
-    "main.58651dd0.js.map": "/calc/static/js/main.58651dd0.js.map"
+    "main.a686b686.css.map": "/calc/static/css/main.a686b686.css.map",
+    "main.98605a14.js.map": "/calc/static/js/main.98605a14.js.map"
   },
   "entrypoints": [
-    "static/css/main.1a300852.css",
-    "static/js/main.58651dd0.js"
+    "static/css/main.a686b686.css",
+    "static/js/main.98605a14.js"
   ]
 }
