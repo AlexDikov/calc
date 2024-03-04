@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/calc/static/css/main.bc46590b.css",
-    "main.js": "/calc/static/js/main.bfeba379.js",
+    "main.css": "/calc/static/css/main.65e6ab3b.css",
+    "main.js": "/calc/static/js/main.1b68292b.js",
     "static/media/logo.png": "/calc/static/media/logo.b3a0c512be3f6d961ab7.png",
     "static/media/Inter-Medium.woff": "/calc/static/media/Inter-Medium.9053572c46aeb4b16caa.woff",
     "static/media/Inter-Black.woff": "/calc/static/media/Inter-Black.c6938660eec019fefd68.woff",
@@ -9,18 +9,32 @@
     "static/media/Inter-Medium.woff2": "/calc/static/media/Inter-Medium.293fd13dbca5a3e450ef.woff2",
     "static/media/Inter-Black.woff2": "/calc/static/media/Inter-Black.15ca31c0a2a68f76d2d1.woff2",
     "static/media/Inter-Regular.woff2": "/calc/static/media/Inter-Regular.c8ba52b05a9ef10f4758.woff2",
-    "static/media/win1.png": "/calc/static/media/win1.b1788aa613c3b95acdad.png",
-    "static/media/win2.png": "/calc/static/media/win2.80938b82bd6351cadc94.png",
-    "static/media/win3.png": "/calc/static/media/win3.727b1c3207ded82ab81a.png",
+    "static/media/03.jpg": "/calc/static/media/03.dd39bb1d5ab5e1bb6f78.jpg",
+    "static/media/02.jpg": "/calc/static/media/02.6bc37d4f90459b5a520c.jpg",
+    "static/media/01.jpg": "/calc/static/media/01.f31333aefbb5d7aef128.jpg",
+    "static/media/23.jpg": "/calc/static/media/23.d69465f41af279e966b3.jpg",
+    "static/media/21.jpg": "/calc/static/media/21.86957510b19343b2b26d.jpg",
+    "static/media/22.jpg": "/calc/static/media/22.bf86a77b5d28185f1a33.jpg",
+    "static/media/13.jpg": "/calc/static/media/13.d511ba166bdaec0e62e8.jpg",
+    "static/media/12.jpg": "/calc/static/media/12.18ae63dbb214058fa3a1.jpg",
+    "static/media/11.jpg": "/calc/static/media/11.d6561b3f8179133706c3.jpg",
+    "static/media/7.jpg": "/calc/static/media/7.d4896b4e84e1823558fc.jpg",
+    "static/media/2.jpg": "/calc/static/media/2.e00ae0210a42c95be501.jpg",
+    "static/media/4.jpg": "/calc/static/media/4.a820fe54a66bf5cce6fb.jpg",
+    "static/media/5.jpg": "/calc/static/media/5.04ddc736f79255874e98.jpg",
+    "static/media/8.jpg": "/calc/static/media/8.d418311c43d66a7dbd4c.jpg",
+    "static/media/6.jpg": "/calc/static/media/6.483358ae9c3b2f877d2d.jpg",
+    "static/media/3.jpg": "/calc/static/media/3.224996f4150e395f01bc.jpg",
+    "static/media/1.jpg": "/calc/static/media/1.8a3d798bafa643e90a54.jpg",
     "static/media/minus.svg": "/calc/static/media/minus.912dff0a5f16a08105d4.svg",
     "index.html": "/calc/index.html",
     "static/media/cross.svg": "/calc/static/media/cross.908972aa71c1d47bc1b3.svg",
     "static/media/plus.svg": "/calc/static/media/plus.cdabed8f886695a62625.svg",
-    "main.bc46590b.css.map": "/calc/static/css/main.bc46590b.css.map",
-    "main.bfeba379.js.map": "/calc/static/js/main.bfeba379.js.map"
+    "main.65e6ab3b.css.map": "/calc/static/css/main.65e6ab3b.css.map",
+    "main.1b68292b.js.map": "/calc/static/js/main.1b68292b.js.map"
   },
   "entrypoints": [
-    "static/css/main.bc46590b.css",
-    "static/js/main.bfeba379.js"
+    "static/css/main.65e6ab3b.css",
+    "static/js/main.1b68292b.js"
   ]
 }
