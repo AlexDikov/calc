@@ -5,18 +5,18 @@ import SystData from './SystData';
 import WallData from './WallData';
 import React, { useState } from 'react';
 import BracketData from './BracketData';
-import Calculator from './Calculator';
 import CoverData from './CoverData';
 import { cities } from './cities';
 import { DefaultContext } from '../contexts/DefaultContext';
 import { materials } from './materials';
 import { covers } from './covers';
+import Final from './Final';
 
 export default function App(props) {
   const [addBracket, setAddBracket] = useState([]);
   const [bracketResult, setBracketResult] = useState({});
-  const [brickAir, setBrickAir] = useState(null);
-  const [brickArea, setBrickArea] = useState(null);
+  const [brickAir, setBrickAir] = useState('');
+  const [brickArea, setBrickArea] = useState('');
   const [brickData, setBrickData] = useState(null);
   const [brickDensity, setBrickDensity] = useState(null);
   const [brickMaterial, setBrickMaterial] = useState(null);
@@ -24,19 +24,20 @@ export default function App(props) {
   const [brickLambda, setBrickLambda] = useState(null);
   const [brickSp, setBrickSp] = useState(false);
   const [brickThickness, setBrickThickness] = useState(null);
-  const [brickVapor, setBrickVapor] = useState(null);
+  const [brickType, setBrickType] = useState(false);
+  const [brickVapor, setBrickVapor] = useState('');
   const [buildingAim, setBuildingAim] = useState(null);
   const [buildingType, setBuildingType] = useState(null);
   const [cityProp, setCityProp] = useState({});
   const [cityValue, setCityValue] = useState(null);
   const [concreteAir, setConcreteAir] = useState(null);
-  const [concreteArea, setConcreteArea] = useState(null);
+  const [concreteArea, setConcreteArea] = useState('');
   const [concreteDensity, setConcreteDensity] = useState(null);
-  const [concreteLambda, setConcreteLambda] = useState(null);
+  const [concreteLambda, setConcreteLambda] = useState('');
   const [concreteSpLambda, setConcreteSpLambda] = useState(null);
   const [concreteSp, setConcreteSp] = useState(false);
   const [concreteThickness, setConcreteThickness] = useState(null);
-  const [concreteVapor, setConcreteVapor] = useState(null);
+  const [concreteVapor, setConcreteVapor] = useState('');
   const [concreteWall, setConcreteWall] = useState(false);
   const [coverLambda, setCoverLambda] = useState(null);
   const [cover, setCover] = useState({});
@@ -52,6 +53,7 @@ export default function App(props) {
   const [gribPcs, setGribPcs] = useState(null);
   const [height, setHeight] = useState(null);
   const [humidity, setHumidity] = useState(50);
+  const [humidityZone, setHumidityZone] = useState(false);
   const [innerTemp, setInnerTemp] = useState(20);
   const [insAir, setInsAir] = useState(null);
   const [insData, setInsData] = useState(null);
@@ -109,7 +111,7 @@ export default function App(props) {
     setBrickAir(e.target.value);
   }
   function handleBrickArea(e) {
-    setBrickArea(parseFloat(e.target.value));
+    setBrickArea(e.target.value);
   }
   function handleBrickDensity(event) {
     setBrickDensity(event.target.value);
@@ -121,6 +123,10 @@ export default function App(props) {
         cityProp.s === 'А' ? selectedMaterial.d[selectedDensity].la : selectedMaterial.d[selectedDensity].lb
       );
       setBrickVapor(selectedMaterial.d[selectedDensity].v);
+    }
+    const selectedType = materials['brick'].find((item) => item.t);
+    if (selectedType) {
+      setBrickType(true);
     }
   }
   function handleBrickLambda(e) {
@@ -154,7 +160,7 @@ export default function App(props) {
     setConcreteAir(e.target.value);
   }
   function handleConcreteArea(e) {
-    setConcreteArea(parseFloat(e.target.value));
+    setConcreteArea(e.target.value);
   }
   function handleConcreteDensity(e) {
     setConcreteDensity(e.target.value);
@@ -210,6 +216,9 @@ export default function App(props) {
   }
   function handleHumidity(e) {
     setHumidity(e.target.value);
+  }
+  function handleHumidityZone(value) {
+    setHumidityZone(value);
   }
   function handleInsAir(e) {
     setInsAir(e.target.value);
@@ -350,6 +359,7 @@ export default function App(props) {
   function toggleConcreteSp() {
     setConcreteLambda(concreteSp ? null : cityProp.s === 'А' ? 1.92 : 2.04);
     setConcreteVapor(concreteSp ? null : 0.03);
+    setConcreteAir(concreteSp ? null : 0.00004);
     setConcreteSp(!concreteSp);
   }
   function toggleBrickSp() {
@@ -387,6 +397,7 @@ export default function App(props) {
           brickName,
           brickLambda,
           brickThickness,
+          brickType,
           brickVapor,
           buildingAim,
           buildingType,
@@ -414,6 +425,7 @@ export default function App(props) {
           gribPcs,
           height,
           humidity,
+          humidityZone,
           innerTemp,
           insAir,
           insData,
@@ -490,6 +502,7 @@ export default function App(props) {
           handleGribPcs,
           handleHeight,
           handleHumidity,
+          handleHumidityZone,
           handleInsAir,
           handleInsDensity,
           handleInsLambda,
@@ -544,7 +557,7 @@ export default function App(props) {
           <Route path="/systdata" element={<SystData />}></Route>
           <Route path="/bracketdata" element={<BracketData />}></Route>
           <Route path="/coverdata" element={<CoverData />}></Route>
-          <Route path="/pz" element={<Calculator />}></Route>
+          <Route path="/final" element={<Final />}></Route>
         </Routes>
       </DefaultContext.Provider>
     </div>

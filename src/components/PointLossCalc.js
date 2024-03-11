@@ -11,11 +11,11 @@ export default function PointLossCalc(props) {
       : context.insThickness / context.insLambda;
 
     const wallValue =
-      context.buildingType === '2'
+      context.buildingType === 2
         ? props.isWallType === true
           ? context.concreteLambda
           : context.brickLambda
-        : context.buildingType === '1'
+        : context.buildingType === 1
         ? context.concreteLambda
         : context.brickLambda;
 

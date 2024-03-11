@@ -1,26 +1,16 @@
-.systData {
-    display: flex;
-    flex-direction: column;
-    margin-top: 30px;
-    height: 59vh;
-}
-.add-bracket {
-    background-image: url(../../images/plus.svg);
-    background-position: center;
-    background-size: cover;
-    height: 30px;
-    width: 30px;
-    border: none;
-    background-color: transparent;
-    
-}
 
-.systdata-img {
-    height: 180px;
+.systdata-window-img {
+    height: 130px;
     width: fit-content;
     align-self: center;
     margin: 20px 0 20px;
-    position: absolute;
-    right: 350px;
-    top: 90px
+    
+}
+
+.systdata-grib-img {
+    height: 100px;
+    width: fit-content;
+    align-self: center;
+    margin: 20px 0 20px;
+   
 }

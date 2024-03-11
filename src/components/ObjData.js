@@ -1,11 +1,16 @@
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { cities } from './cities';
-import Stack from 'react-bootstrap/Stack';
-import { Button, Col, Container, ProgressBar } from 'react-bootstrap';
+import { Button, Col, Container, OverlayTrigger, ProgressBar } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { DefaultContext } from '../contexts/DefaultContext';
+import concrete from '../images/concrete.jpeg';
+import map from '../images/map.jpeg';
+import bc from '../images/bc.jpeg';
+import manufacture from '../images/manufacture.jpeg';
+import hospital from '../images/hospital.jpeg';
+import Tooltip from 'react-bootstrap/Tooltip';
 
 export default function ObjData() {
   const navigate = useNavigate();
@@ -23,32 +28,44 @@ export default function ObjData() {
     );
   });
 
+  const buildingPhoto = () => {
+    if (buildingAim === 1) return hospital;
+    if (buildingAim === 2) return bc;
+    if (buildingAim === 3) return manufacture;
+  };
+
   return (
     <DefaultContext.Consumer>
       {({
+        AirCalc,
         buildingAim,
         buildingType,
         cityValue,
         cityProp,
         concreteWall,
-        humidity,
-        innerTemp,
-        mr,
-        objAddress,
-        objName,
+        handleAirCalc,
         handleBuildingAim,
         handleBuildingType,
         handleCityValue,
-        toggleConcreteWall,
         handleHumidity,
+        handleHumidityZone,
         handleInnerTemp,
         handleMr,
         handleObjAddress,
         handleObjName,
+        handleVaporCalc,
+        humidity,
+        humidityZone,
+        innerTemp,
+        mr,
+        objAddress,
+        objName,
+        toggleConcreteWall,
+        vaporCalc,
       }) => (
-        <div className="objPage">
+        <div className="obj-page">
           <ProgressBar variant="secondary" now={20} label={`${20}%`} />
-          <Row className="mb-5 mt-3">
+          <Row className="mb-2 mt-3">
             <Col>
               <Form.Control placeholder="Название объекта" value={objName} onChange={handleObjName} />
             </Col>
@@ -56,81 +73,172 @@ export default function ObjData() {
               <Form.Control placeholder="Адрес объекта" value={objAddress} onChange={handleObjAddress} />
             </Col>
           </Row>
-          <Row>
-            <Col>
-              <div className="objData">
-                <div className="objData__list">
-                  <Form.Select className="mb-3" id="city" value={cityValue} required onChange={handleCityValue}>
-                    <option>Город строительства</option>
-                    {cityList}
-                  </Form.Select>
-                  <Form.Select
-                    className="mb-3"
-                    id="building-aim"
-                    value={buildingAim}
-                    required
-                    onChange={handleBuildingAim}
-                  >
-                    <option>Назначение здания</option>
-                    <option value="1">Жилое</option>
-                    <option value="2">Лечебное</option>
-                    <option value="3">Коммерческое</option>
-                  </Form.Select>
-                  <Form.Select
-                    className="mb-4 "
-                    id="building-type"
-                    value={buildingType}
-                    required
-                    onChange={handleBuildingType}
-                  >
-                    <option>Тип конструкции</option>
-                    <option value={1}>Монолитная</option>
-                    <option value={2}>Монолитно-каркасная</option>
-                    <option value={3}>Беcкаркасная</option>
-                  </Form.Select>
-                  {buildingType === '2' ? (
-                    <Form.Check
-                      className="obj-data__check"
-                      onClick={toggleConcreteWall}
-                      checked={concreteWall}
-                      label="Есть стены из железобетона"
-                    />
-                  ) : null}
-
-                  <Form.Label>
-                    Температура внутреннего воздуха: {innerTemp} <sup>o</sup>C
-                  </Form.Label>
-                  <Form.Range
-                    className="mb-3"
-                    defaultValue="20"
-                    min="16"
-                    max="26"
-                    step="1"
-                    onChange={handleInnerTemp}
-                    id="temp-in"
-                  />
-                  <Form.Label className="letter">Влажность внутреннего воздуха: {humidity} %</Form.Label>
-                  <Form.Range defaultValue="50" min="35" max="65" step="5" onChange={handleHumidity} id="humid-in" />
-                  <Form.Label
-                    htmlFor="mr"
-                    data-tooltip-id="mr-tooltip"
-                    className="position-relative mt-3"
-                    data-tooltip-content="коэф"
-                  >
-                    m<sub>r</sub>
-                    <button
-                      className="i-btn position-absolute"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="right"
-                      title="Высота наибольшего неприрывного участка между входным и выходным зазорами"
-                    ></button>
-                  </Form.Label>
-                  <Form.Control id="mr" value={mr} onChange={handleMr} min={0.63} max={1} />
-                </div>
+          <div className="obj-data">
+            <div className="obj-container">
+              <div className="obj-img">
+                <img className="obj-map" src={map} alt="map" />
               </div>
-            </Col>
-            <Col>
-              <Container className="container">
+              <Form.Select className="mt-3" id="city" value={cityValue} required onChange={handleCityValue}>
+                <option>Город строительства</option>
+                {cityList}
+              </Form.Select>
+            </div>
+            <div className="obj-container">
+              <div className="obj-img">
+                <img className="obj-map" src={buildingPhoto()} alt="map" />
+              </div>
+              <Form.Select className="mt-3" id="building-aim" value={buildingAim} required onChange={handleBuildingAim}>
+                <option>Назначение здания</option>
+                <option value="1">Жилое, лечебное, детское</option>
+                <option value="2">Общественное, административное</option>
+                <option value="3">Производственное </option>
+              </Form.Select>
+            </div>
+            <div className="obj-container">
+              <div className="obj-img">
+                <img className="obj-map" src={concrete} alt="map" />
+              </div>
+              <Form.Select
+                className="mt-3 mb-3 position-relative"
+                id="building-type"
+                value={buildingType}
+                required
+                onChange={handleBuildingType}
+              >
+                <option>Тип конструкции</option>
+                <option value={1}>Монолитная</option>
+                <option value={2}>Монолитно-каркасная</option>
+                <option value={3}>Беcкаркасная</option>
+              </Form.Select>
+              {buildingType === 2 ? (
+                <Form.Check
+                  className="obj-data__check"
+                  onClick={toggleConcreteWall}
+                  checked={concreteWall}
+                  label="Есть стены из железобетона"
+                />
+              ) : null}
+            </div>
+          </div>
+          <div className="d-flex flex-row mt-3 justify-content-between">
+            <div className="obj-param ">
+              <Form.Label className=" position-relative">
+                Температура внутреннего воздуха: {innerTemp} <sup>o</sup>C{' '}
+                <OverlayTrigger
+                  overlay={<Tooltip id="temp">Допустимая температура в помещениях согласно СП 50.13330.2012</Tooltip>}
+                >
+                  <button className="i-btn position-absolute"></button>
+                </OverlayTrigger>
+              </Form.Label>
+              <Form.Range
+                className="mb-3"
+                defaultValue="20"
+                min="16"
+                max="26"
+                step="1"
+                onChange={handleInnerTemp}
+                id="temp-in"
+              />
+              <Form.Label className=" position-relative">
+                Влажность внутреннего воздуха: {humidity} %
+                <OverlayTrigger
+                  overlay={
+                    <Tooltip id="temp">
+                      Для жилых зданий, лечебных учреждений, домов для престарелых и инвалидов, школ и детских домов –
+                      55 %; <br />
+                      для кухонь – 60 %; <br />
+                      для ванных комнат – 65 %; <br />
+                      для теплых подвалов и подполий с коммуникациями – 75 %; <br />
+                      для теплых чердаков жилых зданий – 55 %; <br />
+                      для других помещений общественных зданий – 50 %.
+                    </Tooltip>
+                  }
+                >
+                  <button className="i-btn position-absolute"></button>
+                </OverlayTrigger>
+              </Form.Label>
+              <Form.Range defaultValue="50" min="35" max="100" step="5" onChange={handleHumidity} id="humid-in" />
+            </div>
+            <div className="obj-param position-relative">
+              <button
+                className="i-btn position-absolute"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                title="Учитывать проверку отсутствия точки росы в утеплителе и излишней проницаемости ограждающей конструкции"
+              ></button>
+              <Form.Check
+                className=" ms-2 position-relative"
+                id="mtel-cover"
+                label="Учитывать расчет влагопроницания"
+                checked={vaporCalc}
+                onChange={handleVaporCalc}
+              ></Form.Check>
+
+              <Form.Check
+                className=" ms-2 position-relative"
+                id="mtel-cover"
+                label="Учитывать расчет воздухопроницания"
+                checked={AirCalc}
+                onChange={handleAirCalc}
+              ></Form.Check>
+            </div>
+            <div className="obj-param d-flex flex-column">
+              <Form.Label
+                htmlFor="mr"
+                data-tooltip-id="mr-tooltip"
+                className="position-relative  w-25"
+                data-tooltip-content="коэф"
+              >
+                m<sub>r</sub>
+                <button
+                  className="i-btn position-absolute"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="right"
+                  title="Коэффициент, учитывающий особенности региона строительства. 
+                      По умолчанию принимается 0,63, либо по по разделу 'Энергоэффективность' проекта."
+                ></button>
+              </Form.Label>
+
+              <Form.Control id="mr" className="w-50" value={mr} onChange={handleMr} min={0.63} max={1} />
+            </div>
+            <div className="obj-param">
+              <Form.Label
+                htmlFor="wet-zone"
+                data-tooltip-id="wet-zone"
+                className="position-relative "
+                data-tooltip-content="зона"
+              >
+                Зона влажности
+                <button
+                  className="i-btn position-absolute"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="right"
+                  title="Для населенных пунктов без данных в СП 50 о зоне влажности необходимо выбрать: А - для сухой, Б - для нормальной и влажной"
+                ></button>
+              </Form.Label>
+              {cityProp.s ? (
+                <div>{cityProp.s}</div>
+              ) : (
+                <div className="d-flex">
+                  <Form.Check
+                    className=" ms-2"
+                    id="humidity-a"
+                    label="А"
+                    checked={humidityZone}
+                    onChange={() => handleHumidityZone(true)}
+                  ></Form.Check>
+                  <Form.Check
+                    className=" ms-2"
+                    id="humidity-b"
+                    label="Б"
+                    checked={!humidityZone}
+                    onChange={() => handleHumidityZone(false)}
+                  ></Form.Check>
+                </div>
+              )}
+            </div>
+          </div>
+          {/* <Container className="container">
                 <p>Расчетные параметры атмосферы</p>
                 <Stack gap={0}>
                   <div className="p-2">
@@ -156,10 +264,10 @@ export default function ObjData() {
                   <div className="p-2">
                     {'Максимальная из средних скоростей по румбам за январь: ' + (cityProp.v || '')} м/с
                   </div>
+                  <div className="p-2">{'Зона влажности: ' + (cityProp.s || '')}</div>
                 </Stack>
-              </Container>
-            </Col>
-          </Row>
+              </Container> */}
+
           <div className="navbnt position-relative mt-3 mb-3"></div>
 
           <Button

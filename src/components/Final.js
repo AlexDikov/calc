@@ -1,102 +1,175 @@
-import { useContext, useState } from 'react';
-import { Badge, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
 import { DefaultContext } from '../contexts/DefaultContext';
+import { Col, Form, Row } from 'react-bootstrap';
+import HeatCalc from './HeatCalc';
 
 export default function Final() {
-  const [firstOk, setFirstOk] = useState(false);
-  const [secondOk, setSecondOk] = useState(false);
-  const [thirdOk, setThirdOk] = useState(false);
+  HeatCalc();
 
-  const context = useContext(DefaultContext);
+  const {
+    eGap,
+    gObl,
+    gU,
+    handleInsThickness,
+    handleSecondInsThickness,
+    handleVaporMembraneAir,
+    handlePlasterValue,
+    handleVaporMembraneR,
+    handleVentHeight,
+    handleVentIn,
+    handleVentMed,
+    handleVentOut,
+    insThickness,
+    outE,
+    plaster,
+    rObl,
+    rRed,
+    secondIns,
+    secondInsThickness,
+    vaporMembraneAir,
+    vaporMembraneR,
+    ventHeight,
+    ventIn,
+    ventMed,
+    ventOut,
+  } = useContext(DefaultContext);
 
-  const checkValues = () => {
-    if (context.finalValues.r1 < context.finalValues.r2) setFirstOk(true);
-    if (context.finalValues.e1 < context.finalValues.e2) setSecondOk(true);
-    if (context.finalValues.g1 < context.finalValues.g2) setThirdOk(true);
-  };
-  checkValues();
-
-  const navigate = useNavigate();
+  HeatCalc();
   return (
     <div className="final">
-      {firstOk ? (
-        <div>
-          <h1>
-            <Badge bg="secondary">
-              R<sub>у</sub> {'<'} R<sub>тр</sub>
-            </Badge>
-          </h1>
-          <h1>Условие выполнено</h1>
-        </div>
-      ) : (
-        <div>
-          <h1>
-            <Badge bg="secondary" size="lg">
-              R<sub>у</sub> {'>'} R<sub>тр</sub>
-            </Badge>
-          </h1>
-          <h1>Условие не выполнено! Увеличьте слой утеплителя.</h1>
-        </div>
-      )}
-      {secondOk ? (
-        <div>
-          <h1>
-            <Badge bg="secondary">
-              R<sub>у</sub> {'<'} R<sub>тр</sub>
-            </Badge>
-          </h1>
-          <h1>Условие выполнено!</h1>
-        </div>
-      ) : (
-        <div>
-          <h1>
-            <Badge bg="secondary" size="lg">
-              e<sub>в</sub> {'>'} E<sub>н</sub>
-            </Badge>
-          </h1>
-          <h1>Условие не выполнено!</h1>
-        </div>
-      )}
-      {thirdOk ? (
-        <div className="final">
-          <h1>
-            <Badge bg="secondary">
-              G {'<'} G<sub>тр</sub>
-            </Badge>
-          </h1>
-          <h1>Условие выполнено!</h1>
-        </div>
-      ) : (
-        <div>
-          <h1>
-            <Badge bg="secondary" size="lg">
-              G<sub>у</sub> {'>'} G<sub>тр</sub>
-            </Badge>
-          </h1>
-          <h1>Условие не выполнено!</h1>
-        </div>
-      )}
-      <Button
-        className="btn-previous"
-        variant="outline-secondary"
-        size="sm"
-        onClick={() => {
-          navigate('/coverdata');
-        }}
-      >
-        Назад
-      </Button>
-      <Button
-        className="btn-next"
-        variant="outline-secondary"
-        size="sm"
-        onClick={() => {
-          navigate('/pz');
-        }}
-      >
-        Далее
-      </Button>
+      <div className="final-container">
+        {rRed > rObl ? (
+          <div className="final rounded shadow p-2 mb-2 bg-body-tertiary w-100">
+            <h4>
+              R<sub>у({rRed.toFixed(2)})</sub> {'>'} R<sub>тр({rObl.toFixed(2)})</sub>
+            </h4>
+            <h6>Условие выполнено</h6>
+          </div>
+        ) : (
+          <div className="final  rounded shadow p-2 mb-2 bg-body-tertiary w-100">
+            <h4>
+              R<sub>у({rRed.toFixed(2)})</sub> {'<'} R<sub>тр({rObl.toFixed(2)})</sub>
+            </h4>
+            <Row className="mx-auto">
+              <Col xs={7} className="mt-2">
+                <p>Увеличьте слой утеплителя:</p>
+              </Col>
+              {secondIns ? (
+                <Col xs={4}>
+                  <Form.Control
+                    className="w-25"
+                    placeholder="нижний слой, мм"
+                    value={insThickness ? insThickness * 1000 : null}
+                    onChange={handleInsThickness}
+                  ></Form.Control>
+                  <Form.Control
+                    className="w-25"
+                    placeholder="верхний слой, мм"
+                    value={secondInsThickness ? secondInsThickness * 1000 : null}
+                    onChange={handleSecondInsThickness}
+                  ></Form.Control>
+                </Col>
+              ) : (
+                <Col xs={2}>
+                  <Form.Control
+                    placeholder="мм"
+                    value={insThickness ? insThickness * 1000 : null}
+                    onChange={handleInsThickness}
+                  ></Form.Control>
+                </Col>
+              )}
+            </Row>
+          </div>
+        )}
+        {eGap < outE ? (
+          <div class="final rounded shadow p-2 mb-2 bg-body-tertiary w-100">
+            <h4>
+              e<sub>пр({eGap.toFixed(0)})</sub> {'<'} E<sub>н({outE.toFixed(0)})</sub>
+            </h4>
+            <h6>Условие выполнено</h6>
+          </div>
+        ) : (
+          <div className="final mt-1 rounded shadow p-3 mb-2 bg-body-tertiary ">
+            <h4>
+              e<sub>пр({eGap.toFixed(0)})</sub> {'>'} E<sub>н({outE.toFixed(0)})</sub>
+            </h4>
+            <Row className="ms-auto">
+              <Col xs={7} className="mt-2">
+                <p>Уменьшите высоту прослойки отсечкой: </p>
+              </Col>
+              <Col xs={2}>
+                <Form.Control
+                  className=" ms-4"
+                  placeholder="м"
+                  value={ventHeight}
+                  onChange={handleVentHeight}
+                ></Form.Control>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={14} className="mt-2">
+                <Form.Label>Увеличьте ширину зазора или точек входа/выхода воздуха </Form.Label>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={3}>
+                <Form.Control placeholder="вход, мм" value={ventIn * 1000} onChange={handleVentIn}></Form.Control>
+              </Col>
+              <Col xs={3} className="mx-auto">
+                <Form.Control placeholder="ширина, мм" value={ventMed * 1000} onChange={handleVentMed}></Form.Control>
+              </Col>
+              <Col xs={3}>
+                <Form.Control placeholder="выход, мм" value={ventOut * 1000} onChange={handleVentOut}></Form.Control>
+              </Col>
+            </Row>
+          </div>
+        )}
+        {gU < gObl ? (
+          <div class="final rounded shadow p-2 mb-2 bg-body-tertiary w-100">
+            <h4>
+              G<sub>у({gU.toFixed(3)})</sub> {'<'} G<sub>тр({gObl.toFixed(3)})</sub>
+            </h4>
+            <h6>Условие выполнено</h6>
+          </div>
+        ) : (
+          <div className="final rounded shadow p-3 mb-5 bg-body-tertiary ">
+            <h4>
+              G<sub>у({gU.toFixed(3)})</sub> {'>'} G<sub>тр({gObl.toFixed(3)})</sub>
+            </h4>
+            <p>Добавьте штукатурку или пароизоляцию</p>
+            {plaster ? null : (
+              <Row>
+                <Col>
+                  <Form.Select id="plaster" className=" mx-auto" onChange={handlePlasterValue}>
+                    <option>Штукатурка изнутри</option>
+                    <option value={1}>Нет</option>
+                    <option value={2}>Гипсовая</option>
+                    <option value={3}>Цементная</option>
+                  </Form.Select>
+                </Col>
+              </Row>
+            )}
+            <Row>
+              <Col xs={11}>
+                <Form.Control
+                  id="vapor-membrane-air"
+                  placeholder="Сопротивление воздухопроницанию, м²чПа/кг"
+                  value={vaporMembraneAir}
+                  onChange={handleVaporMembraneAir}
+                />
+              </Col>
+              <Col xs={11}>
+                <Form.Control
+                  id="vapor-membrane-r"
+                  placeholder="Сопротивление паропроницанию, м²чПа/мг"
+                  value={vaporMembraneR}
+                  onChange={handleVaporMembraneR}
+                />
+              </Col>
+            </Row>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

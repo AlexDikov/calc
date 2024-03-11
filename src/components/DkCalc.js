@@ -1,5 +1,4 @@
 import { dk } from './dk';
-import { useContext, useEffect } from 'react';
 export default function DkCalc(props) {
   const ins = () => {
     let ins1, ins2;

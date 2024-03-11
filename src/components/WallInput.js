@@ -112,6 +112,7 @@ export default function WallInput({
               </li>
               <input
                 className="wallInputValue"
+                type="number"
                 id={`${isId}-t`}
                 value={isThickness ? isThickness * 1000 : null}
                 onChange={onThickness}
@@ -127,6 +128,7 @@ export default function WallInput({
                 isId === 'concrete' ? (
                   <input
                     className="wallInputValue"
+                    type="number"
                     id={`${isId}-sp-h`}
                     value={context.concreteLambda}
                     onChange={onLambda}
@@ -134,13 +136,20 @@ export default function WallInput({
                 ) : (
                   <input
                     className="wallInputValue"
+                    type="number"
                     id={`${isId}-sp-h`}
                     value={isSpData ? (context.cityProp.s === 'А' ? isSpData.la : isSpData.lb) : null}
                     onChange={onLambda}
                   ></input>
                 )
               ) : (
-                <input className="wallInputValue" id={`${isId}-h`} defaultValue={isLambda} onChange={onLambda}></input>
+                <input
+                  className="wallInputValue"
+                  type="number"
+                  id={`${isId}-h`}
+                  defaultValue={isLambda}
+                  onChange={onLambda}
+                ></input>
               )}
             </div>
             <div className="wallInputUnit">
@@ -151,17 +160,30 @@ export default function WallInput({
               </li>
               {isSp ? (
                 isId === 'concrete' ? (
-                  <input className="wallInputValue" id={`${isId}-sp-v`} defaultValue={0.03} onChange={onVapor}></input>
+                  <input
+                    className="wallInputValue"
+                    type="number"
+                    id={`${isId}-sp-v`}
+                    defaultValue={0.03}
+                    onChange={onVapor}
+                  ></input>
                 ) : (
                   <input
                     className="wallInputValue"
+                    type="number"
                     id={`${isId}-sp-v`}
                     defaultValue={isSpData ? isSpData.v : null}
                     onChange={onVapor}
                   ></input>
                 )
               ) : (
-                <input className="wallInputValue" id={`${isId}-v`} defaultValue={isVapor} onChange={onVapor}></input>
+                <input
+                  className="wallInputValue"
+                  id={`${isId}-v`}
+                  type="number"
+                  defaultValue={isVapor}
+                  onChange={onVapor}
+                ></input>
               )}
             </div>
             <div className="wallInputUnit">
@@ -172,6 +194,7 @@ export default function WallInput({
               </li>
               <input
                 className="wallInputValue"
+                type="number"
                 id={`${isId}-a`}
                 value={isSp && isId === 'concrete' ? 0.00004 : isAir}
                 onChange={onAir}

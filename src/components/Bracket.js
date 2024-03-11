@@ -32,11 +32,12 @@ export default function Bracket(props) {
         </option>
       );
     if (!bracketType && !bracketWeight)
-      return (
-        <option key={`b-${i}`} value={i}>
-          {list.b.name}
-        </option>
-      );
+      if (list.b)
+        return (
+          <option key={`b-${i}`} value={i}>
+            {list.b.name}
+          </option>
+        );
     return null;
   });
 
@@ -148,6 +149,7 @@ export default function Bracket(props) {
         <Col xs={3}>
           <Form.Control
             placeholder="Количество"
+            type="number"
             className="w-50 mt-2"
             id="bracket-pcs"
             key={`${props.ukey}-pcs`}

@@ -15,11 +15,13 @@ export default function WallData() {
     brickMaterial,
     brickSp,
     brickThickness,
+    brickVapor,
     buildingAim,
     buildingType,
     concreteAir,
     concreteLambda,
     concreteSp,
+    concreteVapor,
     cityProp,
     concreteThickness,
     innerTemp,
@@ -30,6 +32,7 @@ export default function WallData() {
     insMaterial,
     insSp,
     insThickness,
+    insVapor,
     handleBrickAir,
     handleBrickDensity,
     handleBrickLambda,
@@ -83,6 +86,49 @@ export default function WallData() {
     windMembrane,
     windMembraneR,
   } = useContext(DefaultContext);
+
+  const checkValidity = () => {
+    if (buildingType === 1)
+      return (
+        concreteThickness &&
+        concreteLambda &&
+        concreteVapor &&
+        concreteAir &&
+        insThickness &&
+        insLambda &&
+        insVapor &&
+        insAir &&
+        (secondIns ? secondInsThickness && insLambda && insVapor && insAir : true)
+      );
+    if (buildingType === 2)
+      return (
+        concreteThickness &&
+        concreteLambda &&
+        concreteVapor &&
+        concreteAir &&
+        brickThickness &&
+        brickLambda &&
+        brickVapor &&
+        brickAir &&
+        insThickness &&
+        insLambda &&
+        insVapor &&
+        insAir &&
+        (secondIns ? secondInsThickness && insLambda && insVapor && insAir : true)
+      );
+    if (buildingType === 3)
+      return (
+        brickThickness &&
+        brickLambda &&
+        brickVapor &&
+        brickAir &&
+        insThickness &&
+        insLambda &&
+        insVapor &&
+        insAir &&
+        (secondIns ? secondInsThickness && insLambda && insVapor && insAir : true)
+      );
+  };
 
   const b = () => {
     if (buildingAim === 1) return 1.4;
@@ -209,37 +255,15 @@ export default function WallData() {
           ) : null}
         </div>
         <div className="wall-options">
-          <Form.Select id="plaster" onChange={handlePlaster}>
-            <option>Штукатурка изнутри</option>
+          <Form.Label className="ms-3">Штукатурка изнутри</Form.Label>
+          <Form.Select className="w-50" id="plaster" onChange={handlePlaster}>
             <option value={1}>Нет</option>
             <option value={2}>Гипсовая</option>
             <option value={3}>Цементная</option>
           </Form.Select>
+
           <Form.Check
-            className="mt-3 ms-2"
-            id="vapor-membrane"
-            label="Пароизоляция"
-            checked={vaporMembrane}
-            onChange={handleVaporMembrane}
-          ></Form.Check>
-          {vaporMembrane ? (
-            <>
-              <Form.Control
-                id="vapor-membrane-r"
-                placeholder="Сопротивление паропроницанию, м²чПа/мг"
-                value={vaporMembraneR}
-                onChange={handleVaporMembraneR}
-              />
-              <Form.Control
-                id="vapor-membrane-air"
-                placeholder="Сопротивление воздухопроницанию, м²чПа/кг"
-                value={vaporMembraneAir}
-                onChange={handleVaporMembraneAir}
-              />
-            </>
-          ) : null}
-          <Form.Check
-            className="mt-3 ms-2"
+            className="mt-3 ms-4"
             id="wind-membrane"
             label="Ветрозащита"
             checked={windMembrane}
@@ -248,6 +272,7 @@ export default function WallData() {
           {windMembrane ? (
             <Form.Control
               id="wind-membrane-r"
+              type="number"
               placeholder="Сопротивление паропроницанию, м²чПа/мг"
               value={windMembraneR}
               onChange={handleWindMembraneR}
@@ -259,7 +284,7 @@ export default function WallData() {
           variant="outline-secondary"
           size="sm"
           onClick={() => {
-            navigate('/');
+            navigate('/objdata');
           }}
         >
           Назад
@@ -269,8 +294,11 @@ export default function WallData() {
           variant="outline-secondary"
           size="sm"
           onClick={() => {
-            navigate('/systdata');
+            if (checkValidity()) {
+              navigate('/systdata');
+            }
           }}
+          disabled={!checkValidity()}
         >
           Далее
         </Button>
