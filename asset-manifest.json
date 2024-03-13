@@ -1,8 +1,13 @@
 {
   "files": {
-    "main.css": "/calc/static/css/main.667fe24f.css",
-    "main.js": "/calc/static/js/main.7a5ac08a.js",
+    "main.css": "/calc/static/css/main.abb18d99.css",
+    "main.js": "/calc/static/js/main.25c80fdf.js",
     "static/media/logo.png": "/calc/static/media/logo.b3a0c512be3f6d961ab7.png",
+    "static/media/concrete.jpeg": "/calc/static/media/concrete.5591de2e5fcd23357c25.jpeg",
+    "static/media/manufacture.jpeg": "/calc/static/media/manufacture.fde85a2f423ccecd3bee.jpeg",
+    "static/media/bc.jpeg": "/calc/static/media/bc.100ad4596979b20202e5.jpeg",
+    "static/media/map.jpeg": "/calc/static/media/map.d3a416b13bf2842f1374.jpeg",
+    "static/media/hospital.jpeg": "/calc/static/media/hospital.591fdfb8383809b74268.jpeg",
     "static/media/Inter-Medium.woff": "/calc/static/media/Inter-Medium.9053572c46aeb4b16caa.woff",
     "static/media/Inter-Black.woff": "/calc/static/media/Inter-Black.c6938660eec019fefd68.woff",
     "static/media/Inter-Regular.woff": "/calc/static/media/Inter-Regular.8c206db99195777c6769.woff",
@@ -30,11 +35,11 @@
     "index.html": "/calc/index.html",
     "static/media/cross.svg": "/calc/static/media/cross.908972aa71c1d47bc1b3.svg",
     "static/media/plus.svg": "/calc/static/media/plus.cdabed8f886695a62625.svg",
-    "main.667fe24f.css.map": "/calc/static/css/main.667fe24f.css.map",
-    "main.7a5ac08a.js.map": "/calc/static/js/main.7a5ac08a.js.map"
+    "main.abb18d99.css.map": "/calc/static/css/main.abb18d99.css.map",
+    "main.25c80fdf.js.map": "/calc/static/js/main.25c80fdf.js.map"
   },
   "entrypoints": [
-    "static/css/main.667fe24f.css",
-    "static/js/main.7a5ac08a.js"
+    "static/css/main.abb18d99.css",
+    "static/js/main.25c80fdf.js"
   ]
 }
