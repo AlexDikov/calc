@@ -41,6 +41,28 @@ export default function CoverData() {
         <div>
           <ProgressBar variant="secondary" now={99} label={`${99}%`} />
           <div className="d-flex justify-content-between">
+            <Button
+              className="mt-2"
+              variant="outline-secondary"
+              size="sm"
+              onClick={() => {
+                navigate('/bracketdata');
+              }}
+            >
+              Назад
+            </Button>
+            <Button
+              className="mt-2"
+              variant="outline-secondary"
+              size="sm"
+              onClick={() => {
+                navigate('/final');
+              }}
+            >
+              Далее
+            </Button>
+          </div>
+          <div className="d-flex justify-content-between">
             <div>
               <SystInput
                 xs1={9}
@@ -181,29 +203,6 @@ export default function CoverData() {
               )}
             </div>
           </div>
-
-          <Button
-            className="btn-previous"
-            variant="outline-secondary"
-            size="sm"
-            onClick={() => {
-              navigate('/bracketdata');
-            }}
-          >
-            Назад
-          </Button>
-          <Button
-            className="btn-next"
-            variant="outline-secondary"
-            size="sm"
-            onClick={() => {
-              navigate('/final');
-            }}
-          >
-            Далее
-          </Button>
-          <LinearLossCalc />
-          {concreteWall && <LinearLossCalcConcrete />}
         </div>
       )}
     </DefaultContext.Consumer>

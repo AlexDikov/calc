@@ -7,12 +7,13 @@ export default function PointLossCalc(props) {
   const context = useContext(DefaultContext);
   useEffect(() => {
     const insValue = context.secondIns
-      ? context.insThickness / context.insLambda + context.secondInsThickness / context.secondInsLambda
+      ? parseFloat(context.insThickness / context.insLambda) +
+        parseFloat(context.secondInsThickness / context.secondInsLambda)
       : context.insThickness / context.insLambda;
 
     const wallValue =
       context.buildingType === 2
-        ? props.isWallType === true
+        ? props.isWallType
           ? context.concreteLambda
           : context.brickLambda
         : context.buildingType === 1

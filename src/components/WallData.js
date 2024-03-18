@@ -148,17 +148,49 @@ export default function WallData() {
     if (buildingType === 3) return 1.4;
   };
 
+  const brickQ = brickThickness && brickThickness / brickLambda;
+
+  const concreteQ = concreteThickness && concreteThickness / concreteLambda;
+
   const rObl = (a() * gsop + b()) * mr;
   const preIns =
-    (k() * rObl - concreteThickness / concreteLambda - brickThickness / brickLambda - 1 / 8.7 - 1 / 12) *
-    (secondIns
-      ? (insThickness / (insThickness + secondInsThickness)) * insLambda +
-        (secondInsThickness / (insThickness + secondInsThickness)) * secondInsLambda
-      : insLambda);
+    Math.ceil(
+      (k() * rObl - concreteQ - brickQ - 1 / 8.7 - 1 / 12) *
+        (secondIns
+          ? (insThickness / (insThickness + secondInsThickness)) * insLambda +
+            (secondInsThickness / (insThickness + secondInsThickness)) * secondInsLambda
+          : insLambda) *
+        100
+    ) * 10;
 
   return (
     <>
       <ProgressBar variant="secondary" now={40} label={`${40}%`} />
+      <div className="d-flex justify-content-between">
+        <Button
+          className="mt-2"
+          variant="outline-secondary"
+          size="sm"
+          onClick={() => {
+            navigate('/');
+          }}
+        >
+          Назад
+        </Button>
+        <Button
+          className="mt-2"
+          variant="outline-secondary"
+          size="sm"
+          onClick={() => {
+            if (checkValidity()) {
+              navigate('/systdata');
+            }
+          }}
+          disabled={!checkValidity()}
+        >
+          Далее
+        </Button>
+      </div>
       <div className="wall">
         <div className="wallData">
           {buildingType !== 3 ? (
@@ -223,13 +255,6 @@ export default function WallData() {
             onName={handleInsMaterial}
             onName2={handleInsName}
           />
-          {/* ({k} ∙ {rObl.toFixed(2)}
-            {concreteThickness ? concreteThickness / concreteLambda : null}
-            {brickThickness ? brickThickness / brickLambda : null} - 1 / 8.7 - 1 / 12) ∙ (
-            {secondIns
-              ? (insThickness / (insThickness + secondInsThickness)) * insLambda +
-                (secondInsThickness / (insThickness + secondInsThickness)) * secondInsLambda
-              : insLambda} */}
           {secondIns ? (
             <WallInput
               isAir={secondInsAir}
@@ -256,14 +281,13 @@ export default function WallData() {
         </div>
         <div className="wall-options">
           <Form.Label className="ms-3">Штукатурка изнутри</Form.Label>
-          <Form.Select className="w-50" id="plaster" onChange={handlePlaster}>
+          <Form.Select id="plaster" onChange={handlePlaster}>
             <option value={1}>Нет</option>
             <option value={2}>Гипсовая</option>
             <option value={3}>Цементная</option>
           </Form.Select>
-
           <Form.Check
-            className="mt-3 ms-4"
+            className="mt-3 ms-4 w-25"
             id="wind-membrane"
             label="Ветрозащита"
             checked={windMembrane}
@@ -271,37 +295,15 @@ export default function WallData() {
           ></Form.Check>
           {windMembrane ? (
             <Form.Control
+              className="w-50"
               id="wind-membrane-r"
               type="number"
-              placeholder="Сопротивление паропроницанию, м²чПа/мг"
+              placeholder="м²чПа/мг"
               value={windMembraneR}
               onChange={handleWindMembraneR}
             />
           ) : null}
         </div>
-        <Button
-          className="btn-previous"
-          variant="outline-secondary"
-          size="sm"
-          onClick={() => {
-            navigate('/objdata');
-          }}
-        >
-          Назад
-        </Button>
-        <Button
-          className="btn-next"
-          variant="outline-secondary"
-          size="sm"
-          onClick={() => {
-            if (checkValidity()) {
-              navigate('/systdata');
-            }
-          }}
-          disabled={!checkValidity()}
-        >
-          Далее
-        </Button>
       </div>
     </>
   );

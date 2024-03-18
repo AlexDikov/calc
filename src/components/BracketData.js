@@ -4,54 +4,56 @@ import { Button, ProgressBar } from 'react-bootstrap';
 import { useContext, useState } from 'react';
 import React from 'react';
 import { DefaultContext } from '../contexts/DefaultContext';
+import LinearLossCalc from './LinearLossCalc';
+import LinearLossCalcConcrete from './LinearLossCalcConcrete';
 
 export default function BracketData(props) {
   const navigate = useNavigate();
 
-  const context = useContext(DefaultContext);
+  const { addBracket, airCalc, concreteWall, setAddBracket, setUKey, vaporCalc, uKey } = useContext(DefaultContext);
 
   function addBracketInput() {
-    context.setAddBracket((prevBrackets) => [
+    setAddBracket((prevBrackets) => [
       ...prevBrackets,
       React.cloneElement(<Bracket />, {
-        key: context.uKey,
-        ukey: context.uKey,
+        key: uKey,
+        ukey: uKey,
       }),
     ]);
-    context.setUKey((prevKey) => prevKey + 1);
+    setUKey((prevKey) => prevKey + 1);
   }
 
   return (
-    <DefaultContext.Consumer>
-      {(context) => (
-        <div className="bracketData">
-          <ProgressBar variant="secondary" now={80} label={`${80}%`} />
-          <Bracket ukey={0} hide={true} />
-          {context.addBracket}
-          <button className="add-bracket" key="add-btn" onClick={addBracketInput}></button>
+    <div className="bracketData">
+      <ProgressBar variant="secondary" now={80} label={`${80}%`} />
+      <div className="d-flex justify-content-between">
+        <Button
+          className="mt-2"
+          variant="outline-secondary"
+          size="sm"
+          onClick={() => {
+            navigate('/systdata');
+          }}
+        >
+          Назад
+        </Button>
+        <Button
+          className="mt-2"
+          variant="outline-secondary"
+          size="sm"
+          onClick={() => {
+            navigate(vaporCalc || airCalc ? '/coverdata' : '/final');
+          }}
+        >
+          Далее
+        </Button>
+      </div>
+      <Bracket ukey={0} hide={true} />
+      {addBracket}
+      <button className="add-bracket" key="add-btn" onClick={addBracketInput}></button>
 
-          <Button
-            className="btn-previous"
-            variant="outline-secondary"
-            size="sm"
-            onClick={() => {
-              navigate('/systdata');
-            }}
-          >
-            Назад
-          </Button>
-          <Button
-            className="btn-next"
-            variant="outline-secondary"
-            size="sm"
-            onClick={() => {
-              navigate('/coverdata');
-            }}
-          >
-            Далее
-          </Button>
-        </div>
-      )}
-    </DefaultContext.Consumer>
+      <LinearLossCalc />
+      <LinearLossCalcConcrete />
+    </div>
   );
 }

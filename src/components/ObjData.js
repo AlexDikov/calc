@@ -5,7 +5,9 @@ import { Button, Col, Container, OverlayTrigger, ProgressBar } from 'react-boots
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { DefaultContext } from '../contexts/DefaultContext';
-import concrete from '../images/concrete.jpeg';
+import concrete from '../images/concrete.jpg';
+import block from '../images/block.jpg';
+import brick from '../images/brick.jpg';
 import map from '../images/map.jpeg';
 import bc from '../images/bc.jpeg';
 import manufacture from '../images/manufacture.jpeg';
@@ -34,16 +36,20 @@ export default function ObjData() {
     if (buildingAim === 3) return manufacture;
   };
 
+  const wallPhoto = () => {
+    if (buildingType === 1) return concrete;
+    if (buildingType === 2) return block;
+    if (buildingType === 3) return brick;
+  };
+
   return (
     <DefaultContext.Consumer>
       {({
-        AirCalc,
         buildingAim,
         buildingType,
         cityValue,
         cityProp,
         concreteWall,
-        handleAirCalc,
         handleBuildingAim,
         handleBuildingType,
         handleCityValue,
@@ -65,7 +71,24 @@ export default function ObjData() {
       }) => (
         <div className="obj-page">
           <ProgressBar variant="secondary" now={20} label={`${20}%`} />
-          <Row className="mb-2 mt-3">
+          <div className="d-flex justify-content-end">
+            <Button
+              className="mt-2"
+              variant="outline-secondary"
+              size="sm"
+              onClick={() => {
+                if (checkValidity()) {
+                  navigate('/walldata');
+                } else {
+                  alert('ХУЙ!');
+                }
+              }}
+              disabled={!checkValidity()}
+            >
+              Далее
+            </Button>
+          </div>
+          <Row className="mb-2 mt-2">
             <Col>
               <Form.Control placeholder="Название объекта" value={objName} onChange={handleObjName} />
             </Col>
@@ -85,7 +108,7 @@ export default function ObjData() {
             </div>
             <div className="obj-container">
               <div className="obj-img">
-                <img className="obj-map" src={buildingPhoto()} alt="map" />
+                <img className="obj-map" src={buildingAim ? buildingPhoto() : bc} alt="map" />
               </div>
               <Form.Select className="mt-3" id="building-aim" value={buildingAim} required onChange={handleBuildingAim}>
                 <option>Назначение здания</option>
@@ -96,7 +119,7 @@ export default function ObjData() {
             </div>
             <div className="obj-container">
               <div className="obj-img">
-                <img className="obj-map" src={concrete} alt="map" />
+                <img className="obj-map" src={buildingType ? wallPhoto() : concrete} alt="map" />
               </div>
               <Form.Select
                 className="mt-3 mb-3 position-relative"
@@ -169,17 +192,9 @@ export default function ObjData() {
               <Form.Check
                 className=" ms-2 position-relative"
                 id="mtel-cover"
-                label="Учитывать расчет влагопроницания"
+                label="Учитывать расчет влаго/воздухопроницания"
                 checked={vaporCalc}
                 onChange={handleVaporCalc}
-              ></Form.Check>
-
-              <Form.Check
-                className=" ms-2 position-relative"
-                id="mtel-cover"
-                label="Учитывать расчет воздухопроницания"
-                checked={AirCalc}
-                onChange={handleAirCalc}
               ></Form.Check>
             </div>
             <div className="obj-param d-flex flex-column">
@@ -269,22 +284,6 @@ export default function ObjData() {
               </Container> */}
 
           <div className="navbnt position-relative mt-3 mb-3"></div>
-
-          <Button
-            className="btn-next"
-            variant="outline-secondary"
-            size="sm"
-            onClick={() => {
-              if (checkValidity()) {
-                navigate('/walldata');
-              } else {
-                alert('ХУЙ!');
-              }
-            }}
-            disabled={!checkValidity()}
-          >
-            Далее
-          </Button>
         </div>
       )}
     </DefaultContext.Consumer>

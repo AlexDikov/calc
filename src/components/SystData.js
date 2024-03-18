@@ -30,7 +30,7 @@ export default function SystData() {
     concreteWall,
     windowDepth,
     windowConcreteLength,
-    windowLength,
+    windowBrickLength,
     windowHeight,
     gribDepth,
     gribConcretePcs,
@@ -44,11 +44,11 @@ export default function SystData() {
     if (buildingType === 2)
       return (
         brickArea &&
-        windowLength &&
+        windowBrickLength &&
         gribPcs &&
         (concreteWall ? concreteArea && windowConcreteLength && gribConcretePcs : true)
       );
-    if (buildingType === 3) return brickArea && windowLength && gribPcs;
+    if (buildingType === 3) return brickArea && windowBrickLength && gribPcs;
   };
 
   const windowPic = () => {
@@ -98,6 +98,31 @@ export default function SystData() {
       }) => (
         <div>
           <ProgressBar variant="secondary" now={60} label={`${60}%`} />
+          <div className="d-flex justify-content-between">
+            <Button
+              className="mt-2"
+              variant="outline-secondary"
+              size="sm"
+              onClick={() => {
+                navigate('/walldata');
+              }}
+            >
+              Назад
+            </Button>
+            <Button
+              className="mt-2"
+              variant="outline-secondary"
+              size="sm"
+              onClick={() => {
+                if (checkValidity()) {
+                  navigate('/bracketdata');
+                }
+              }}
+              disabled={!checkValidity()}
+            >
+              Далее
+            </Button>
+          </div>
           <div className="d-flex justify-content-between mt-1">
             <div>
               {buildingType !== 1 ? (
@@ -145,7 +170,7 @@ export default function SystData() {
                   xs2={2}
                   id={'window-length'}
                   type="number"
-                  text={`Длина оконных откосов, ${concreteWall ? 'образованных кладкой, ' : null}м`}
+                  text={`Длина оконных откосов, ${concreteWall ? 'образованных кладкой, ' : ''}м`}
                   iValue={windowBrickLength}
                   method={handleWindowBrickLength}
                 />
@@ -288,29 +313,6 @@ export default function SystData() {
               </div>
             </div>
           </div>
-          <Button
-            className="btn-previous"
-            variant="outline-secondary"
-            size="sm"
-            onClick={() => {
-              navigate('/walldata');
-            }}
-          >
-            Назад
-          </Button>
-          <Button
-            className="btn-next"
-            variant="outline-secondary"
-            size="sm"
-            onClick={() => {
-              if (checkValidity()) {
-                navigate('/bracketdata');
-              }
-            }}
-            disabled={!checkValidity()}
-          >
-            Далее
-          </Button>
         </div>
       )}
     </DefaultContext.Consumer>

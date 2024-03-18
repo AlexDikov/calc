@@ -19,8 +19,7 @@ export default function LinearLossCalcConcrete() {
 
   useEffect(() => {
     const insValue = secondIns
-      ? (insThickness / (insThickness + secondInsThickness)) * insLambda +
-        (secondInsThickness / (insThickness + secondInsThickness)) * secondInsLambda
+      ? insThickness / insLambda + secondInsThickness / secondInsLambda
       : insThickness / insLambda;
     const wallValue = concreteLambda;
 

@@ -1,24 +1,23 @@
 export const brackets = [
-  { a: { name: 'MFT-MF HS', value: 1 }, b: { name: 'MFT-MF HS(sts)', value: 2 } },
-  { a: { name: 'MFT-MF S', value: 3 } },
-  { a: { name: 'MFT-MF M', value: 5 }, b: { name: 'MFT-MF M(sts)', value: 6 }, c: { name: 'MFT-RB M', value: 7 } },
+  { a: { name: 'MFT-MF HS' }, b: { name: 'MFT-MF HS(sts)' } },
+  { a: { name: 'MFT-MF S' } },
+  { a: { name: 'MFT-MF M' }, b: { name: 'MFT-MF M(sts)' }, c: { name: 'MFT-RB M' } },
   {
-    a: { name: 'MFT-MF LM', value: 8 },
-    b: { name: 'MFT-MF LM(perf)', value: 9 },
-    c: { name: 'MFT-RB LM', value: 10 },
-    d: { name: 'MFT-RB LM(perf)', value: 11 },
+    a: { name: 'MFT-MF LM' },
+    b: { name: 'MFT-MF LM(perf)' },
+    d: { name: 'MFT-RB LM(perf)' },
   },
   {
-    a: { name: 'MFT-MF L', value: 12 },
-    b: { name: 'MFT-MF L(perf)', value: 13 },
-    c: { name: 'MFT-RB L', value: 14 },
-    d: { name: 'MFT-RB L(perf)', value: 15 },
+    a: { name: 'MFT-MF L' },
+    b: { name: 'MFT-MF L(perf)' },
+    c: { name: 'MFT-RB L' },
+    d: { name: 'MFT-RB L(perf)' },
   },
   {
-    a: { name: null, value: 17 },
-    b: { name: 'MFT-MF LH(perf)', value: 17 },
-    c: { name: 'MFT-RB LH', value: 18 },
-    d: { name: 'MFT-RB LH(perf)', value: 19 },
+    a: { name: 'MFT-MF LH' },
+    b: { name: 'MFT-MF LH(perf)' },
+    c: { name: 'MFT-RB LH' },
+    d: { name: 'MFT-RB LH(perf)' },
   },
 ];
 
@@ -29,7 +28,6 @@ export const bracketData = [
     r2: { l1: 0.0104, l2: 0.016, l3: 0.03, l4: 0.041, l5: 0.046 },
     r3: { l1: 0.0146, l2: 0.019, l3: 0.03, l4: 0.037, l5: 0.041 },
     r4: { l1: 0.0174, l2: 0.021, l3: 0.03, l4: 0.034, l5: 0.037 },
-    value: 1,
   },
   {
     name: 'MFT-MF S',
@@ -37,23 +35,20 @@ export const bracketData = [
     r2: { l1: 0.011, l2: 0.017, l3: 0.032, l4: 0.044, l5: 0.05 },
     r3: { l1: 0.015, l2: 0.02, l3: 0.033, l4: 0.041, l5: 0.046 },
     r4: { l1: 0.017, l2: 0.022, l3: 0.034, l4: 0.039, l5: 0.043 },
-    value: 3,
   },
   {
     name: 'MFT-MF M',
-    r1: { l1: 0.0046, l2: 0.007, l3: 0.013, l4: 0.018, l5: 0.02 },
-    r2: { l1: 0.0064, l2: 0.008, l3: 0.012, l4: 0.012, l5: 0.015 },
-    r3: { l1: 0.0062, l2: 0.007, l3: 0.009, l4: 0.009, l5: 0.012 },
-    r4: { l1: 0.0061, l2: 0.006, l3: 0.007, l4: 0.007, l5: 0.01 },
-    value: 5,
+    r1: { l1: 0.006, l2: 0.012, l3: 0.027, l4: 0.041, l5: 0.0472 },
+    r2: { l1: 0.0113, l2: 0.0175, l3: 0.033, l4: 0.045, l5: 0.051 },
+    r3: { l1: 0.0161, l2: 0.0215, l3: 0.035, l4: 0.044, l5: 0.049 },
+    r4: { l1: 0.0193, l2: 0.0242, l3: 0.037, l4: 0.043, l5: 0.0476 },
   },
   {
     name: 'MFT-MF LM',
-    r1: { l1: 0.0056, l2: 0.008, l3: 0.014, l4: 0.019, l5: 0.02 },
-    r2: { l1: 0.064, l2: 0.008, l3: 0.012, l4: 0.015, l5: 0.017 },
-    r3: { l1: 0.068, l2: 0.008, l3: 0.011, l4: 0.012, l5: 0.013 },
-    r4: { l1: 0.007, l2: 0.008, l3: 0.01, l4: 0.01, l5: 0.011 },
-    value: 8,
+    r1: { l1: 0.0065, l2: 0.0135, l3: 0.031, l4: 0.048, l5: 0.0553 },
+    r2: { l1: 0.0124, l2: 0.02, l3: 0.039, l4: 0.054, l5: 0.0614 },
+    r3: { l1: 0.0185, l2: 0.0255, l3: 0.043, l4: 0.055, l5: 0.0615 },
+    r4: { l1: 0.0226, l2: 0.0292, l3: 0.0457, l4: 0.0557, l5: 0.0616 },
   },
   {
     name: 'MFT-MF L',
@@ -64,10 +59,10 @@ export const bracketData = [
   },
   {
     name: 'MFT-MF LH',
-    r1: { l1: 0.0068, l2: 0.01, l3: 0.018, l4: 0.025, l5: 0.028 },
-    r2: { l1: 0.0086, l2: 0.011, l3: 0.017, l4: 0.021, l5: 0.023 },
-    r3: { l1: 0.0094, l2: 0.011, l3: 0.015, l4: 0.017, l5: 0.018 },
-    r4: { l1: 0.01, l2: 0.011, l3: 0.014, l4: 0.014, l5: 0.015 },
+    r1: { l1: 0.007, l2: 0.0162, l3: 0.038, l4: 0.0585, l5: 0.0675 },
+    r2: { l1: 0.015, l2: 0.0239, l3: 0.0463, l4: 0.0671, l5: 0.0763 },
+    r3: { l1: 0.023, l2: 0.031, l3: 0.0519, l4: 0.0697, l5: 0.078 },
+    r4: { l1: 0.028, l2: 0.0357, l3: 0.0557, l4: 0.0714, l5: 0.079 },
   },
   {
     name: 'MFT-RB S',
@@ -82,7 +77,6 @@ export const bracketData = [
     r2: { l1: 0.011, l2: 0.018, l3: 0.034, l4: 0.046, l5: 0.052 },
     r3: { l1: 0.018, l2: 0.024, l3: 0.039, l4: 0.049, l5: 0.055 },
     r4: { l1: 0.022, l2: 0.028, l3: 0.042, l4: 0.051, l5: 0.056 },
-    value: 7,
   },
   {
     name: 'MFT-RB L',
@@ -105,7 +99,6 @@ export const bracketData = [
     r2: { l1: 0.0044, l2: 0.006, l3: 0.01, l4: 0.012, l5: 0.013 },
     r3: { l1: 0.0042, l2: 0.005, l3: 0.007, l4: 0.008, l5: 0.009 },
     r4: { l1: 0.0041, l2: 0.004, l3: 0.005, l4: 0.005, l5: 0.006 },
-    value: 2,
   },
 
   {
@@ -114,7 +107,6 @@ export const bracketData = [
     r2: { l1: 0.004, l2: 0.006, l3: 0.01, l4: 0.012, l5: 0.0133 },
     r3: { l1: 0.004, l2: 0.005, l3: 0.007, l4: 0.008, l5: 0.0087 },
     r4: { l1: 0.004, l2: 0.0043, l3: 0.005, l4: 0.0053, l5: 0.0056 },
-    value: 6,
   },
   {
     name: 'MFT-MF LM(perf)',
@@ -122,7 +114,6 @@ export const bracketData = [
     r2: { l1: 0.0064, l2: 0.008, l3: 0.012, l4: 0.015, l5: 0.0165 },
     r3: { l1: 0.0068, l2: 0.008, l3: 0.011, l4: 0.012, l5: 0.0129 },
     r4: { l1: 0.0071, l2: 0.008, l3: 0.0103, l4: 0.01, l5: 0.0106 },
-    value: 9,
   },
   {
     name: 'MFT-MF L(perf)',

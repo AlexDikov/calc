@@ -81,6 +81,7 @@ export default function App(props) {
   const [secondInsThickness, setSecondInsThickness] = useState(null);
   const [secondInsVapor, setSecondInsVapor] = useState(null);
   const [secondInsSp, setSecondInsSp] = useState(false);
+  const [vaporCalc, setVaporCalc] = useState(false);
   const [vaporMembraneR, setVaporMembraneR] = useState(null);
   const [ventHeight, setVentHeight] = useState(null);
   const [ventIn, setVentIn] = useState(null);
@@ -101,6 +102,7 @@ export default function App(props) {
   function handleAddSecondIns() {
     setSecondIns(true);
   }
+
   function handleBracketResult({ index, value, bracket, pcs, type, weight, wall }) {
     setBracketResult((prevBracketResult) => ({
       ...prevBracketResult,
@@ -123,6 +125,7 @@ export default function App(props) {
         cityProp.s === 'А' ? selectedMaterial.d[selectedDensity].la : selectedMaterial.d[selectedDensity].lb
       );
       setBrickVapor(selectedMaterial.d[selectedDensity].v);
+      setBrickAir(selectedMaterial.d[selectedDensity].a);
     }
     const selectedType = materials['brick'].find((item) => item.t);
     if (selectedType) {
@@ -234,6 +237,7 @@ export default function App(props) {
         cityProp.s === 'А' ? selectedMaterial.d[selectedDensity].la : selectedMaterial.d[selectedDensity].lb
       );
       setInsVapor(selectedMaterial.d[selectedDensity].v);
+      setInsAir(selectedMaterial.d[selectedDensity].a);
     }
   }
   function handleInsLambda(event) {
@@ -286,6 +290,7 @@ export default function App(props) {
         cityProp.s === 'А' ? selectedMaterial.d[selectedDensity].la : selectedMaterial.d[selectedDensity].lb
       );
       setSecondInsVapor(selectedMaterial.d[selectedDensity].v);
+      setSecondInsAir(selectedMaterial.d[selectedDensity].a);
     }
   }
   function handleSecondInsLambda(e) {
@@ -301,7 +306,9 @@ export default function App(props) {
   function handleSecondInsVapor(e) {
     setSecondInsVapor(e.target.value);
   }
-
+  function handleVaporCalc(value) {
+    setVaporCalc(value);
+  }
   function handleVaporMembraneAir(e) {
     setVaporMembraneAir(e.target.value);
   }
@@ -383,6 +390,32 @@ export default function App(props) {
     setWindMembrane(!windMembrane);
   }
 
+  const [rRed, setRRed] = useState(1);
+  const [rObl, setRObl] = useState(1);
+  const [eGap, setEGap] = useState(1);
+  const [outE, setOutE] = useState(1);
+  const [gU, setGU] = useState(1);
+  const [gObl, setGObl] = useState(1);
+
+  function handleRObl(value) {
+    setRObl(value);
+  }
+  function handleRRed(value) {
+    setRRed(value);
+  }
+  function handleEGap(value) {
+    setEGap(value);
+  }
+  function handleOutE(value) {
+    setOutE(value);
+  }
+  function handleGU(value) {
+    setGU(value);
+  }
+  function handleGObl(value) {
+    setGObl(value);
+  }
+
   return (
     <div className="page">
       <DefaultContext.Provider
@@ -396,6 +429,7 @@ export default function App(props) {
           brickMaterial,
           brickName,
           brickLambda,
+          brickSp,
           brickThickness,
           brickType,
           brickVapor,
@@ -407,6 +441,7 @@ export default function App(props) {
           concreteArea,
           concreteDensity,
           concreteLambda,
+          concreteSp,
           concreteSpLambda,
           concreteThickness,
           concreteVapor,
@@ -418,11 +453,14 @@ export default function App(props) {
           coverVapor,
           d,
           dk,
+          eGap,
           finalValues,
           grib,
           gribDepth,
           gribConcretePcs,
           gribPcs,
+          gObl,
+          gU,
           height,
           humidity,
           humidityZone,
@@ -433,6 +471,7 @@ export default function App(props) {
           insMaterial,
           insLambda,
           insName,
+          insSp,
           insThickness,
           insVapor,
           k,
@@ -440,8 +479,11 @@ export default function App(props) {
           mr,
           objName,
           objAddress,
+          outE,
           ownCover,
           plaster,
+          rObl,
+          rRed,
           secondIns,
           secondInsAir,
           secondInsData,
@@ -453,10 +495,8 @@ export default function App(props) {
           secondInsVapor,
           setAddBracket,
           setUKey,
-          brickSp,
-          concreteSp,
-          insSp,
           secondInsSp,
+          vaporCalc,
           vaporMembrane,
           vaporMembraneR,
           ventHeight,
@@ -496,10 +536,13 @@ export default function App(props) {
           handleD,
           handleDk,
           handleDeleteSecondIns,
+          handleEGap,
           handleFinalValues,
+          handleGObl,
           handleGrib,
           handleGribConcretePcs,
           handleGribPcs,
+          handleGU,
           handleHeight,
           handleHumidity,
           handleHumidityZone,
@@ -512,7 +555,10 @@ export default function App(props) {
           handleK,
           handleMr,
           handleInnerTemp,
+          handleOutE,
           handlePlaster,
+          handleRObl,
+          handleRRed,
           handleSecondInsAir,
           handleSecondInsThickness,
           handleSecondInsDensity,
@@ -521,6 +567,7 @@ export default function App(props) {
           handleSecondInsVapor,
           handleObjAddress,
           handleObjName,
+          handleVaporCalc,
           handleVaporMembraneAir,
           handleVentHeight,
           handleVentIn,
@@ -556,7 +603,7 @@ export default function App(props) {
           <Route path="/walldata" element={<WallData />}></Route>
           <Route path="/systdata" element={<SystData />}></Route>
           <Route path="/bracketdata" element={<BracketData />}></Route>
-          <Route path="/coverdata" element={<CoverData />}></Route>
+          {vaporCalc && <Route path="/coverdata" element={<CoverData />}></Route>}
           <Route path="/final" element={<Final />}></Route>
         </Routes>
       </DefaultContext.Provider>
