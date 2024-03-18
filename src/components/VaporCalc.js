@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { DefaultContext } from '../contexts/DefaultContext';
-import { Badge, Button, Col, Form, Row } from 'react-bootstrap';
-import ReactToPrint, { useReactToPrint } from 'react-to-print';
 import DkCalc from './DkCalc';
 
 export default function VaporCalc({ brickQ, concreteQ, insQ, rCond1, rCond2, rRed, secondInsQ }) {

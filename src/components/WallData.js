@@ -1,7 +1,7 @@
 import { Button, Col, Form, ProgressBar } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import WallInput from './WallInput';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { DefaultContext } from '../contexts/DefaultContext';
 
 export default function WallData() {

@@ -5,7 +5,6 @@ import { DefaultContext } from '../contexts/DefaultContext';
 
 export default function LinearLossCalcConcrete() {
   const {
-    buildingType,
     concreteLambda,
     insLambda,
     insThickness,

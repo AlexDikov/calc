@@ -41,7 +41,7 @@ export default function Bracket(props) {
     return null;
   });
 
-  const context = useContext(DefaultContext);
+  const { addBracket, buildingType, handleBracketResult, setAddBracket } = useContext(DefaultContext);
 
   function handleBracket(e) {
     setBracket(e.target.options[e.target.selectedIndex].text);
@@ -51,7 +51,7 @@ export default function Bracket(props) {
   }
   const handleResult = (item) => {
     setResult(item);
-    context.handleBracketResult(item);
+    handleBracketResult(item);
   };
   const setAluminium = () => {
     setBracketType(true);
@@ -73,8 +73,8 @@ export default function Bracket(props) {
   };
 
   function handleDeleteBracket(indexToRemove) {
-    context.setAddBracket(() => {
-      return context.addBracket.filter((item) => parseInt(item.key) !== indexToRemove);
+    setAddBracket(() => {
+      return addBracket.filter((item) => parseInt(item.key) !== indexToRemove);
     });
   }
   const bKey = props.ukey;
@@ -157,7 +157,7 @@ export default function Bracket(props) {
           />
         </Col>
         <Col>
-          {context.buildingType === 2 ? (
+          {buildingType === 2 ? (
             <Form>
               {['radio'].map((type) => (
                 <div key={`inline-${type}`} className="mb-3">

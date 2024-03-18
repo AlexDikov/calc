@@ -17,7 +17,6 @@ export default function HeatCalc() {
     brickName,
     brickThickness,
     brickType,
-    brickSp,
     brickVapor,
     buildingAim,
     buildingType,
@@ -156,9 +155,9 @@ export default function HeatCalc() {
       linearLoss +
       pointLoss());
 
-  const rRed1 = 1 / (u1 + linearLoss1 + pointLoss1());
+  const rRed1 = 1 / (u1 + linearLoss1 + pointLoss1() + gribConcretePcs * gribDepth);
 
-  const rRed2 = 1 / (u2 + linearLoss2 + pointLoss2());
+  const rRed2 = 1 / (u2 + linearLoss2 + pointLoss2() + gribPcs * gribDepth);
 
   const r = rRed / rCond2;
 
@@ -214,7 +213,7 @@ export default function HeatCalc() {
     removeAfterPrint: true,
   });
 
-  handleRRed(rRed2);
+  concreteWall || buildingType === 1 ? handleRRed(rRed1) : handleRRed(rRed2);
   handleRObl(rObl);
   vaporCalc &&
     VaporCalc({
@@ -356,9 +355,13 @@ export default function HeatCalc() {
               шт/м²
               <br />
             </>
+          )}{' '}
+          {vaporCalc && (
+            <>
+              <br />
+              Облицовка - {coverName} толщиной {coverThickness} мм
+            </>
           )}
-          <br /> Облицовка - {coverName} толщиной {coverThickness} мм
-          <br />
           <br /> <h5>2. Требуемое сопротивление теплопередаче.</h5>
           Градусо-сутки отопительного периода для рассматриваемого случая составляют: ГСОП = (t<sub>в</sub> - t
           {buildingAim === 2 ? <sub>10</sub> : <sub>8</sub>}) ∙ z{buildingAim === 2 ? <sub>10</sub> : <sub>8</sub>}= (
@@ -372,7 +375,7 @@ export default function HeatCalc() {
           <br /> <br />
           <h5>3. Минимально необходимая толщина утеплителя.</h5>
           Приближенная толщина утеплителя : δ = (k ∙ R<sub>тр</sub> - δ<sub>к</sub>/λ<sub>к</sub> - 1/α<sub>в</sub> -
-          1/α<sub>н</sub>)= ({k()} ∙ {rObl.toFixed(2)}
+          1/α<sub>н</sub>) ∙ λ<sub>у</sub> = ({k()} ∙ {rObl.toFixed(2)}
           {concreteQ && ` - ${concreteQ}`}
           {brickQ && ` - ${brickQ}`} - 1 / 8.7 - 1 / 12) ∙ (
           {secondIns
@@ -482,7 +485,7 @@ export default function HeatCalc() {
           <sup>усл</sup> = 1/α<sub>в</sub> + ∑R
           <sub>s</sub> + 1/α<sub>пр0</sub> = 1/8.7 + {buildingType !== 3 ? concreteQ : brickQ} +{' '}
           {secondIns ? `${insQ} + ${secondInsQ}` : insQ}+ 1/12 ={' '}
-          {buildingType !== 3 ? rCond1.toFixed(2) : rCond2.toFixed(2)} м²°С/Вт
+          {buildingType !== 3 ? rCond1.toFixed(3) : rCond2.toFixed(2)} м²°С/Вт
           <br />U<sub>{buildingType === 2 && 1}</sub> = 1/R<sub>{buildingType === 2 && 1}</sub>
           <sup>усл</sup> = 1/ {buildingType !== 3 ? rCond1.toFixed(2) : rCond2.toFixed(2)} ={' '}
           {buildingType !== 3 ? u1.toFixed(3) : u2.toFixed(3)} Вт/(м²°С)
@@ -508,7 +511,7 @@ export default function HeatCalc() {
             участка с НФС: R<sub>пр</sub> = {rRed.toFixed(3)}
             <br />
             Коэффициент теплотехнической однородности стены с НФС: r = R<sub>пр</sub>/R<sub>усл</sub> ={' '}
-            {rRed.toFixed(3)}/{rCond2.toFixed(3)} = {r.toFixed(3)}
+            {rRed.toFixed(3)}/{buildingType === 1 ? rCond1.toFixed(3) : rCond2.toFixed(3)} = {r.toFixed(3)}
             <br />
           </>
         )}

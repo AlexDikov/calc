@@ -3,8 +3,6 @@ import { DefaultContext } from '../contexts/DefaultContext';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import HeatCalc from './HeatCalc';
 import { useNavigate } from 'react-router-dom';
-import { useReactToPrint } from 'react-to-print';
-import VaporCalc from './VaporCalc';
 
 export default function Final() {
   const {
@@ -12,13 +10,9 @@ export default function Final() {
     eGap,
     gObl,
     gU,
-    handleEGap,
-    handleGObl,
-    handleGU,
     handleInsThickness,
     handleSecondInsThickness,
     handleVaporMembraneAir,
-    handleOutE,
     handlePlasterValue,
     handleRObl,
     handleRRed,

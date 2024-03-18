@@ -1,19 +1,8 @@
 import React, { useContext } from 'react';
 import { DefaultContext } from '../contexts/DefaultContext';
 
-export default function RTable3({ brickS, concreteS, isSecWall, u1, u2 }) {
-  const {
-    bracketResult,
-    buildingType,
-    concreteWall,
-    gribDepth,
-    gribConcretePcs,
-    gribPcs,
-    windowBrickLength,
-    windowConcreteLength,
-    windowLoss,
-    windowLossConcrete,
-  } = useContext(DefaultContext);
+export default function RTable3({ brickS, u2 }) {
+  const { bracketResult, gribDepth, gribPcs, windowBrickLength, windowLoss } = useContext(DefaultContext);
 
   let a = 3;
   let b = 1;

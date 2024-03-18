@@ -7,7 +7,6 @@ export default function RTable({ brickS, concreteS, u1, u2 }) {
     buildingType,
     concreteWall,
     gribDepth,
-    gribConcretePcs,
     gribPcs,
     windowBrickLength,
     windowConcreteLength,
@@ -98,24 +97,22 @@ export default function RTable({ brickS, concreteS, u1, u2 }) {
           <th scope="row">{buildingType !== 2 ? 2 : 3}</th>
           <td>Оконный откос</td>
           <td>Линейный </td>
-          <td>
-            {buildingType === 1
-              ? (windowConcreteLength / concreteS).toFixed(3)
-              : (windowBrickLength / (concreteS + brickS)).toFixed(3)}
-          </td>
-          <td>{buildingType === 1 ? windowLossConcrete.toFixed(3) : windowLoss.toFixed(3)}</td>
-          <td>
-            {buildingType === 1
-              ? ((windowLossConcrete * windowConcreteLength) / concreteS).toFixed(3)
-              : ((windowLoss * windowBrickLength) / (concreteS + brickS)).toFixed(3)}
-          </td>
-          <td>
-            {buildingType === 1
-              ? ((windowLossConcrete * windowConcreteLength) / concreteS / qPercent()).toFixed(1)
-              : ((windowLoss * windowBrickLength) / (concreteS + brickS) / qPercent()).toFixed(1)}
-          </td>
+          {buildingType === 1 ? (
+            <>
+              <td>{(windowConcreteLength / concreteS).toFixed(3)}</td>
+              <td> {windowLossConcrete.toFixed(3)}</td>
+              <td>{((windowLossConcrete * windowConcreteLength) / concreteS).toFixed(3)}</td>
+              <td>{((windowLossConcrete * windowConcreteLength) / concreteS / qPercent()).toFixed(1)}</td>
+            </>
+          ) : (
+            <>
+              <td>{(windowBrickLength / (concreteS + brickS)).toFixed(3)}</td>
+              <td> {windowLoss.toFixed(3)}</td>
+              <td>{((windowLoss * windowBrickLength) / (concreteS + brickS)).toFixed(3)}</td>
+              <td>{((windowLoss * windowBrickLength) / (concreteS + brickS) / qPercent()).toFixed(1)}</td>
+            </>
+          )}
         </tr>
-
         <tr key={186}>
           <th scope="row">{buildingType === 2 ? 4 : 3}</th>
           <td>Тарельчатый анкер</td>
@@ -135,7 +132,7 @@ export default function RTable({ brickS, concreteS, u1, u2 }) {
           <td></td>
           <td>
             {' '}
-            1/R<sub>пр</sub> ={(qPercent() * 100).toFixed(3)}
+            1/R<sub>пр</sub> = {(qPercent() * 100).toFixed(3)}
           </td>
           <td></td>
         </tr>

@@ -3,8 +3,6 @@ import SystInput from './SystInput';
 import { useNavigate } from 'react-router-dom';
 import { covers } from './covers';
 import { DefaultContext } from '../contexts/DefaultContext';
-import LinearLossCalc from './LinearLossCalc';
-import LinearLossCalcConcrete from './LinearLossCalcConcrete';
 
 export default function CoverData() {
   const navigate = useNavigate();
@@ -12,8 +10,6 @@ export default function CoverData() {
   return (
     <DefaultContext.Consumer>
       {({
-        buildingType,
-        concreteWall,
         cover,
         coverLambda,
         coverName,

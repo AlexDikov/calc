@@ -10,7 +10,8 @@ import LinearLossCalcConcrete from './LinearLossCalcConcrete';
 export default function BracketData(props) {
   const navigate = useNavigate();
 
-  const { addBracket, airCalc, concreteWall, setAddBracket, setUKey, vaporCalc, uKey } = useContext(DefaultContext);
+  const { addBracket, airCalc, buildingType, concreteWall, setAddBracket, setUKey, vaporCalc, uKey } =
+    useContext(DefaultContext);
 
   function addBracketInput() {
     setAddBracket((prevBrackets) => [
@@ -53,7 +54,7 @@ export default function BracketData(props) {
       <button className="add-bracket" key="add-btn" onClick={addBracketInput}></button>
 
       <LinearLossCalc />
-      <LinearLossCalcConcrete />
+      {(concreteWall || buildingType === 1) && <LinearLossCalcConcrete />}
     </div>
   );
 }
