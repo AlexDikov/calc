@@ -1,21 +1,23 @@
 import { Col, Form, Row } from 'react-bootstrap';
 
-export default function SystInput(props) {
+export default function SystInput({ children, id, iValue, max, method, min, text, xs1, xs2 }) {
   return (
     <Row>
-      <Col xs={props.xs1} className="mt-3">
-        <Form.Label htmlFor={props.id}>
-          {props.text}
-          {props.children}
+      <Col xs={xs1} className="mt-3">
+        <Form.Label htmlFor={id}>
+          {text}
+          {children}
         </Form.Label>
       </Col>
-      <Col xs={props.xs2}>
+      <Col xs={xs2}>
         <Form.Control
-          id={props.id}
+          id={id}
           className="mt-2"
           type="number"
-          onChange={props.method}
-          defaultValue={props.iValue}
+          onChange={method}
+          defaultValue={iValue}
+          min={min}
+          max={max}
         />
       </Col>
     </Row>

@@ -8,6 +8,7 @@
   font-family: Inter, Arial, sans-serif;
   color: black;
   padding: 0 30px 0;
+  font-size: 0.8em;
 }
 
 .navbtn {
@@ -33,7 +34,22 @@
   border: none;
 }
 
+.i-btn2 {
+  position: absolute;
+  background-color: transparent;
+  background-image: url(../../images/info.png);
+  background-size: cover;
+  height: 12px;
+  width: 12px;
+  border: none;
+  top: -5px;
+}
+
+
 .i-btn:hover {
+  opacity: 0.3;
+}
+.i-btn2:hover {
   opacity: 0.3;
 }
 
@@ -65,4 +81,10 @@ input[type="number"]:hover,
 input[type="number"]:focus {
     appearance: none;
     -moz-appearance: textfield;
+}
+
+@media print {
+  .page {
+    font-size: 0.5em;
+  }
 }

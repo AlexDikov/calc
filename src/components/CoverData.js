@@ -61,6 +61,7 @@ export default function CoverData() {
           <div className="d-flex justify-content-between">
             <div>
               <SystInput
+                min={1}
                 xs1={9}
                 xs2={2}
                 id={'ventin'}
@@ -70,6 +71,7 @@ export default function CoverData() {
                 method={handleVentIn}
               />
               <SystInput
+                min={1}
                 xs1={9}
                 xs2={2}
                 id={'ventin'}
@@ -79,6 +81,7 @@ export default function CoverData() {
                 method={handleVentMed}
               />
               <SystInput
+                min={1}
                 xs1={9}
                 xs2={2}
                 id={'ventin'}
@@ -88,6 +91,7 @@ export default function CoverData() {
                 method={handleVentOut}
               />
               <SystInput
+                min={1}
                 xs1={9}
                 xs2={2}
                 id={'ventin'}
@@ -142,7 +146,7 @@ export default function CoverData() {
                 <Row>
                   <Form.Check
                     className="mt-3 ms-2"
-                    id="mtel-cover"
+                    id="metal-cover"
                     label="Металлическая"
                     checked={metallCover}
                     onChange={handleMetallCover}
@@ -151,6 +155,7 @@ export default function CoverData() {
               ) : null}
 
               <SystInput
+                min={1}
                 xs1={9}
                 xs2={2}
                 id="cover-thickness"
@@ -161,6 +166,7 @@ export default function CoverData() {
 
               {ownCover ? (
                 <SystInput
+                  min={0.0001}
                   xs1={9}
                   xs2={2}
                   id="cover-sp-lambda"
@@ -170,6 +176,7 @@ export default function CoverData() {
                 />
               ) : (
                 <SystInput
+                  min={0.0001}
                   xs1={9}
                   xs2={2}
                   id="cover-lambda"
@@ -180,6 +187,7 @@ export default function CoverData() {
               )}
               {ownCover ? (
                 <SystInput
+                  min={0.00001}
                   xs1={9}
                   xs2={2}
                   id="cover-sp-vapor"
@@ -189,6 +197,7 @@ export default function CoverData() {
                 />
               ) : (
                 <SystInput
+                  min={0.00001}
                   xs1={9}
                   xs2={2}
                   id="cover-vapor"

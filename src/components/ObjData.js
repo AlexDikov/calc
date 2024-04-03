@@ -71,9 +71,18 @@ export default function ObjData() {
       }) => (
         <div className="obj-page">
           <ProgressBar variant="secondary" now={20} label={`${20}%`} />
-          <div className="d-flex justify-content-end">
+          <div className="d-flex justify-content-between mt-1">
+            <div className="obj-adress">
+              <Form.Control placeholder="Название объекта" value={objName} onChange={handleObjName} />
+              <Form.Control
+                className="ms-2"
+                placeholder="Адрес объекта"
+                value={objAddress}
+                onChange={handleObjAddress}
+              />
+            </div>
             <Button
-              className="mt-2"
+              className="mt-1"
               variant="outline-secondary"
               size="sm"
               onClick={() => {
@@ -88,14 +97,6 @@ export default function ObjData() {
               Далее
             </Button>
           </div>
-          <Row className="mb-2 mt-2">
-            <Col>
-              <Form.Control placeholder="Название объекта" value={objName} onChange={handleObjName} />
-            </Col>
-            <Col>
-              <Form.Control placeholder="Адрес объекта" value={objAddress} onChange={handleObjAddress} />
-            </Col>
-          </Row>
           <div className="obj-data">
             <div className="obj-container">
               <div className="obj-img">
@@ -148,7 +149,9 @@ export default function ObjData() {
               <Form.Label className=" position-relative">
                 Температура внутреннего воздуха: {innerTemp} <sup>o</sup>C{' '}
                 <OverlayTrigger
-                  overlay={<Tooltip id="temp">Допустимая температура в помещениях согласно СП 50.13330.2012</Tooltip>}
+                  overlay={
+                    <Tooltip id="temp-tooltip">Допустимая температура в помещениях согласно СП 50.13330.2012</Tooltip>
+                  }
                 >
                   <button className="i-btn position-absolute"></button>
                 </OverlayTrigger>
@@ -156,7 +159,7 @@ export default function ObjData() {
               <Form.Range
                 className="mb-3"
                 defaultValue="20"
-                min="16"
+                min="5"
                 max="26"
                 step="1"
                 onChange={handleInnerTemp}
@@ -166,7 +169,7 @@ export default function ObjData() {
                 Влажность внутреннего воздуха: {humidity} %
                 <OverlayTrigger
                   overlay={
-                    <Tooltip id="temp">
+                    <Tooltip id="humid-tooltip">
                       Для жилых зданий, лечебных учреждений, домов для престарелых и инвалидов, школ и детских домов –
                       55 %; <br />
                       для кухонь – 60 %; <br />
@@ -183,19 +186,23 @@ export default function ObjData() {
               <Form.Range defaultValue="50" min="35" max="100" step="5" onChange={handleHumidity} id="humid-in" />
             </div>
             <div className="obj-param position-relative">
-              <button
-                className="i-btn position-absolute"
-                data-bs-toggle="tooltip"
-                data-bs-placement="right"
-                title="Учитывать проверку отсутствия точки росы в утеплителе и излишней проницаемости ограждающей конструкции"
-              ></button>
               <Form.Check
                 className=" ms-2 position-relative"
                 id="mtel-cover"
                 label="Учитывать расчет влаго/воздухопроницания"
                 checked={vaporCalc}
-                onChange={handleVaporCalc}
+                onClick={handleVaporCalc}
               ></Form.Check>
+              <OverlayTrigger
+                overlay={
+                  <Tooltip id="vapor-tooltip">
+                    Учитывать проверку отсутствия точки росы в утеплителе и излишней проницаемости ограждающей
+                    конструкции
+                  </Tooltip>
+                }
+              >
+                <button className="i-btn position-absolute"></button>
+              </OverlayTrigger>
             </div>
             <div className="obj-param d-flex flex-column">
               <Form.Label
@@ -205,13 +212,16 @@ export default function ObjData() {
                 data-tooltip-content="коэф"
               >
                 m<sub>r</sub>
-                <button
-                  className="i-btn position-absolute"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="right"
-                  title="Коэффициент, учитывающий особенности региона строительства. 
-                      По умолчанию принимается 0,63, либо по по разделу 'Энергоэффективность' проекта."
-                ></button>
+                <OverlayTrigger
+                  overlay={
+                    <Tooltip id="vapor-tooltip">
+                      Коэффициент, учитывающий особенности региона строительства. По умолчанию принимается 0,63, либо по
+                      по разделу 'Энергоэффективность' проекта.
+                    </Tooltip>
+                  }
+                >
+                  <button className="i-btn2 position-absolute"></button>
+                </OverlayTrigger>
               </Form.Label>
 
               <Form.Control id="mr" className="w-50" value={mr} onChange={handleMr} min={0.63} max={1} />
@@ -224,12 +234,16 @@ export default function ObjData() {
                 data-tooltip-content="зона"
               >
                 Зона влажности
-                <button
-                  className="i-btn position-absolute"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="right"
-                  title="Для населенных пунктов без данных в СП 50 о зоне влажности необходимо выбрать: А - для сухой, Б - для нормальной и влажной"
-                ></button>
+                <OverlayTrigger
+                  overlay={
+                    <Tooltip id="vapor-tooltip">
+                      Для населенных пунктов без данных в СП 50 о зоне влажности необходимо выбрать: А - для сухой, Б -
+                      для нормальной и влажной
+                    </Tooltip>
+                  }
+                >
+                  <button className="i-btn2 position-absolute"></button>
+                </OverlayTrigger>
               </Form.Label>
               {cityProp.s ? (
                 <div>{cityProp.s}</div>

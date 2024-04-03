@@ -56,11 +56,7 @@ export default function RTable2({ concreteS, u1 }) {
               Поток теплоты, <br />
               обусловленный элементом, Вт/(м² °С)
             </th>
-            <th scope="col">
-              Доля общего
-              <br /> потока теплоты <br />
-              через фрагмент,%
-            </th>
+            <th scope="col">Доля потока,%</th>
           </tr>
         </thead>
         <tbody>

@@ -127,6 +127,7 @@ export default function SystData() {
             <div>
               {buildingType !== 1 ? (
                 <SystInput
+                  min={0.1}
                   xs1={9}
                   xs2={2}
                   id={'brick-area'}
@@ -138,6 +139,7 @@ export default function SystData() {
               ) : null}
               {buildingType !== 3 ? (
                 <SystInput
+                  min={0.1}
                   xs1={9}
                   xs2={2}
                   id={'concrete-area'}
@@ -156,6 +158,7 @@ export default function SystData() {
               ) : null}
               {buildingType === 1 ? (
                 <SystInput
+                  min={0.1}
                   xs1={9}
                   xs2={2}
                   id={'window-concrete-length'}
@@ -166,6 +169,7 @@ export default function SystData() {
                 />
               ) : (
                 <SystInput
+                  min={0.1}
                   xs1={9}
                   xs2={2}
                   id={'window-length'}
@@ -178,6 +182,7 @@ export default function SystData() {
 
               {concreteWall && (
                 <SystInput
+                  min={0.1}
                   xs1={9}
                   xs2={2}
                   id={'window-concrete-length'}
@@ -188,6 +193,7 @@ export default function SystData() {
                 />
               )}
               <SystInput
+                min={1}
                 xs1={9}
                 xs2={2}
                 id={'grib-pcs'}
@@ -198,6 +204,7 @@ export default function SystData() {
               />
               {concreteWall && (
                 <SystInput
+                  min={1}
                   xs1={9}
                   xs2={2}
                   id={'grib-concrete-pcs'}

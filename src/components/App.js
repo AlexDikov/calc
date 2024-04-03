@@ -306,8 +306,8 @@ export default function App(props) {
   function handleSecondInsVapor(e) {
     setSecondInsVapor(e.target.value);
   }
-  function handleVaporCalc(value) {
-    setVaporCalc(value);
+  function handleVaporCalc() {
+    setVaporCalc(!vaporCalc);
   }
   function handleVaporMembraneAir(e) {
     setVaporMembraneAir(e.target.value);

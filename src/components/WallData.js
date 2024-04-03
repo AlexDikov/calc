@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import WallInput from './WallInput';
 import { useContext } from 'react';
 import { DefaultContext } from '../contexts/DefaultContext';
+import VaporCalc from './VaporCalc';
 
 export default function WallData() {
   const navigate = useNavigate();
@@ -62,9 +63,6 @@ export default function WallData() {
     handleSecondInsName,
     handleSecondInsThickness,
     handleSecondInsVapor,
-    handleVaporMembrane,
-    handleVaporMembraneAir,
-    handleVaporMembraneR,
     handleWindMembrane,
     handleWindMembraneR,
     mr,
@@ -76,13 +74,12 @@ export default function WallData() {
     secondInsMaterial,
     secondInsSp,
     secondInsThickness,
+    secondInsVapor,
     toggleBrickSp,
     toggleConcreteSp,
     toggleInsSp,
     toggleSecondInsSp,
-    vaporMembrane,
-    vaporMembraneAir,
-    vaporMembraneR,
+    vaporCalc,
     windMembrane,
     windMembraneR,
   } = useContext(DefaultContext);
@@ -100,7 +97,15 @@ export default function WallData() {
         insAir &&
         (secondIns ? secondInsThickness && insLambda && insVapor && insAir : true)
       );
-    if (buildingType === 2)
+    if (buildingType === 1 && vaporCalc)
+      return (
+        concreteThickness &&
+        concreteLambda &&
+        insThickness &&
+        insLambda &&
+        (secondIns ? secondInsThickness && insLambda : true)
+      );
+    if (buildingType === 2 && vaporCalc)
       return (
         concreteThickness &&
         concreteLambda &&
@@ -116,7 +121,17 @@ export default function WallData() {
         insAir &&
         (secondIns ? secondInsThickness && insLambda && insVapor && insAir : true)
       );
-    if (buildingType === 3)
+    if (buildingType === 2)
+      return (
+        concreteThickness &&
+        concreteLambda &&
+        brickThickness &&
+        brickLambda &&
+        insThickness &&
+        insLambda &&
+        (secondIns ? secondInsThickness && insLambda : true)
+      );
+    if (buildingType === 3 && vaporCalc)
       return (
         brickThickness &&
         brickLambda &&
@@ -127,6 +142,14 @@ export default function WallData() {
         insVapor &&
         insAir &&
         (secondIns ? secondInsThickness && insLambda && insVapor && insAir : true)
+      );
+    if (buildingType === 3)
+      return (
+        brickThickness &&
+        brickLambda &&
+        insThickness &&
+        insLambda &&
+        (secondIns ? secondInsThickness && insLambda : true)
       );
   };
 
@@ -200,10 +223,8 @@ export default function WallData() {
               isId="concrete"
               isLambda={concreteLambda}
               isSp={concreteSp}
-              isSpAir={1}
-              isSpLambda={cityProp.s === 'A' ? 1.72 : 2.04}
-              isSpVapor={20000}
               isThickness={concreteThickness}
+              isVapor={concreteVapor}
               onAir={handleConcreteAir}
               onDensity={handleConcreteDensity}
               onLambda={handleConcreteLambda}
@@ -223,6 +244,7 @@ export default function WallData() {
               isSpDensity={brickDensity}
               isThickness={brickThickness}
               isMaterial={brickMaterial}
+              isVapor={brickVapor}
               onAir={handleBrickAir}
               onDensity={handleBrickDensity}
               onLambda={handleBrickLambda}
@@ -244,8 +266,9 @@ export default function WallData() {
             isSpDensity={insDensity}
             isThickness={insThickness}
             isMaterial={insMaterial}
-            onAddSecondIns={handleAddSecondIns}
             isSecondIns={secondIns}
+            isVapo={insVapor}
+            onAddSecondIns={handleAddSecondIns}
             onAir={handleInsAir}
             onDensity={handleInsDensity}
             onLambda={handleInsLambda}
@@ -266,9 +289,10 @@ export default function WallData() {
               isSpDensity={secondInsDensity}
               isThickness={secondInsThickness}
               isMaterial={secondInsMaterial}
-              onDeleteSecondIns={handleDeleteSecondIns}
               isSecondIns={secondIns}
+              isVapor={secondInsVapor}
               onAir={handleSecondInsAir}
+              onDeleteSecondIns={handleDeleteSecondIns}
               onDensity={handleSecondInsDensity}
               onLambda={handleSecondInsLambda}
               onSp={toggleSecondInsSp}

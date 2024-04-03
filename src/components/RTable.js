@@ -45,7 +45,7 @@ export default function RTable({ brickS, concreteS, u1, u2 }) {
   };
 
   return (
-    <table className="table center-text">
+    <table className="table center-text pe-1">
       <thead>
         <tr key={181}>
           <th scope="col"></th>
@@ -63,11 +63,7 @@ export default function RTable({ brickS, concreteS, u1, u2 }) {
             Поток теплоты, <br />
             обусловленный элементом, Вт/(м² °С)
           </th>
-          <th scope="col">
-            Доля общего
-            <br /> потока теплоты <br />
-            через фрагмент,%
-          </th>
+          <th scope="col">Доля потока,%</th>
         </tr>
       </thead>
       <tbody>

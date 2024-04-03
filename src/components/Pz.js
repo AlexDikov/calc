@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { DefaultContext } from '../contexts/DefaultContext';
 import { Button } from 'react-bootstrap';
 import { useReactToPrint } from 'react-to-print';
@@ -7,7 +7,7 @@ import RTable from './RTable';
 import RTable2 from './RTable2';
 import RTable3 from './RTable3';
 
-export default function HeatCalc() {
+export default function Pz() {
   const {
     bracketResult,
     brickAir,
@@ -213,7 +213,7 @@ export default function HeatCalc() {
     removeAfterPrint: true,
   });
 
-  concreteWall ? handleRRed(rRed1) : handleRRed(rRed);
+  concreteWall || buildingType === 1 ? handleRRed(rRed1) : handleRRed(rRed2);
   handleRObl(rObl);
   vaporCalc &&
     VaporCalc({
@@ -228,9 +228,9 @@ export default function HeatCalc() {
 
   return (
     <>
-      <div ref={contentToPrint} className="p-5 position-relative">
-        <div className="d-none">
-          <div className=" stamp-body"></div>
+      <div ref={contentToPrint} className="pz position-relative">
+        <div>
+          <div className="stamp-body"></div>
           <div className="stamp1"></div>
           <div className="stamp2"></div>
           <div className="stamp3"></div>
@@ -240,11 +240,31 @@ export default function HeatCalc() {
           <div className="stamp7"></div>
           <div className="stamp8"></div>
           <div className="stamp9"></div>
+          <div className="stamp-body2"></div>
+          <div className="stamp10"></div>
+          <div className="stamp11"></div>
+          <div className="stamp12"></div>
+          <div className="stamp13"></div>
+          <div className="stamp14"></div>
+          <div className="stamp15"></div>
+          <div className="stamp16"></div>
+          <div className="stamp17"></div>
+          <div className="stamp18"></div>
+          <div className="stamp-body3"></div>
+          <div className="stamp19"></div>
+          <div className="stamp20"></div>
+          <div className="stamp21"></div>
+          <div className="stamp22"></div>
+          <div className="stamp23"></div>
+          <div className="stamp24"></div>
+          <div className="stamp25"></div>
+          <div className="stamp26"></div>
+          <div className="stamp27"></div>
         </div>
+        <br />
+        <br />
         <h4>Пояснительная записка к расчету энергоэффективности ограждающей конструкции с системой НВФ</h4>
-        <h4>
-          Объект : {objName}, расположенный по адресу : {objAddress}
-        </h4>
+        <h4>Объект : ЖК Какашкинский, расположенный по адресу : село Какашкино, ул. Говнистая</h4>
         <br />
         <h5>1. Данные для расчета.</h5>
         <div>
@@ -374,6 +394,13 @@ export default function HeatCalc() {
               Облицовка - {coverName} толщиной {coverThickness} мм
             </>
           )}
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
           <br /> <h5>2. Требуемое сопротивление теплопередаче.</h5>
           Градусо-сутки отопительного периода для рассматриваемого случая составляют: ГСОП = (t<sub>в</sub> - t
           {buildingAim === 2 ? <sub>10</sub> : <sub>8</sub>}) ∙ z{buildingAim === 2 ? <sub>10</sub> : <sub>8</sub>}= (
@@ -506,6 +533,13 @@ export default function HeatCalc() {
             </>
           )}
           <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
           Приведенное сопротивление теплопередаче фрагмента стены с НФС представлено в{' '}
           {concreteWall ? '2 таблицах' : 'таблице'} аналогично приложению Е СП 50.13330.2012, что позволяет оценить
           какое влияние оказывает каждый элемент конструкции. Для учета примыканий оконных блоков принимаем
@@ -515,26 +549,26 @@ export default function HeatCalc() {
         {!concreteWall && (
           <>
             <RTable brickS={brickS} concreteS={concreteS} u1={u1} u2={u2} /> Приведенное сопротивление теплопередаче
-            участка с НФС: R<sub>пр</sub> = {rRed.toFixed(2)} м²˚С/Вт
+            участка с НФС: R<sub>пр</sub> = {rRed.toFixed(3)}
             <br />
             Коэффициент теплотехнической однородности стены с НФС: r = R<sub>пр</sub>/R<sub>усл</sub> ={' '}
-            {rRed.toFixed(2)}/{buildingType === 1 ? rCond1.toFixed(2) : rCond2.toFixed(2)} = {r.toFixed(2)}
+            {rRed.toFixed(3)}/{buildingType === 1 ? rCond1.toFixed(3) : rCond2.toFixed(3)} = {r.toFixed(3)}
             <br />
           </>
         )}
         {concreteWall && (
           <>
             <RTable2 concreteS={concreteS} u1={u1} />
-            Приведенное сопротивление теплопередаче участка с НФС: R<sub>пр</sub> = {rRed1.toFixed(2)} м²˚С/Вт
+            Приведенное сопротивление теплопередаче участка с НФС: R<sub>пр</sub> = {rRed1.toFixed(3)}
             <br />
             Коэффициент теплотехнической однородности стены с НФС: r = R<sub>пр</sub>/R<sub>усл</sub> ={' '}
-            {rRed1.toFixed(2)}/{rCond1.toFixed(2)} = {r1.toFixed(2)}
+            {rRed1.toFixed(3)}/{rCond1.toFixed(3)} = {r1.toFixed(3)}
             <br />
             <RTable3 brickS={brickS} u2={u2} />
-            Приведенное сопротивление теплопередаче участка с НФС: R<sub>пр</sub> = {rRed2.toFixed(2)}
+            Приведенное сопротивление теплопередаче участка с НФС: R<sub>пр</sub> = {rRed2.toFixed(3)}
             <br />
             Коэффициент теплотехнической однородности стены с НФС: r = R<sub>пр</sub>/R<sub>усл</sub> ={' '}
-            {rRed2.toFixed(2)}/{rCond2.toFixed(2)} = {r2.toFixed(2)}
+            {rRed2.toFixed(3)}/{rCond2.toFixed(3)} = {r2.toFixed(3)}
           </>
         )}
         <br />
@@ -552,7 +586,7 @@ export default function HeatCalc() {
         )}
         Вывод: утепление рассматриваемого участка объекта {objName} по адресу: {objAddress} с приведенным сопротивлением
         теплопередаче {concreteWall ? rRed1.toFixed(2) : rRed.toFixed(2)} м²˚С/Вт удовлетворяет условию
-        теплотехнического расчета - приведенное сопротивление больше требуемого, составляющего {rObl.toFixed(2)}{' '}
+        теплотехнического расчета - приведенное сопротивление меньше требуемого, составляющего {rObl.toFixed(2)}{' '}
         м²˚С/Вт.
         <br />
       </div>

@@ -17,6 +17,11 @@
   margin-bottom: 20px;
 }
 
+.header-btn {
+  border: none;
+  background-color: transparent;
+}
+
 @media screen and (max-width:950px) {
   .header {
     max-width: 578px;

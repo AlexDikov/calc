@@ -6,6 +6,253 @@
     
 }
 
-.final-container {
-    max-width: 700px;
+
+
+.pz {
+ width: 210mm;
+ margin-left: 20mm;
+ padding-left: 5mm;
+ padding-right: 5mm;
 }
+
+.stamp-body {
+    left: -1.5mm;
+   top: 5mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 205mm;
+    height: 315mm;
+}
+.stamp1 {
+    top: 311.8mm;
+    right: 6.5mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 10mm;
+    height: 8mm;
+}
+.stamp2 {
+    top: 304.8mm;
+    right: 6.5mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 10mm;
+    height: 7.2mm;
+}
+.stamp3 {
+    top: 304.8mm;
+    right: 16.2mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 110mm;
+    height: 15mm;
+}
+.stamp4 {
+    top: 304.8mm;
+    right: 126.1mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 10mm;
+    height: 15mm;
+}
+.stamp5 {
+    top: 304.8mm;
+    right: 135.9mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 15mm;
+    height: 15mm;
+}
+.stamp6 {
+    top: 304.8mm;
+    right: 150.7mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 23mm;
+    height: 15mm;
+}
+.stamp7 {
+    top: 304.8mm;
+    right: 173.3mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 10mm;
+    height: 15mm;
+}
+.stamp8 {
+    top: 304.8mm;
+    right: 183mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 7mm;
+    height: 15mm;
+}
+.stamp9 {
+    top: 309.8mm;
+    right: 126.1mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 64mm;
+    height: 5mm;
+}
+.stamp-body2 {
+    z-index: -1;
+    left: -1.5mm;
+   top: 330mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 205mm;
+    height: 315mm;
+}
+.stamp10 {
+    top: 636.8mm;
+    right: 6.5mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 10mm;
+    height: 8mm;
+}
+.stamp11 {
+    top: 629.8mm;
+    right: 6.5mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 10mm;
+    height: 7.2mm;
+}
+.stamp12 {
+    top: 629.8mm;
+    right: 16.2mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 110mm;
+    height: 15mm;
+}
+.stamp13 {
+    top: 629.8mm;
+    right: 126.1mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 10mm;
+    height: 15mm;
+}
+.stamp14 {
+    top: 629.8mm;
+    right: 135.9mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 15mm;
+    height: 15mm;
+}
+.stamp15 {
+    top: 629.8mm;
+    right: 150.7mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 23mm;
+    height: 15mm;
+}
+.stamp16 {
+    top: 629.8mm;
+    right: 173.3mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 10mm;
+    height: 15mm;
+}
+.stamp17 {
+    top: 629.8mm;
+    right: 183mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 7mm;
+    height: 15mm;
+}
+.stamp18 {
+    top: 634.8mm;
+    right: 126.1mm;
+    position: absolute;
+    border: solid 1px black;
+    width: 64mm;
+    height: 5mm;}
+    
+    .stamp-body3 {
+        z-index: -1;
+        left: -1.5mm;
+       top: 655mm;
+        position: absolute;
+        border: solid 1px black;
+        width: 205mm;
+        height: 315mm;
+    }
+    .stamp19 {
+        top: 961.8mm;
+        right: 6.5mm;
+        position: absolute;
+        border: solid 1px black;
+        width: 10mm;
+        height: 8mm;
+    }
+    .stamp20 {
+        top: 954.8mm;
+        right: 6.5mm;
+        position: absolute;
+        border: solid 1px black;
+        width: 10mm;
+        height: 7.2mm;
+    }
+    .stamp21 {
+        top: 954.8mm;
+        right: 16.2mm;
+        position: absolute;
+        border: solid 1px black;
+        width: 110mm;
+        height: 15mm;
+    }
+    .stamp22 {
+        top: 954.8mm;
+        right: 126.1mm;
+        position: absolute;
+        border: solid 1px black;
+        width: 10mm;
+        height: 15mm;
+    }
+    .stamp23 {
+        top: 954.8mm;
+        right: 135.9mm;
+        position: absolute;
+        border: solid 1px black;
+        width: 15mm;
+        height: 15mm;
+    }
+    .stamp24 {
+        top: 954.8mm;
+        right: 150.7mm;
+        position: absolute;
+        border: solid 1px black;
+        width: 23mm;
+        height: 15mm;
+    }
+    .stamp25 {
+        top: 954.8mm;
+        right: 173.3mm;
+        position: absolute;
+        border: solid 1px black;
+        width: 10mm;
+        height: 15mm;
+    }
+    .stamp26 {
+        top: 954.8mm;
+        right: 183mm;
+        position: absolute;
+        border: solid 1px black;
+        width: 7mm;
+        height: 15mm;
+    }
+    .stamp27 {
+        top: 959.8mm;
+        right: 126.1mm;
+        position: absolute;
+        border: solid 1px black;
+        width: 64mm;
+        height: 5mm;}

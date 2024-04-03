@@ -12,6 +12,7 @@ export default function VaporCalc({ brickQ, concreteQ, insQ, rCond1, rCond2, rRe
     concreteAir,
     concreteThickness,
     concreteVapor,
+    concreteWall,
     cover,
     coverThickness,
     handleGU,
@@ -189,6 +190,7 @@ export default function VaporCalc({ brickQ, concreteQ, insQ, rCond1, rCond2, rRe
   return (
     <>
       <h5>5. Воздухообмен в воздушной прослойке.</h5>
+      {concreteWall && 'Дальнейший расчет ведется для участка из кладки, как более проницаемого.'}
       Воздухообмен в воздушной прослойке находится для термического сопротивления стены от внутренней поверхности до
       воздушной прослойки равного требуемому сопротивлению теплопередаче фасада. <br />
       Сумма коэффициентов местных сопротивлений для исследуемой конструкции составляет: <br />ξ = 1.2(S
@@ -295,7 +297,6 @@ export default function VaporCalc({ brickQ, concreteQ, insQ, rCond1, rCond2, rRe
           ${secondInsAir}`
         : null}
       {plasterV() !== 0 ? ` + ${plasterV()}` : null} = {rU.toFixed(3)} м²∙ч∙Па/кг <br />
-      <br />
       Разность давлений на наружной и внутренней поверхностях ограждения: Δp = 0.55H(γ<sub>н</sub> - γ<sub>в</sub>) +
       0.03γ<sub>н</sub>ν<sup>2</sup> = 0.55 ∙ 48 ∙ ({yOuter.toFixed(1)} - {yInner.toFixed(1)}) + 0.03 ∙{' '}
       {yOuter.toFixed(1)} ∙ {cityProp.v}² = {deltaP.toFixed(1)} Па <br />

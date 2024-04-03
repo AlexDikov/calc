@@ -3,6 +3,7 @@ import { DefaultContext } from '../contexts/DefaultContext';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import HeatCalc from './HeatCalc';
 import { useNavigate } from 'react-router-dom';
+import Pz from './Pz';
 
 export default function Final() {
   const {
@@ -14,8 +15,6 @@ export default function Final() {
     handleSecondInsThickness,
     handleVaporMembraneAir,
     handlePlasterValue,
-    handleRObl,
-    handleRRed,
     handleVaporMembraneR,
     handleVentHeight,
     handleVentIn,
@@ -81,7 +80,7 @@ export default function Final() {
                   ></Form.Control>
                 </Col>
               ) : (
-                <Col xs={2}>
+                <Col xs={3}>
                   <Form.Control
                     placeholder="мм"
                     value={insThickness ? insThickness * 1000 : null}
@@ -186,13 +185,15 @@ export default function Final() {
       <Button
         variant="outline-secondary"
         size="sm"
+        className="mt-3 mb-3"
         onClick={() => {
           handlePz();
         }}
       >
         Пояснительная записка
       </Button>
-      {pz && <HeatCalc setRRed={handleRRed} setRObl={handleRObl} />}
+      {/* {pz && <Pz setRRed={handleRRed} setRObl={handleRObl} />} */}
+      {pz && <HeatCalc />}
       <Button
         className="mb-5"
         variant="outline-secondary"

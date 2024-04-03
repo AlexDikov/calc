@@ -112,33 +112,15 @@ export default function WallInput({
             <br />
             Вт/м²С°
           </li>
-          {isSp ? (
-            isId === 'concrete' ? (
-              <input
-                className="wallInputValue"
-                type="number"
-                id={`${isId}-sp-h`}
-                value={concreteLambda}
-                onChange={onLambda}
-              ></input>
-            ) : (
-              <input
-                className="wallInputValue"
-                type="number"
-                id={`${isId}-sp-h`}
-                value={isSpData ? (cityProp.s === 'А' ? isSpData.la : isSpData.lb) : null}
-                onChange={onLambda}
-              ></input>
-            )
-          ) : (
+          {
             <input
               className="wallInputValue"
               type="number"
               id={`${isId}-h`}
-              defaultValue={isLambda}
+              value={isLambda}
               onChange={onLambda}
             ></input>
-          )}
+          }
         </div>
         {vaporCalc && (
           <>
