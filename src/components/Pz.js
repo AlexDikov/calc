@@ -198,13 +198,13 @@ export default function Pz() {
   const windowD = () => {
     if (windowDepth === '1') return 'как для рам, утопленных в стену на 100 мм';
     if (windowDepth === '2') return 'как для рам сразу за утеплителем';
-    if (windowDepth === '3') return 'как для рам, вынесенных за стену на 100мм';
+    if (windowDepth === '3') return 'как для рам, вынесенных за стену на 100 мм';
   };
 
   const windowH = () => {
     if (windowHeight === '1') return 'без нахлеста утеплителя на раму';
-    if (windowHeight === '2') return 'как сразу за утеплителем';
-    if (windowHeight === '3') return 'как вынесенным за стену на 100мм';
+    if (windowHeight === '2') return 'c нахлестом утеплителя на раму 20 мм';
+    if (windowHeight === '3') return 'c нахлестом утеплителя на раму 60 мм';
   };
 
   const contentToPrint = useRef(null);

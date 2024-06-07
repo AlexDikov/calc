@@ -67,6 +67,11 @@ export default function HeatCalc() {
     windowLossConcrete,
   } = useContext(DefaultContext);
 
+  const brickThick = brickThickness * 0.001;
+  const concreteThick = concreteThickness * 0.001;
+  const insThick = insThickness * 0.001;
+  const secondInsThick = secondInsThickness * 0.001;
+
   const brickS = brickArea && parseFloat(brickArea);
   const concreteS = concreteArea && parseFloat(concreteArea);
 
@@ -88,17 +93,17 @@ export default function HeatCalc() {
   };
   const gsop = buildingAim === 2 ? (innerTemp - cityProp.t10) * cityProp.z10 : (innerTemp - cityProp.t8) * cityProp.z8;
 
-  const concreteQ = buildingType !== 3 && parseFloat((concreteThickness / concreteLambda).toFixed(3));
-  const brickQ = buildingType !== 1 && parseFloat((brickThickness / brickLambda).toFixed(3));
-  const insQ = parseFloat((insThickness / insLambda).toFixed(3));
-  const secondInsQ = secondIns && parseFloat((secondInsThickness / secondInsLambda).toFixed(3));
+  const concreteQ = buildingType !== 3 && parseFloat((concreteThick / concreteLambda).toFixed(3));
+  const brickQ = buildingType !== 1 && parseFloat((brickThick / brickLambda).toFixed(3));
+  const insQ = parseFloat((insThick / insLambda).toFixed(3));
+  const secondInsQ = secondIns && parseFloat((secondInsThick / secondInsLambda).toFixed(3));
 
   const rObl = (a() * gsop + b()) * mr;
   const preIns =
     (k() * rObl - concreteQ - brickQ - 1 / 8.7 - 1 / 12) *
     (secondIns
-      ? (insThickness / (insThickness + secondInsThickness)) * insLambda +
-        (secondInsThickness / (insThickness + secondInsThickness)) * secondInsLambda
+      ? (insThick / (insThick + secondInsThick)) * insLambda +
+        (secondInsThick / (insThick + secondInsThick)) * secondInsLambda
       : insLambda);
 
   const linearLoss = !concreteWall && parseFloat((windowLoss * windowBrickLength) / (concreteS + brickS));
@@ -198,13 +203,13 @@ export default function HeatCalc() {
   const windowD = () => {
     if (windowDepth === '1') return 'как для рам, утопленных в стену на 100 мм';
     if (windowDepth === '2') return 'как для рам сразу за утеплителем';
-    if (windowDepth === '3') return 'как для рам, вынесенных за стену на 100мм';
+    if (windowDepth === '3') return 'как для рам, вынесенных за стену на 100 мм';
   };
 
   const windowH = () => {
     if (windowHeight === '1') return 'без нахлеста утеплителя на раму';
-    if (windowHeight === '2') return 'как сразу за утеплителем';
-    if (windowHeight === '3') return 'как вынесенным за стену на 100мм';
+    if (windowHeight === '2') return 'c нахлестом утеплителя на раму 20 мм';
+    if (windowHeight === '3') return 'c нахлестом утеплителя на раму 60 мм';
   };
 
   const contentToPrint = useRef(null);
@@ -264,39 +269,38 @@ export default function HeatCalc() {
           {cityProp.w} %.
           <br />
           <br /> <b>Состав стены:</b>
-          {buildingType !== 3 &&
-            (buildingType === 2 ? (
-              concreteWall ? (
-                <div>- монолитный железобетон толщиной {concreteThickness * 1000} мм;</div>
-              ) : (
-                <div>
-                  - монолитный железобетон, для расчета требуемого сопротивления перекрытия толщину принимаем{' '}
-                  {brickThickness * 1000} мм;
-                </div>
-              )
-            ) : (
-              <div>- монолитный железобетон толщиной {concreteThickness * 1000} мм;</div>
-            ))}
-          {buildingType !== 1 && (
-            <div>
-              - {brickName} плотностью {brickDensity} кг/м³, толщиной {brickThickness * 1000} мм;
-            </div>
-          )}
-          {secondIns ? (
-            <div>
-              - внутренний слой теплоизоляции плотностью {insDensity} кг/м³, толщиной {insThickness * 1000} мм; <br />-
-              внешний слой теплоизоляции плотностью {secondInsDensity} кг/м³, толщиной {secondInsThickness * 1000} мм;
-            </div>
-          ) : (
-            <div>
-              - утеплитель {insName} {insSp && <>плотностью {insDensity} кг/м³, толщиной</>} {insThickness * 1000} мм;
-            </div>
-          )}
           {plaster &&
             `- ${
               plaster === 2 ? 'гипсовая' : 'цементная'
             } штукатурка средней толщиной 15мм с внутренней стороны стены.`}
-          <br />
+          {buildingType !== 3 &&
+            (buildingType === 2 ? (
+              concreteWall ? (
+                <div>- монолитный железобетон толщиной {concreteThickness} мм;</div>
+              ) : (
+                <div>
+                  - монолитный железобетон, для расчета требуемого сопротивления перекрытия толщину принимаем{' '}
+                  {brickThickness} мм;
+                </div>
+              )
+            ) : (
+              <div>- монолитный железобетон толщиной {concreteThickness} мм;</div>
+            ))}
+          {buildingType !== 1 && (
+            <div>
+              - {brickName} плотностью {brickDensity} кг/м³, толщиной {brickThickness} мм;
+            </div>
+          )}
+          {secondIns ? (
+            <div>
+              - внутренний слой теплоизоляции плотностью {insDensity} кг/м³, толщиной {insThickness} мм; <br />- внешний
+              слой теплоизоляции плотностью {secondInsDensity} кг/м³, толщиной {secondInsThickness} мм;
+            </div>
+          ) : (
+            <div>
+              - утеплитель {insName} {insSp && <>плотностью {insDensity} кг/м³, толщиной</>} {insThickness} мм;
+            </div>
+          )}
           <br />
           <b>Расчетные характеристики материалов:</b> <br />
           {buildingType !== 3 && (
@@ -391,8 +395,8 @@ export default function HeatCalc() {
           {concreteQ && ` - ${concreteQ}`}
           {brickQ && ` - ${brickQ}`} - 1 / 8.7 - 1 / 12) ∙ (
           {secondIns
-            ? (insThickness / (insThickness + secondInsThickness)) * insLambda +
-              (secondInsThickness / (insThickness + secondInsThickness)) * secondInsLambda
+            ? (insThick / (insThick + secondInsThick)) * insLambda +
+              (secondInsThick / (insThick + secondInsThick)) * secondInsLambda
             : insLambda}
           ) = {preIns.toFixed(2) * 1000} мм;
           <br /> Удельные потери теплоты через кронштейны в соответствии с заключением НИИСФ РААСН по договору №
@@ -544,7 +548,6 @@ export default function HeatCalc() {
             brickQ={brickQ}
             concreteQ={concreteQ}
             insQ={insQ}
-            rRed={rRed2}
             rCond1={rCond1}
             rCond2={rCond2}
             secondInsQ={secondInsQ}

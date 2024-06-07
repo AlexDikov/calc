@@ -3,7 +3,6 @@ import { DefaultContext } from '../contexts/DefaultContext';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import HeatCalc from './HeatCalc';
 import { useNavigate } from 'react-router-dom';
-import Pz from './Pz';
 
 export default function Final() {
   const {
@@ -69,13 +68,13 @@ export default function Final() {
                   <Form.Control
                     className="w-25"
                     placeholder="нижний слой, мм"
-                    value={insThickness ? insThickness * 1000 : null}
+                    value={insThickness ? insThickness : null}
                     onChange={handleInsThickness}
                   ></Form.Control>
                   <Form.Control
                     className="w-25"
                     placeholder="верхний слой, мм"
-                    value={secondInsThickness ? secondInsThickness * 1000 : null}
+                    value={secondInsThickness ? secondInsThickness : null}
                     onChange={handleSecondInsThickness}
                   ></Form.Control>
                 </Col>
@@ -83,7 +82,7 @@ export default function Final() {
                 <Col xs={3}>
                   <Form.Control
                     placeholder="мм"
-                    value={insThickness ? insThickness * 1000 : null}
+                    value={insThickness ? insThickness : null}
                     onChange={handleInsThickness}
                   ></Form.Control>
                 </Col>
@@ -182,16 +181,31 @@ export default function Final() {
             </div>
           ))}
       </div>
-      <Button
-        variant="outline-secondary"
-        size="sm"
-        className="mt-3 mb-3"
-        onClick={() => {
-          handlePz();
-        }}
-      >
-        Пояснительная записка
-      </Button>
+      {vaporCalc ? (
+        eGap < outE && gU < gObl ? (
+          <Button
+            variant="outline-secondary"
+            size="sm"
+            className="mt-3 mb-3"
+            onClick={() => {
+              handlePz();
+            }}
+          >
+            Пояснительная записка
+          </Button>
+        ) : null
+      ) : rRed > rObl ? (
+        <Button
+          variant="outline-secondary"
+          size="sm"
+          className="mt-3 mb-3"
+          onClick={() => {
+            handlePz();
+          }}
+        >
+          Пояснительная записка
+        </Button>
+      ) : null}
       {/* {pz && <Pz setRRed={handleRRed} setRObl={handleRObl} />} */}
       {pz && <HeatCalc />}
       <Button

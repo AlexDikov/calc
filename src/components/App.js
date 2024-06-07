@@ -143,7 +143,7 @@ export default function App(props) {
     setBrickName(e.target.value);
   }
   function handleBrickThickness(e) {
-    setBrickThickness(e.target.value * 0.001);
+    setBrickThickness(e.target.value);
   }
   function handleBrickVapor(e) {
     setBrickVapor(e.target.value);
@@ -176,7 +176,7 @@ export default function App(props) {
     setConcreteLambda(cityProp.s === 'А' ? 1.72 : 2.04);
   }
   function handleConcreteThickness(e) {
-    setConcreteThickness(e.target.value * 0.001);
+    setConcreteThickness(e.target.value);
   }
   function handleConcreteVapor(e) {
     setConcreteVapor(e.target.value);
@@ -251,7 +251,7 @@ export default function App(props) {
     setInsName(e.target.value);
   }
   function handleInsThickness(e) {
-    setInsThickness(e.target.value * 0.001);
+    setInsThickness(e.target.value);
   }
   function handleInsVapor(e) {
     setInsVapor(e.target.value);
@@ -278,7 +278,7 @@ export default function App(props) {
     setSecondInsAir(e.target.value);
   }
   function handleSecondInsThickness(e) {
-    setSecondInsThickness(e.target.value * 0.001);
+    setSecondInsThickness(e.target.value);
   }
   function handleSecondInsDensity(event) {
     setSecondInsDensity(event.target.value);

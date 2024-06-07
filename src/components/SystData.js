@@ -264,8 +264,17 @@ export default function SystData() {
                         id={`inline-${type}-1w`}
                         value="1"
                         inline
+                        checked={windowDepth === '1' ? true : false}
                       />
-                      <Form.Check label="0" name="group1" type={type} id={`inline-${type}-2w`} value="2" inline />
+                      <Form.Check
+                        label="0"
+                        name="group1"
+                        type={type}
+                        id={`inline-${type}-2w`}
+                        value="2"
+                        inline
+                        checked={windowDepth === '2' ? true : false}
+                      />
                       <Form.Check
                         label="+100"
                         name="group1"
@@ -274,6 +283,7 @@ export default function SystData() {
                         value="3"
                         inline
                         className="ms-2"
+                        checked={windowDepth === '3' ? true : false}
                       />
                     </div>
                   ))}
@@ -295,6 +305,7 @@ export default function SystData() {
                         value="1"
                         inline
                         className="me-4"
+                        checked={windowHeight === '1' ? true : false}
                       />
                       <Form.Check
                         label="20"
@@ -304,6 +315,7 @@ export default function SystData() {
                         value="2"
                         inline
                         className="ms-3"
+                        checked={windowHeight === '2' ? true : false}
                       />
                       <Form.Check
                         label="60"
@@ -313,6 +325,7 @@ export default function SystData() {
                         value="3"
                         inline
                         className="me-5"
+                        checked={windowHeight === '3' ? true : false}
                       />
                     </div>
                   ))}

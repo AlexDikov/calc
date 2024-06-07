@@ -102,7 +102,7 @@ export default function WallInput({
             className="wallInputValue"
             type="number"
             id={`${isId}-t`}
-            value={isThickness ? isThickness * 1000 : null}
+            value={isThickness ? isThickness : null}
             onChange={onThickness}
           ></input>
         </div>

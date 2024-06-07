@@ -66,6 +66,7 @@ export default function WallData() {
     handleWindMembrane,
     handleWindMembraneR,
     mr,
+    plaster,
     secondIns,
     secondInsAir,
     secondInsData,
@@ -89,37 +90,12 @@ export default function WallData() {
       return (
         concreteThickness &&
         concreteLambda &&
-        concreteVapor &&
-        concreteAir &&
         insThickness &&
         insLambda &&
-        insVapor &&
-        insAir &&
-        (secondIns ? secondInsThickness && insLambda && insVapor && insAir : true)
-      );
-    if (buildingType === 1 && vaporCalc)
-      return (
-        concreteThickness &&
-        concreteLambda &&
-        insThickness &&
-        insLambda &&
-        (secondIns ? secondInsThickness && insLambda : true)
-      );
-    if (buildingType === 2 && vaporCalc)
-      return (
-        concreteThickness &&
-        concreteLambda &&
-        concreteVapor &&
-        concreteAir &&
-        brickThickness &&
-        brickLambda &&
-        brickVapor &&
-        brickAir &&
-        insThickness &&
-        insLambda &&
-        insVapor &&
-        insAir &&
-        (secondIns ? secondInsThickness && insLambda && insVapor && insAir : true)
+        (secondIns
+          ? secondInsThickness && secondInsLambda && (vaporCalc ? secondInsVapor && secondInsAir : true)
+          : true) &&
+        (vaporCalc ? concreteVapor && concreteAir && insVapor && insAir : true)
       );
     if (buildingType === 2)
       return (
@@ -129,19 +105,10 @@ export default function WallData() {
         brickLambda &&
         insThickness &&
         insLambda &&
-        (secondIns ? secondInsThickness && insLambda : true)
-      );
-    if (buildingType === 3 && vaporCalc)
-      return (
-        brickThickness &&
-        brickLambda &&
-        brickVapor &&
-        brickAir &&
-        insThickness &&
-        insLambda &&
-        insVapor &&
-        insAir &&
-        (secondIns ? secondInsThickness && insLambda && insVapor && insAir : true)
+        (secondIns
+          ? secondInsThickness && secondInsLambda && (vaporCalc ? secondInsVapor && secondInsAir : true)
+          : true) &&
+        (vaporCalc ? concreteVapor && concreteAir && brickVapor && brickAir && insVapor && insAir : true)
       );
     if (buildingType === 3)
       return (
@@ -149,7 +116,10 @@ export default function WallData() {
         brickLambda &&
         insThickness &&
         insLambda &&
-        (secondIns ? secondInsThickness && insLambda : true)
+        (secondIns
+          ? secondInsThickness && secondInsLambda && (vaporCalc ? secondInsVapor && secondInsAir : true)
+          : true) &&
+        (vaporCalc ? brickVapor && brickAir && insVapor && insAir : true)
       );
   };
 
@@ -171,17 +141,17 @@ export default function WallData() {
     if (buildingType === 3) return 1.4;
   };
 
-  const brickQ = brickThickness && brickThickness / brickLambda;
+  const brickQ = brickThickness * 0.001 && (brickThickness * 0.001) / brickLambda;
 
-  const concreteQ = concreteThickness && concreteThickness / concreteLambda;
+  const concreteQ = concreteThickness * 0.001 && (concreteThickness * 0.001) / concreteLambda;
 
   const rObl = (a() * gsop + b()) * mr;
   const preIns =
     Math.ceil(
       (k() * rObl - concreteQ - brickQ - 1 / 8.7 - 1 / 12) *
         (secondIns
-          ? (insThickness / (insThickness + secondInsThickness)) * insLambda +
-            (secondInsThickness / (insThickness + secondInsThickness)) * secondInsLambda
+          ? (insThickness / (insThickness + secondInsThickness)) * 0.001 * insLambda +
+            (secondInsThickness / (insThickness + secondInsThickness)) * 0.001 * secondInsLambda
           : insLambda) *
         100
     ) * 10;
@@ -305,7 +275,7 @@ export default function WallData() {
         </div>
         <div className="wall-options">
           <Form.Label className="ms-3">Штукатурка изнутри</Form.Label>
-          <Form.Select id="plaster" onChange={handlePlaster}>
+          <Form.Select id="plaster" onChange={handlePlaster} value={plaster}>
             <option value={1}>Нет</option>
             <option value={2}>Гипсовая</option>
             <option value={3}>Цементная</option>

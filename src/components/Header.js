@@ -8,7 +8,7 @@ export default function Header() {
       <button className="header-btn" onClick={() => navigate('/')}>
         <img className="header__logo" src={logo} alt="логотип" />
       </button>
-      <h1 className="header__title">Energy efficiency solution</h1>
+      <h1 className="header__title">Калькулятор энергоэффективности</h1>
     </header>
   );
 }

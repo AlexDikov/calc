@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { DefaultContext } from '../contexts/DefaultContext';
 import DkCalc from './DkCalc';
 
-export default function VaporCalc({ brickQ, concreteQ, insQ, rCond1, rCond2, rRed, secondInsQ }) {
+export default function VaporCalc({ brickQ, concreteQ, insQ, rCond1, rCond2, secondInsQ }) {
   const {
     brickAir,
     brickThickness,
@@ -24,6 +24,7 @@ export default function VaporCalc({ brickQ, concreteQ, insQ, rCond1, rCond2, rRe
     insThickness,
     insVapor,
     plaster,
+    rRed,
     secondIns,
     secondInsAir,
     secondInsThickness,
@@ -140,12 +141,20 @@ export default function VaporCalc({ brickQ, concreteQ, insQ, rCond1, rCond2, rRe
   };
 
   const rVaporWhole =
-    parseFloat(concreteVapor ? concreteThickness / concreteVapor : 0) +
-    parseFloat(brickVapor ? brickThickness / brickVapor : 0) +
-    parseFloat(secondIns ? insThickness / insVapor + secondInsThickness / secondInsVapor : insThickness / insVapor) +
+    parseFloat(concreteVapor ? (concreteThickness * 0.001) / concreteVapor : 0) +
+    parseFloat(brickVapor ? (brickThickness * 0.001) / brickVapor : 0) +
+    parseFloat(
+      secondIns
+        ? (insThickness * 0.001) / insVapor + (secondInsThickness * 0.001) / secondInsVapor
+        : (insThickness * 0.001) / insVapor
+    ) +
     plasterV();
   const rVaporIns =
-    parseFloat(secondIns ? insThickness / insVapor + secondInsThickness / secondInsVapor : insThickness / insVapor) +
+    parseFloat(
+      secondIns
+        ? (insThickness * 0.001) / insVapor + (secondInsThickness * 0.001) / secondInsVapor
+        : (insThickness * 0.001) / insVapor
+    ) +
     (vaporMembrane ? vaporMembraneR : 0) +
     (windMembrane ? vaporMembraneR : 0) +
     0.02;
@@ -172,9 +181,9 @@ export default function VaporCalc({ brickQ, concreteQ, insQ, rCond1, rCond2, rRe
   const gObl = g / (6.14 * rVaporWhole);
 
   const rU =
-    (concreteAir ? concreteThickness / concreteAir : null) +
-    (brickAir ? brickThickness / brickAir : null) +
-    (insThickness / insAir + secondInsAir ? secondInsAir : null) +
+    (concreteAir ? (concreteThickness * 0.001) / concreteAir : null) +
+    (brickAir ? (brickThickness * 0.001) / brickAir : null) +
+    ((insThickness * 0.001) / insAir + secondInsAir ? secondInsAir : null) +
     (windMembraneR ? windMembraneR : null) +
     plasterA();
   const yOuter = 3463 / (273 + cityProp.tm);
@@ -213,14 +222,15 @@ export default function VaporCalc({ brickQ, concreteQ, insQ, rCond1, rCond2, rRe
       <br />
       Полное сопротивление паропроницанию стены составляет:
       <br />R<sub>o</sub>
-      <sup>п</sup> = {concreteVapor && `${concreteThickness} / ${concreteVapor} +`}
-      {brickVapor && `${brickThickness} / ${brickVapor}`} + {insThickness} / {insVapor}{' '}
-      {secondIns && `+ ${secondInsThickness} / ${secondInsVapor}`}
+      <sup>п</sup> = {concreteVapor && `${concreteThickness * 0.001} / ${concreteVapor} +`}
+      {brickVapor && `${brickThickness * 0.001} / ${brickVapor}`} + {insThickness * 0.001} / {insVapor}{' '}
+      {secondIns && `+ ${secondInsThickness * 0.001} / ${secondInsVapor}`}
       {plaster && `+ ${plasterV()}`} = {rVaporWhole.toFixed(2)} м² ∙ ч ∙ Па/мг
       <br />
       Сопротивление паропроницанию слоев от основания до воздушной прослойки составляет:
       <br />R<sub>у</sub>
-      <sup>п</sup> = {insThickness} / {insVapor} {secondIns && `+ ${secondInsThickness} / ${secondInsVapor}`}
+      <sup>п</sup> = {insThickness * 0.001} / {insVapor}{' '}
+      {secondIns && `+ ${secondInsThickness * 0.001} / ${secondInsVapor}`}
       {vaporMembrane && `+ ${vaporMembraneR}`} {windMembrane && `+ ${windMembraneR}`}+ 0.02 = {rVaporIns} м² ∙ ч ∙ Па/мг
       <br />
       Поток водяного пара из конструкции в воздушную прослойку равен:
@@ -284,16 +294,16 @@ export default function VaporCalc({ brickQ, concreteQ, insQ, rCond1, rCond2, rRe
       <br />
       Сопротивление воздухопроницаемости исследуемой стены составляет: R = ∑R<sub>u</sub> ={' '}
       {concreteThickness
-        ? `${concreteThickness} /
+        ? `${concreteThickness * 0.001} /
           ${concreteAir} + `
         : null}
       {brickThickness
-        ? `${brickThickness} /
+        ? `${brickThickness * 0.001} /
           ${brickAir} + `
         : null}
-      {insThickness} / {insAir}
+      {insThickness * 0.001} / {insAir}
       {secondIns
-        ? ` + ${secondInsThickness} /
+        ? ` + ${secondInsThickness * 0.001} /
           ${secondInsAir}`
         : null}
       {plasterV() !== 0 ? ` + ${plasterV()}` : null} = {rU.toFixed(3)} м²∙ч∙Па/кг <br />

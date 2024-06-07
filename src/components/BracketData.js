@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Bracket from './Bracket';
 import { Button, ProgressBar } from 'react-bootstrap';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import React from 'react';
 import { DefaultContext } from '../contexts/DefaultContext';
 import LinearLossCalc from './LinearLossCalc';
@@ -10,8 +10,17 @@ import LinearLossCalcConcrete from './LinearLossCalcConcrete';
 export default function BracketData(props) {
   const navigate = useNavigate();
 
-  const { addBracket, airCalc, buildingType, concreteWall, setAddBracket, setUKey, vaporCalc, uKey } =
+  const { addBracket, airCalc, bracketResult, buildingType, concreteWall, setAddBracket, setUKey, vaporCalc, uKey } =
     useContext(DefaultContext);
+
+  useEffect(() => {
+    addBracket.map((item) => {
+      React.cloneElement(<Bracket />, {
+        key: uKey,
+        ukey: uKey,
+      });
+    });
+  });
 
   function addBracketInput() {
     setAddBracket((prevBrackets) => [
