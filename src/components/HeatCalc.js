@@ -117,6 +117,8 @@ export default function HeatCalc() {
         (windowLossConcrete * windowConcreteLength) / (brickS + concreteS)
     );
 
+  console.log(bracketResult);
+
   const pointLoss = () => {
     let totalLoss = gribPcs * gribDepth;
 

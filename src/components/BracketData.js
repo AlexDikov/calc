@@ -9,29 +9,34 @@ import LinearLossCalcConcrete from './LinearLossCalcConcrete';
 
 export default function BracketData(props) {
   const navigate = useNavigate();
+  const [bracketList, setBracketList] = useState([]);
 
   const { addBracket, airCalc, bracketResult, buildingType, concreteWall, setAddBracket, setUKey, vaporCalc, uKey } =
     useContext(DefaultContext);
-
+  console.log(bracketResult);
   useEffect(() => {
-    addBracket.map((item) => {
-      React.cloneElement(<Bracket />, {
-        key: uKey,
-        ukey: uKey,
-      });
-    });
-  });
+    const updatedBrackets = Object.entries(bracketResult).map(([key, item]) => (
+      <Bracket
+        key={key}
+        isBracket={item.bracket}
+        isBracketPcs={item.pcs}
+        isBracketType={item.type}
+        isBracketWeight={item.weight}
+        isWallType={item.wall}
+      />
+    ));
+    console.log(updatedBrackets);
+    setBracketList(updatedBrackets);
+  }, []);
 
-  function addBracketInput() {
-    setAddBracket((prevBrackets) => [
-      ...prevBrackets,
-      React.cloneElement(<Bracket />, {
-        key: uKey,
-        ukey: uKey,
-      }),
-    ]);
+  const addBracketInput = () => {
+    setAddBracket((prevBrackets) => {
+      const newBrackets = [...prevBrackets];
+      newBrackets.push(<Bracket key={uKey} ukey={uKey} />);
+      return newBrackets;
+    });
     setUKey((prevKey) => prevKey + 1);
-  }
+  };
 
   return (
     <div className="bracketData">
@@ -58,7 +63,7 @@ export default function BracketData(props) {
           Далее
         </Button>
       </div>
-      <Bracket ukey={0} hide={true} />
+      {bracketList}
       {addBracket}
       <button className="add-bracket" key="add-btn" onClick={addBracketInput}></button>
 

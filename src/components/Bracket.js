@@ -41,7 +41,7 @@ export default function Bracket(props) {
     return null;
   });
 
-  const { addBracket, buildingType, handleBracketResult, setAddBracket } = useContext(DefaultContext);
+  const { addBracket, buildingType, bracketResult, handleBracketResult, setAddBracket } = useContext(DefaultContext);
 
   function handleBracket(e) {
     setBracket(e.target.options[e.target.selectedIndex].text);
@@ -94,7 +94,7 @@ export default function Bracket(props) {
                   id={`${props.ukey}-1m`}
                   htmlFor={`${props.ukey}-1m`}
                   onClick={setAluminium}
-                  // checked={bracketType === true}
+                  defaultChecked={props.isBracketType === true}
                 />
                 <Form.Check
                   key={`${props.ukey}-2m`}
@@ -104,7 +104,7 @@ export default function Bracket(props) {
                   id={`${props.ukey}-2m`}
                   htmlFor={`${props.ukey}-2m`}
                   onClick={setSteel}
-                  // checked={bracketType !== true}
+                  defaultChecked={props.isBracketType !== true}
                 />
               </div>
             ))}
@@ -122,7 +122,7 @@ export default function Bracket(props) {
                   id={`${props.ukey}-1b`}
                   htmlFor={`${props.ukey}-1b`}
                   onClick={setHeavy}
-                  // checked={bracketWeight === true}
+                  defaultChecked={props.isBracketWeight === true}
                 />
                 <Form.Check
                   label="рядовой"
@@ -132,7 +132,7 @@ export default function Bracket(props) {
                   id={`${props.ukey}-2b`}
                   htmlFor={`${props.ukey}-2b`}
                   onClick={setLight}
-                  // checked={bracketWeight !== true}
+                  defaultChecked={props.isBracketWeight !== true}
                 />
               </div>
             ))}
@@ -145,9 +145,9 @@ export default function Bracket(props) {
             className="mt-2 w-75"
             id="bracket"
             onChange={handleBracket}
-            // value={bracket}
+            value={props.isBracket}
           >
-            <option>Тип кронштейна</option>
+            <option>{props.isBracket ? props.isBracket : 'Тип кронштейна'} </option>
             {bracketList}
           </Form.Select>
         </Col>
@@ -159,7 +159,7 @@ export default function Bracket(props) {
             id="bracket-pcs"
             key={`${props.ukey}-pcs`}
             onChange={handleBracketPcs}
-            // value={bracketPcs}
+            defaultValue={props.isBracketPcs}
           />
         </Col>
         <Col>
@@ -175,7 +175,7 @@ export default function Bracket(props) {
                     id={`${props.ukey}-1w`}
                     htmlFor={`${props.ukey}-1w`}
                     onClick={setConcrete}
-                    // checked={wallType === true}
+                    defaultChecked={props.isWallType === true}
                   />
                   <Form.Check
                     key={`${props.ukey}-2w`}
@@ -185,7 +185,7 @@ export default function Bracket(props) {
                     id={`${props.ukey}-2w`}
                     htmlFor={`${props.ukey}-2w`}
                     onClick={setBrick}
-                    // checked={wallType !== true}
+                    defaultChecked={props.isWallType !== true}
                   />
                 </div>
               ))}
