@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { Button, Col, Form, Image, ProgressBar, Row } from 'react-bootstrap';
+import { Button, Col, Form, Image, OverlayTrigger, ProgressBar, Row, Tooltip } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 import { DefaultContext } from '../contexts/DefaultContext';
@@ -156,6 +156,7 @@ export default function SystData() {
                   method={handleConcreteArea}
                 />
               ) : null}
+
               {buildingType === 1 ? (
                 <SystInput
                   min={0.1}
@@ -166,6 +167,8 @@ export default function SystData() {
                   text="Длина оконных откосов, м"
                   iValue={windowConcreteLength}
                   method={handleWindowConcreteLength}
+                  tooltip={true}
+                  tooltipText="Учитывается периметр всех проёмов"
                 />
               ) : (
                 <SystInput
@@ -177,6 +180,8 @@ export default function SystData() {
                   text={`Длина оконных откосов, ${concreteWall ? 'образованных кладкой, ' : ''}м`}
                   iValue={windowBrickLength}
                   method={handleWindowBrickLength}
+                  tooltip={true}
+                  tooltipText="Учитывается периметр всех проёмов"
                 />
               )}
 
@@ -190,6 +195,8 @@ export default function SystData() {
                   text="Длина оконных откосов, образованных ж/б стеной, м"
                   iValue={windowConcreteLength}
                   method={handleWindowConcreteLength}
+                  tooltip={true}
+                  tooltipText="Учитывается периметр всех проёмов"
                 />
               )}
               <SystInput
@@ -198,9 +205,11 @@ export default function SystData() {
                 xs2={2}
                 id={'grib-pcs'}
                 type="number"
-                text={`Количество тарельчатых дюбелей${concreteWall ? ' на кладке' : ''}, шт/м²`}
+                text={`Количество тарельчатых анкеров${concreteWall ? ' на кладке' : ''}, шт/м²`}
                 iValue={gribPcs}
                 method={handleGribPcs}
+                tooltip={true}
+                tooltipText="Для двухслойного утепления учитываются только анкеры, крепящие верхний слой"
               />
               {concreteWall && (
                 <SystInput
@@ -209,9 +218,11 @@ export default function SystData() {
                   xs2={2}
                   id={'grib-concrete-pcs'}
                   type="number"
-                  text="Количество тарельчатых дюбелей на ж/б стене, шт/м²"
+                  text="Количество тарельчатых анкеров на ж/б стене, шт/м²"
                   iValue={gribConcretePcs}
                   method={handleGribConcretePcs}
+                  tooltip={true}
+                  tooltipText="Для двухслойного утепления учитываются только анкеры, крепящие верхний слой"
                 />
               )}
             </div>

@@ -1,12 +1,17 @@
-import { Col, Form, Row } from 'react-bootstrap';
+import { Col, Form, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 
-export default function SystInput({ children, id, iValue, max, method, min, text, xs1, xs2 }) {
+export default function SystInput({ children, id, iValue, max, method, min, text, xs1, xs2, tooltip, tooltipText }) {
   return (
     <Row>
       <Col xs={xs1} className="mt-3">
-        <Form.Label htmlFor={id}>
+        <Form.Label htmlFor={id} className="obj-param position-relative">
           {text}
           {children}
+          {tooltip ? (
+            <OverlayTrigger overlay={<Tooltip id="vapor-tooltip">{tooltipText}</Tooltip>}>
+              <button className="i-btn position-absolute"></button>
+            </OverlayTrigger>
+          ) : null}
         </Form.Label>
       </Col>
       <Col xs={xs2}>

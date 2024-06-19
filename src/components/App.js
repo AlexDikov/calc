@@ -47,7 +47,7 @@ export default function App(props) {
   const [d, setD] = useState(0.1);
   const [dk, setDk] = useState(null);
   const [finalValues, setFinalValues] = useState({});
-  const [grib, setGrib] = useState(null);
+  const [grib, setGrib] = useState('L ≤ 2');
   const [gribDepth, setGribDepth] = useState(0.006);
   const [gribConcretePcs, setGribConcretePcs] = useState(null);
   const [gribPcs, setGribPcs] = useState(null);

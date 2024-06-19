@@ -1,6 +1,6 @@
 export const brackets = [
   { a: { name: 'MFT-MF HS' }, b: { name: 'MFT-MF HS(sts)' } },
-  { a: { name: 'MFT-MF S' } },
+  { a: { name: 'MFT-MF S' }, c: { name: 'MFT-RB S' } },
   { a: { name: 'MFT-MF M' }, b: { name: 'MFT-MF M(sts)' }, c: { name: 'MFT-RB M' } },
   {
     a: { name: 'MFT-MF LM' },

@@ -13,7 +13,7 @@ export default function BracketData(props) {
 
   const { addBracket, airCalc, bracketResult, buildingType, concreteWall, setAddBracket, setUKey, vaporCalc, uKey } =
     useContext(DefaultContext);
-  console.log(bracketResult);
+
   useEffect(() => {
     const updatedBrackets = Object.entries(bracketResult).map(([key, item]) => (
       <Bracket
@@ -25,7 +25,6 @@ export default function BracketData(props) {
         isWallType={item.wall}
       />
     ));
-    console.log(updatedBrackets);
     setBracketList(updatedBrackets);
   }, []);
 
@@ -64,6 +63,7 @@ export default function BracketData(props) {
         </Button>
       </div>
       {bracketList}
+      <Bracket key={0} ukey={0} />
       {addBracket}
       <button className="add-bracket" key="add-btn" onClick={addBracketInput}></button>
 
