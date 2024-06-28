@@ -194,7 +194,7 @@ export default function Final() {
             Пояснительная записка
           </Button>
         ) : null
-      ) : rRed > rObl ? (
+      ) : (
         <Button
           variant="outline-secondary"
           size="sm"
@@ -205,7 +205,7 @@ export default function Final() {
         >
           Пояснительная записка
         </Button>
-      ) : null}
+      )}
       {/* {pz && <Pz setRRed={handleRRed} setRObl={handleRObl} />} */}
       {pz && <HeatCalc />}
       <Button

@@ -106,7 +106,11 @@ export default function HeatCalc() {
         (secondInsThick / (insThick + secondInsThick)) * secondInsLambda
       : insLambda);
 
-  const linearLoss = !concreteWall && parseFloat((windowLoss * windowBrickLength) / (concreteS + brickS));
+  const linearLoss =
+    !concreteWall &&
+    parseFloat(
+      buildingType !== 1 ? windowLoss * windowBrickLength : (windowLoss * windowConcreteLength) / (concreteS + brickS)
+    );
 
   const linearLoss1 = concreteWall && parseFloat((windowLossConcrete * windowConcreteLength) / concreteS);
 
@@ -120,7 +124,7 @@ export default function HeatCalc() {
   console.log(bracketResult);
 
   const pointLoss = () => {
-    let totalLoss = gribPcs * gribDepth;
+    let totalLoss = 0;
 
     for (const key in bracketResult) {
       const bracketData = bracketResult[key];
@@ -160,7 +164,8 @@ export default function HeatCalc() {
     ((buildingType !== 3 && u1 * (concreteS / (brickS + concreteS))) +
       (buildingType !== 1 && u2 * (brickS / (brickS + concreteS))) +
       linearLoss +
-      pointLoss());
+      pointLoss() +
+      gribPcs * gribDepth);
 
   const rRed1 = 1 / (u1 + linearLoss1 + pointLoss1() + gribConcretePcs * gribDepth);
 
@@ -555,10 +560,18 @@ export default function HeatCalc() {
             secondInsQ={secondInsQ}
           />
         )}
-        <b>Вывод:</b> утепление рассматриваемого участка объекта {objName} по адресу: {objAddress} с приведенным
-        сопротивлением теплопередаче {concreteWall ? rRed1.toFixed(2) : rRed.toFixed(2)} м²˚С/Вт удовлетворяет условию
-        теплотехнического расчета - приведенное сопротивление больше требуемого, составляющего {rObl.toFixed(2)}{' '}
-        м²˚С/Вт.
+        <b>Вывод:</b>{' '}
+        {rRed > rObl
+          ? `утепление рассматриваемого участка объекта ${objName} по адресу: ${objAddress} с приведенным
+        сопротивлением теплопередаче ${concreteWall ? rRed1.toFixed(2) : rRed.toFixed(2)} м²˚С/Вт удовлетворяет условию
+        теплотехнического расчета - приведенное сопротивление больше требуемого, составляющего ${rObl.toFixed(2)} 
+        м²˚С/Вт.)`
+          : `утепление рассматриваемого участка объекта ${objName} по адресу: ${objAddress} с приведенным
+        сопротивлением теплопередаче ${
+          concreteWall ? rRed1.toFixed(2) : rRed.toFixed(2)
+        } м²˚С/Вт не удовлетворяет условию
+        теплотехнического расчета - приведенное сопротивление меньше требуемого, составляющего ${rObl.toFixed(2)} 
+        м²˚С/Вт.`}
         <br />
       </div>
       <Button
