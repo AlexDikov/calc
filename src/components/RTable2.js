@@ -16,8 +16,8 @@ export default function RTable2({ concreteS, u1 }) {
               <th scope="row">{(a += 1)}</th>
               <td>кронштейн {item.bracket}</td>
               <td>Точечный {(b += 1)}</td>
-              <td>{(item.pcs / concreteS).toFixed(3)}</td>
-              <td>{item.value.toFixed(3)}</td>
+              <td>{(item.pcs / concreteS).toFixed(3)} шт/м²</td>
+              <td>{item.value.toFixed(3)} Вт/°С</td>
               <td>{((item.value * item.pcs) / concreteS).toFixed(3)}</td>
               <td>{((item.value * item.pcs) / concreteS / qPercent()).toFixed(1)}</td>
             </tr>
@@ -64,8 +64,8 @@ export default function RTable2({ concreteS, u1 }) {
             <th scope="row">1</th>
             <td>{'Стена'}</td>
             <td>Плоский </td>
-            <td>1</td>
-            <td>{u1.toFixed(3)}</td>
+            <td>1 м²/м²</td>
+            <td>{u1.toFixed(3)} Вт/(м²°С)</td>
             <td>{u1.toFixed(3)}</td>
             <td>{(u1 / qPercent()).toFixed(1)}</td>
           </tr>
@@ -73,8 +73,8 @@ export default function RTable2({ concreteS, u1 }) {
             <th scope="row">2</th>
             <td>Оконный откос</td>
             <td>Линейный</td>
-            <td>{(windowConcreteLength / concreteS).toFixed(3)}</td>
-            <td>{windowLossConcrete.toFixed(3)}</td>
+            <td>{(windowConcreteLength / concreteS).toFixed(3)} м/м²</td>
+            <td>{windowLossConcrete.toFixed(3)} Вт/(м²°С)</td>
             <td>{((windowLossConcrete * windowConcreteLength) / concreteS).toFixed(3)}</td>
             <td>{((windowLossConcrete * windowConcreteLength) / concreteS / qPercent()).toFixed(1)}</td>
           </tr>
@@ -82,8 +82,8 @@ export default function RTable2({ concreteS, u1 }) {
             <th scope="row">3</th>
             <td>Тарельчатый анкер</td>
             <td>Точечный 1</td>
-            <td>{gribConcretePcs}</td>
-            <td>{gribDepth}</td>
+            <td>{gribConcretePcs} шт/м²</td>
+            <td>{gribDepth} Вт/°С</td>
             <td>{(gribConcretePcs * gribDepth).toFixed(3)}</td>
             <td>{((gribConcretePcs * gribDepth) / qPercent()).toFixed(1)}</td>
           </tr>
@@ -96,7 +96,7 @@ export default function RTable2({ concreteS, u1 }) {
             <td></td>
             <td>
               {' '}
-              1/R<sub>пр</sub> ={(qPercent() * 100).toFixed(3)}
+              ∑ ={(qPercent() * 100).toFixed(3)}(1/R<sub>пр</sub>)
             </td>
             <td></td>
           </tr>

@@ -15,8 +15,8 @@ export default function RTable3({ brickS, u2 }) {
               <th scope="row">{(a += 1)}</th>
               <td>кронштейн {item.bracket}</td>
               <td>Точечный {(b += 1)}</td>
-              <td>{(item.pcs / brickS).toFixed(3)}</td>
-              <td>{item.value.toFixed(3)}</td>
+              <td>{(item.pcs / brickS).toFixed(3)} шт/м²</td>
+              <td>{item.value.toFixed(3)} Вт/°С</td>
               <td>{((item.value * item.pcs) / brickS).toFixed(3)}</td>
               <td>{((item.value * item.pcs) / brickS / qPercent()).toFixed(1)}</td>
             </tr>
@@ -64,8 +64,8 @@ export default function RTable3({ brickS, u2 }) {
             <th scope="row">1</th>
             <td>{'Стена'}</td>
             <td>Плоский </td>
-            <td>1</td>
-            <td>{u2.toFixed(3)}</td>
+            <td>1 м²/м²</td>
+            <td>{u2.toFixed(3)} Вт/(м²°С)</td>
             <td>{u2.toFixed(3)}</td>
             <td>{(u2 / qPercent()).toFixed(1)}</td>
           </tr>
@@ -73,8 +73,8 @@ export default function RTable3({ brickS, u2 }) {
             <th scope="row">2</th>
             <td>Оконный откос</td>
             <td>Линейный</td>
-            <td>{(windowBrickLength / brickS).toFixed(3)}</td>
-            <td>{windowLoss.toFixed(3)}</td>
+            <td>{(windowBrickLength / brickS).toFixed(3)} м/м²</td>
+            <td>{windowLoss.toFixed(3)} Вт/(м²°С)</td>
             <td>{((windowLoss * windowBrickLength) / brickS).toFixed(3)}</td>
             <td>{((windowLoss * windowBrickLength) / brickS / qPercent()).toFixed(1)}</td>
           </tr>
@@ -82,8 +82,8 @@ export default function RTable3({ brickS, u2 }) {
             <th scope="row">3</th>
             <td>Тарельчатый анкер</td>
             <td>Точечный 1</td>
-            <td>{gribPcs}</td>
-            <td>{gribDepth}</td>
+            <td>{gribPcs} шт/м²</td>
+            <td>{gribDepth} Вт/°С</td>
             <td>{(gribPcs * gribDepth).toFixed(3)}</td>
             <td>{((gribPcs * gribDepth) / qPercent()).toFixed(1)}</td>
           </tr>
@@ -96,7 +96,7 @@ export default function RTable3({ brickS, u2 }) {
             <td></td>
             <td>
               {' '}
-              1/R<sub>пр</sub> ={(qPercent() * 100).toFixed(3)}
+              ∑ ={(qPercent() * 100).toFixed(3)}(1/R<sub>пр</sub>)
             </td>
             <td></td>
           </tr>

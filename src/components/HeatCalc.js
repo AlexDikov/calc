@@ -1,11 +1,28 @@
 import React, { useContext, useRef } from 'react';
 import { DefaultContext } from '../contexts/DefaultContext';
-import { Button } from 'react-bootstrap';
+import { Button, Image } from 'react-bootstrap';
 import { useReactToPrint } from 'react-to-print';
 import VaporCalc from './VaporCalc';
 import RTable from './RTable';
 import RTable2 from './RTable2';
 import RTable3 from './RTable3';
+import grib1 from '../images/1.jpg';
+import grib2 from '../images/2.jpg';
+import grib3 from '../images/3.jpg';
+import grib4 from '../images/4.jpg';
+import grib5 from '../images/5.jpg';
+import grib6 from '../images/6.jpg';
+import grib7 from '../images/7.jpg';
+import grib8 from '../images/8.jpg';
+import win01 from '../images/01.jpg';
+import win02 from '../images/02.jpg';
+import win03 from '../images/03.jpg';
+import win11 from '../images/11.jpg';
+import win12 from '../images/12.jpg';
+import win13 from '../images/13.jpg';
+import win21 from '../images/21.jpg';
+import win22 from '../images/22.jpg';
+import win23 from '../images/23.jpg';
 
 export default function HeatCalc() {
   const {
@@ -237,6 +254,28 @@ export default function HeatCalc() {
       rRed: rRed2,
       secondInsQ: secondInsQ,
     });
+  const windowPic = () => {
+    if (windowDepth == 1 && windowHeight == 1) return win01;
+    if (windowDepth == 1 && windowHeight == 2) return win02;
+    if (windowDepth == 1 && windowHeight == 3) return win03;
+    if (windowDepth == 2 && windowHeight == 1) return win11;
+    if (windowDepth == 2 && windowHeight == 2) return win12;
+    if (windowDepth == 2 && windowHeight == 3) return win13;
+    if (windowDepth == 3 && windowHeight == 1) return win21;
+    if (windowDepth == 3 && windowHeight == 2) return win22;
+    if (windowDepth == 3 && windowHeight == 3) return win23;
+  };
+
+  const gribPic = () => {
+    if (gribDepth == 0.006) return grib1;
+    if (gribDepth == 0.005) return grib2;
+    if (gribDepth == 0.004) return grib3;
+    if (gribDepth == 0.003) return grib4;
+    if (gribDepth == 0.0025) return grib5;
+    if (gribDepth == 0.002) return grib6;
+    if (gribDepth == 0.0015) return grib7;
+    if (gribDepth == 0.001) return grib8;
+  };
 
   return (
     <>
@@ -276,6 +315,7 @@ export default function HeatCalc() {
           {cityProp.w} %.
           <br />
           <br /> <b>Состав стены:</b>
+          <br />
           {plaster &&
             `- ${
               plaster === 2 ? 'гипсовая' : 'цементная'
@@ -391,10 +431,17 @@ export default function HeatCalc() {
           {innerTemp} -(
           {buildingAim === 2 ? cityProp.t10 : cityProp.t8})) ∙ {buildingAim === 2 ? cityProp.z10 : cityProp.z8}={' '}
           {gsop.toFixed(0)}
-          °С∙сут. <br />
-          Минимально требуемое приведенное сопротивление теплопередаче стен по СП 50.13330.2012 составляет <br />R
+          °С∙сут. <br />t<sub>в</sub> - температура внутреннего воздуха
+          <br />t{buildingAim === 2 ? <sub>10</sub> : <sub>8</sub>} - средняя температура отопительного периода по табл.
+          3.1 СП 131.13330.2020
+          <br />z{buildingAim === 2 ? <sub>10</sub> : <sub>8</sub>} - продолжительность отопительного периода по табл.
+          3.1 СП 131.13330.2020
+          <br />
+          Минимально требуемое приведенное сопротивление теплопередаче стен по СП 50.13330.2012 составляет: <br />R
           <sub>тр</sub> = (a ∙ ГСОП + b) ∙ m<sub>r</sub> = ({a()} ∙ {gsop.toFixed(0)} + {b()}) ∙ {mr} ={' '}
           {rObl.toFixed(2)} м²°С/Вт.
+          <br />a - коэффициент по табл. 3 СП 50.13330.2012
+          <br />b - коэффициент по табл. 3 СП 50.13330.2012
           <br /> <br />
           <h5>3. Минимально необходимая толщина утеплителя.</h5>
           Приближенная толщина утеплителя : δ = (k ∙ R<sub>тр</sub> - δ<sub>к</sub>/λ<sub>к</sub> - 1/α<sub>в</sub> -
@@ -405,13 +452,21 @@ export default function HeatCalc() {
             ? (insThick / (insThick + secondInsThick)) * insLambda +
               (secondInsThick / (insThick + secondInsThick)) * secondInsLambda
             : insLambda}
-          ) = {preIns.toFixed(2) * 1000} мм;
-          <br /> Удельные потери теплоты через кронштейны в соответствии с заключением НИИСФ РААСН по договору №
-          12250(2020) от «09» декабря 2020 г. находятся по таблицам Г.71, Г.73, Г.74, Г.75 СП 230.1325800.2015
-          интерполяцией:
+          ) = {preIns.toFixed(2) * 1000} мм,
+          <br />α<sub>в</sub> = 8,7 по табл. 4 СП 50.13330.2012
+          <br />α<sub>н</sub> = 12 по табл. 6 СП 50.13330.2012
+          <br />k = {k()} для данного типа материала ограждающей конструкции
+          <br /> δ<sub>к</sub> - толщина конструкционного слоя
+          <br /> λ<sub>к</sub> - коэффициент теплопроводности материала конструкционного слоя
+          <br /> λ<sub>у</sub> - коэффициент теплопроводности утеплителя
+          <br />
+          <br />
+          Удельные потери теплоты через кронштейны в соответствии с заключением НИИСФ РААСН по договору № 12250(2020) от
+          «09» декабря 2020 г. находятся по таблицам Г.71, Г.73, Г.74, Г.75 СП 230.1325800.2015 интерполяцией:
           {brackets2()}
           <br />У применяемого на данном объекте тарельчатого анкера расстояние от края стального распорного элемента до
           тарелки дюбеля составляет {grib} мм.
+          <Image src={gribPic()} alt="a" className="systdata-grib-img d-flex" />
           <br /> В соответствии с таблицей Г4 СП 230.1325800.2015 удельные потери теплоты тарельчатого анкера χ ={' '}
           {gribDepth} Вт/°С.
           <h5>
@@ -517,11 +572,14 @@ export default function HeatCalc() {
             </>
           )}
           <br />
+          Для учета примыканий оконных блоков принимаем характеристики этих узлов по таблице Г.33 приложения Г СП
+          230.1325800.2015 {windowD()} и {windowH()}.
+          <br />
+          <Image src={windowPic()} alt="a" className="systdata-window-img " />
+          <br />
           Приведенное сопротивление теплопередаче фрагмента стены с НФС представлено в{' '}
           {concreteWall ? '2 таблицах' : 'таблице'} аналогично приложению Е СП 50.13330.2012, что позволяет оценить
-          какое влияние оказывает каждый элемент конструкции. Для учета примыканий оконных блоков принимаем
-          характеристики этих узлов по таблице Г.33 приложения Г СП 230.1325800.2015 {windowD()} и {windowH()}.
-          <br />
+          какое влияние оказывает каждый элемент конструкции.
         </div>
         {!concreteWall && (
           <>

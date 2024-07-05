@@ -23,8 +23,8 @@ export default function RTable({ brickS, concreteS, u1, u2 }) {
           </th>
           <td>кронштейн {item.bracket}</td>
           <td>Точечный {parseInt(key) + 2}</td>
-          <td>{(item.pcs / (concreteS + brickS)).toFixed(3)}</td>
-          <td>{item.value.toFixed(3)}</td>
+          <td>{(item.pcs / (concreteS + brickS)).toFixed(3)} шт/м²</td>
+          <td>{item.value.toFixed(3)} Вт/°С</td>
           <td>{((item.value * item.pcs) / (concreteS + brickS)).toFixed(3)}</td>
           <td>{((item.value * item.pcs) / (concreteS + brickS) / qPercent()).toFixed(1)}</td>
         </tr>
@@ -72,8 +72,8 @@ export default function RTable({ brickS, concreteS, u1, u2 }) {
             <th scope="row">1</th>
             <td>{buildingType === 1 ? 'Стена' : 'Перекрытие'}</td>
             <td>Плоский {buildingType === 2 ? 1 : null} </td>
-            <td>{(concreteS / (concreteS + brickS)).toFixed(3)}</td>
-            <td>{u1.toFixed(3)}</td>
+            <td>{(concreteS / (concreteS + brickS)).toFixed(3)} м²/м²</td>
+            <td>{u1.toFixed(3)} Вт/(м²°С)</td>
             <td>{((u1 * concreteS) / (concreteS + brickS)).toFixed(3)}</td>
             <td>{((u1 * concreteS) / (concreteS + brickS) / qPercent()).toFixed(1)}</td>
           </tr>
@@ -83,8 +83,8 @@ export default function RTable({ brickS, concreteS, u1, u2 }) {
             <th scope="row"> {buildingType !== 3 ? 2 : 1}</th>
             <td>Стена</td>
             <td>Плоский {buildingType === 2 ? 2 : null}</td>
-            <td>{(brickS / (concreteS + brickS)).toFixed(3)}</td>
-            <td>{u2.toFixed(3)}</td>
+            <td>{(brickS / (concreteS + brickS)).toFixed(3)} м²/м²</td>
+            <td>{u2.toFixed(3)} Вт/(м²°С)</td>
             <td>{((u2 * brickS) / (concreteS + brickS)).toFixed(3)}</td>
             <td>{((u2 * brickS) / (concreteS + brickS) / qPercent()).toFixed(1)}</td>
           </tr>
@@ -95,14 +95,14 @@ export default function RTable({ brickS, concreteS, u1, u2 }) {
           <td>Линейный </td>
           {buildingType === 1 ? (
             <>
-              <td>{(windowConcreteLength / concreteS).toFixed(3)}</td>
-              <td> {windowLossConcrete.toFixed(3)}</td>
+              <td>{(windowConcreteLength / concreteS).toFixed(3)} м/м²</td>
+              <td> {windowLossConcrete.toFixed(3)} Вт/(м²°С)</td>
               <td>{((windowLossConcrete * windowConcreteLength) / concreteS).toFixed(3)}</td>
               <td>{((windowLossConcrete * windowConcreteLength) / concreteS / qPercent()).toFixed(1)}</td>
             </>
           ) : (
             <>
-              <td>{(windowBrickLength / (concreteS + brickS)).toFixed(3)}</td>
+              <td>{(windowBrickLength / (concreteS + brickS)).toFixed(3)} м/м²</td>
               <td> {windowLoss.toFixed(3)}</td>
               <td>{((windowLoss * windowBrickLength) / (concreteS + brickS)).toFixed(3)}</td>
               <td>{((windowLoss * windowBrickLength) / (concreteS + brickS) / qPercent()).toFixed(1)}</td>
@@ -113,9 +113,9 @@ export default function RTable({ brickS, concreteS, u1, u2 }) {
           <th scope="row">{buildingType === 2 ? 4 : 3}</th>
           <td>Тарельчатый анкер</td>
           <td>Точечный 1</td>
-          <td>{gribPcs}</td>
-          <td>{gribDepth}</td>
-          <td>{(gribPcs * gribDepth).toFixed(3)}</td>
+          <td>{gribPcs} шт/м²</td>
+          <td>{gribDepth} Вт/°С</td>
+          <td>{(gribPcs * gribDepth).toFixed(3)} </td>
           <td>{((gribPcs * gribDepth) / qPercent()).toFixed(1)}</td>
         </tr>
 
@@ -128,7 +128,7 @@ export default function RTable({ brickS, concreteS, u1, u2 }) {
           <td></td>
           <td>
             {' '}
-            1/R<sub>пр</sub> = {(qPercent() * 100).toFixed(3)}
+            ∑ = {(qPercent() * 100).toFixed(3)}(1/R<sub>пр</sub>)
           </td>
           <td></td>
         </tr>
