@@ -108,7 +108,7 @@ export default function HeatCalc() {
     if (buildingAim === 2) return 0.0003;
     if (buildingAim === 3) return 0.0002;
   };
-  const gsop = buildingAim === 2 ? (innerTemp - cityProp.t10) * cityProp.z10 : (innerTemp - cityProp.t8) * cityProp.z8;
+  const gsop = buildingAim === 1 ? (innerTemp - cityProp.t10) * cityProp.z10 : (innerTemp - cityProp.t8) * cityProp.z8;
 
   const concreteQ = buildingType !== 3 && parseFloat((concreteThick / concreteLambda).toFixed(3));
   const brickQ = buildingType !== 1 && parseFloat((brickThick / brickLambda).toFixed(3));
@@ -126,7 +126,9 @@ export default function HeatCalc() {
   const linearLoss =
     !concreteWall &&
     parseFloat(
-      buildingType !== 1 ? windowLoss * windowBrickLength : (windowLoss * windowConcreteLength) / (concreteS + brickS)
+      buildingType !== 1
+        ? (windowLoss * windowBrickLength) / (concreteS + brickS)
+        : (windowLoss * windowConcreteLength) / (concreteS + brickS)
     );
 
   const linearLoss1 = concreteWall && parseFloat((windowLossConcrete * windowConcreteLength) / concreteS);
@@ -303,10 +305,10 @@ export default function HeatCalc() {
           Климатические данные принимаются по таблице 3.1 СП 131.13330.2020 и пункту 5.7 СП 50.13330.2012; <br />-
           средняя температура наиболее холодной пятидневки, с обеспеченностью 0,92: t = {cityProp.t} °С;
           <br />- средняя температура наиболее холодного месяца: t<sub>м</sub> = {cityProp.tm} °С; <br />- средняя
-          температура отопительного периода: t<sub>{buildingAim === 2 ? '10' : '8'}</sub> ={' '}
-          {buildingAim === 2 ? cityProp.t10 : cityProp.t8} °С;
-          <br />- продолжительность отопительного периода: z<sub>{buildingAim === 2 ? '10' : '8'}</sub> ={' '}
-          {buildingAim === 2 ? cityProp.z10 : cityProp.z8} сут;
+          температура отопительного периода: t<sub>{buildingAim === 1 ? '10' : '8'}</sub> ={' '}
+          {buildingAim === 1 ? cityProp.t10 : cityProp.t8} °С;
+          <br />- продолжительность отопительного периода: z<sub>{buildingAim === 1 ? '10' : '8'}</sub> ={' '}
+          {buildingAim === 1 ? cityProp.z10 : cityProp.z8} сут;
           <br />- максимальная из скоростей ветра по румбам за январь: ν = {cityProp.v} м/c;
           <br />- расчетная относительная влажность внутреннего воздуха: φ = {humidity} %; <br />
           <br />
@@ -427,14 +429,14 @@ export default function HeatCalc() {
           )}
           <br /> <h5>2. Требуемое сопротивление теплопередаче.</h5>
           Градусо-сутки отопительного периода для рассматриваемого случая составляют: ГСОП = (t<sub>в</sub> - t
-          {buildingAim === 2 ? <sub>10</sub> : <sub>8</sub>}) ∙ z{buildingAim === 2 ? <sub>10</sub> : <sub>8</sub>}= (
+          {buildingAim === 1 ? <sub>10</sub> : <sub>8</sub>}) ∙ z{buildingAim === 1 ? <sub>10</sub> : <sub>8</sub>}= (
           {innerTemp} -(
-          {buildingAim === 2 ? cityProp.t10 : cityProp.t8})) ∙ {buildingAim === 2 ? cityProp.z10 : cityProp.z8}={' '}
+          {buildingAim === 1 ? cityProp.t10 : cityProp.t8})) ∙ {buildingAim === 1 ? cityProp.z10 : cityProp.z8}={' '}
           {gsop.toFixed(0)}
           °С∙сут. <br />t<sub>в</sub> - температура внутреннего воздуха
-          <br />t{buildingAim === 2 ? <sub>10</sub> : <sub>8</sub>} - средняя температура отопительного периода по табл.
+          <br />t{buildingAim === 1 ? <sub>10</sub> : <sub>8</sub>} - средняя температура отопительного периода по табл.
           3.1 СП 131.13330.2020
-          <br />z{buildingAim === 2 ? <sub>10</sub> : <sub>8</sub>} - продолжительность отопительного периода по табл.
+          <br />z{buildingAim === 1 ? <sub>10</sub> : <sub>8</sub>} - продолжительность отопительного периода по табл.
           3.1 СП 131.13330.2020
           <br />
           Минимально требуемое приведенное сопротивление теплопередаче стен по СП 50.13330.2012 составляет: <br />R
