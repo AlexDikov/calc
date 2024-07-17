@@ -113,9 +113,10 @@ export default function ObjData() {
               </div>
               <Form.Select className="mt-3" id="building-aim" value={buildingAim} required onChange={handleBuildingAim}>
                 <option>Назначение здания</option>
-                <option value="1">Жилое, лечебное, детское</option>
-                <option value="2">Общественное, административное</option>
-                <option value="3">Производственное </option>
+                <option value="1">Лечебное, детское</option>
+                <option value="2">Жилое, гостиница</option>
+                <option value="3">Общественное, административное</option>
+                <option value="4">Производственное </option>
               </Form.Select>
             </div>
             <div className="obj-container">

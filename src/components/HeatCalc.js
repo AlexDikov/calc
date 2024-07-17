@@ -100,13 +100,15 @@ export default function HeatCalc() {
 
   const b = () => {
     if (buildingAim === 1) return 1.4;
-    if (buildingAim === 2) return 1.2;
-    if (buildingAim === 3) return 1;
+    if (buildingAim === 2) return 1.4;
+    if (buildingAim === 3) return 1.2;
+    if (buildingAim === 4) return 1;
   };
   const a = () => {
     if (buildingAim === 1) return 0.00035;
-    if (buildingAim === 2) return 0.0003;
-    if (buildingAim === 3) return 0.0002;
+    if (buildingAim === 2) return 0.00035;
+    if (buildingAim === 3) return 0.0003;
+    if (buildingAim === 4) return 0.0002;
   };
   const gsop = buildingAim === 1 ? (innerTemp - cityProp.t10) * cityProp.z10 : (innerTemp - cityProp.t8) * cityProp.z8;
 
