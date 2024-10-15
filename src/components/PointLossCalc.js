@@ -25,11 +25,10 @@ export default function PointLossCalc(props) {
       let heatItem;
 
       heatItem = bracketData.find((item) => item.name === props.isBracket);
-      if (insValue < 1.5) {
-        ins1 = heatItem.r1;
-        ins2 = heatItem.r2;
-      }
-      if (1.5 < insValue && insValue < 3) {
+      if (0.7 < insValue && insValue < 1.5) {
+        ins1 = heatItem.r0;
+        ins2 = heatItem.r1;
+      } else if (1.5 < insValue && insValue < 3) {
         ins1 = heatItem.r1;
         ins2 = heatItem.r2;
       } else if (3 < insValue && insValue < 6) {
