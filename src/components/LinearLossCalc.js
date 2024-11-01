@@ -34,19 +34,19 @@ export default function LinearLossCalc() {
       preItem = windows.find((item) => item.name === windowDepth);
       heatItem = Object.values(preItem[windowHeight]);
 
-      if (0 < wallValue && wallValue <= 0.04) {
+      if (0.7 < insValue && insValue < 1.5) {
         ins1 = heatItem[0];
         ins2 = heatItem[1];
       }
       if (1.5 < insValue && insValue < 3) {
-        ins1 = heatItem[0];
-        ins2 = heatItem[1];
-      } else if (3 < insValue && insValue < 6) {
         ins1 = heatItem[1];
         ins2 = heatItem[2];
-      } else if (6 < insValue && insValue < 8) {
+      } else if (3 < insValue && insValue < 6) {
         ins1 = heatItem[2];
         ins2 = heatItem[3];
+      } else if (6 < insValue && insValue < 8) {
+        ins1 = heatItem[3];
+        ins2 = heatItem[4];
       }
 
       return { ins1, ins2 };

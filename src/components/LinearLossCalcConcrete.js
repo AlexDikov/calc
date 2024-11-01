@@ -29,19 +29,18 @@ export default function LinearLossCalcConcrete() {
 
       preItem = windows.find((item) => item.name === windowDepth);
       heatItem = Object.values(preItem[windowHeight]);
-      if (0 < wallValue && wallValue <= 0.04) {
+      if (0.7 < insValue && insValue <= 1.5) {
         ins1 = heatItem[0];
         ins2 = heatItem[1];
-      }
-      if (1.5 < insValue && insValue < 3) {
-        ins1 = heatItem[0];
-        ins2 = heatItem[1];
-      } else if (3 < insValue && insValue < 6) {
+      } else if (1.5 < insValue && insValue < 3) {
         ins1 = heatItem[1];
         ins2 = heatItem[2];
-      } else if (6 < insValue && insValue < 8) {
+      } else if (3 < insValue && insValue < 6) {
         ins1 = heatItem[2];
         ins2 = heatItem[3];
+      } else if (6 < insValue && insValue < 8) {
+        ins1 = heatItem[3];
+        ins2 = heatItem[4];
       }
 
       return { ins1, ins2 };
@@ -65,31 +64,31 @@ export default function LinearLossCalcConcrete() {
       const wallResult = wall();
 
       const wallX1 = () => {
-        if (0.04 < wallValue && wallValue < 0.2) return 0.04;
-        if (0.2 < wallValue && wallValue < 0.6) return 0.2;
-        if (0.6 < wallValue && wallValue < 1.8) return 0.6;
-        if (1.8 < wallValue && wallValue < 2.1) return 1.8;
+        if (0.04 < wallValue && wallValue <= 0.2) return 0.04;
+        if (0.2 < wallValue && wallValue <= 0.6) return 0.2;
+        if (0.6 < wallValue && wallValue <= 1.8) return 0.6;
+        if (1.8 < wallValue && wallValue <= 2.1) return 1.8;
       };
 
       const wallX2 = () => {
-        if (0.04 < wallValue && wallValue < 0.2) return 0.2;
-        if (0.2 < wallValue && wallValue < 0.6) return 0.6;
-        if (0.6 < wallValue && wallValue < 1.8) return 1.8;
-        if (1.8 < wallValue && wallValue < 2.1) return 2.1;
+        if (0.04 < wallValue && wallValue <= 0.2) return 0.2;
+        if (0.2 < wallValue && wallValue <= 0.6) return 0.6;
+        if (0.6 < wallValue && wallValue <= 1.8) return 1.8;
+        if (1.8 < wallValue && wallValue <= 2.1) return 2.1;
       };
 
       const insX1 = () => {
-        if (0.4 < insValue && insValue < 1.5) return 0.4;
-        if (1.5 < insValue && insValue < 3) return 1.5;
-        if (3 < insValue && insValue < 6) return 3;
-        if (6 < insValue && insValue < 8) return 6;
+        if (0.4 < insValue && insValue <= 1.5) return 0.4;
+        if (1.5 < insValue && insValue <= 3) return 1.5;
+        if (3 < insValue && insValue <= 6) return 3;
+        if (6 < insValue && insValue <= 8) return 6;
       };
 
       const insX2 = () => {
-        if (0.4 < insValue && insValue < 1.5) return 1.5;
-        if (1.5 < insValue && insValue < 3) return 3;
-        if (3 < insValue && insValue < 6) return 6;
-        if (6 < insValue && insValue < 8) return 8;
+        if (0.4 < insValue && insValue <= 1.5) return 1.5;
+        if (1.5 < insValue && insValue <= 3) return 3;
+        if (3 < insValue && insValue <= 6) return 6;
+        if (6 < insValue && insValue <= 8) return 8;
       };
 
       const pre1 = wallResult[0] + ((wallValue - wallX1()) * (wallResult[1] - wallResult[0])) / (wallX2() - wallX1());
