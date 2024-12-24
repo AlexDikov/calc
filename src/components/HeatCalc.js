@@ -84,6 +84,7 @@ export default function HeatCalc() {
     windowLossConcrete,
   } = useContext(DefaultContext);
 
+  //TODO: если в коде появляются какие либо числа/константы то оставляй коментарии-пояснение что это и зачем
   const brickThick = brickThickness * 0.001;
   const concreteThick = concreteThickness * 0.001;
   const insThick = insThickness * 0.001;

@@ -5,6 +5,12 @@ export default function Header() {
   const navigate = useNavigate();
   return (
     <header className="header ">
+      {/* TODO: 
+      import {ROUTES} from '../routes'
+      <button className="header-btn" onClick={() => navigate(ROUTES.ROOT)}>
+
+
+      */}
       <button className="header-btn" onClick={() => navigate('/')}>
         <img className="header__logo" src={logo} alt="логотип" />
       </button>

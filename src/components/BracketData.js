@@ -7,6 +7,7 @@ import { DefaultContext } from '../contexts/DefaultContext';
 import LinearLossCalc from './LinearLossCalc';
 import LinearLossCalcConcrete from './LinearLossCalcConcrete';
 
+  // TODO: props не используется
 export default function BracketData(props) {
   const navigate = useNavigate();
   const [bracketList, setBracketList] = useState([]);
@@ -15,6 +16,7 @@ export default function BracketData(props) {
     useContext(DefaultContext);
 
   useEffect(() => {
+    // TODO: тут лучше useMemo
     const updatedBrackets = Object.entries(bracketResult).map(([key, item]) => (
       <Bracket
         key={key}
@@ -28,6 +30,7 @@ export default function BracketData(props) {
     setBracketList(updatedBrackets);
   }, []);
 
+  // TODO: не забываем useCallback
   const addBracketInput = () => {
     setAddBracket((prevBrackets) => {
       const newBrackets = [...prevBrackets];
@@ -36,7 +39,7 @@ export default function BracketData(props) {
     });
     setUKey((prevKey) => prevKey + 1);
   };
-
+// TODO: ProgressBar лучше вынести выше формы и завести стейт, который будет хранить состояние конкретного шага формы и вычислять его на лету
   return (
     <div className="bracketData">
       <ProgressBar variant="secondary" now={80} label={`${80}%`} />
@@ -65,6 +68,7 @@ export default function BracketData(props) {
       {bracketList}
       <Bracket key={0} ukey={0} />
       {addBracket}
+      {/* подключил бутстрап и не используешь... */}
       <button className="add-bracket" key="add-btn" onClick={addBracketInput}></button>
 
       <LinearLossCalc />

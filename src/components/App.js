@@ -13,6 +13,7 @@ import { covers } from './covers';
 import Final from './Final';
 
 export default function App(props) {
+  // TODO: Эти все стейты унести в REDUX
   const [addBracket, setAddBracket] = useState([]);
   const [bracketResult, setBracketResult] = useState({});
   const [brickAir, setBrickAir] = useState('');
@@ -99,6 +100,7 @@ export default function App(props) {
   const [windowLossConcrete, setWindowLossConcrete] = useState(null);
   const [uKey, setUKey] = useState(1);
 
+  // TODO: В App файле не должно быть никакой логики, только роутер и подключение контекстов
   function handleAddSecondIns() {
     setSecondIns(true);
   }
@@ -596,6 +598,7 @@ export default function App(props) {
           handleWindMembrane,
           uKey,
         }}
+        // TODO: все роуты вынести в константы и испльзовать через них; в тч и составлять составные роуты тоже через константы
       >
         <Header />
         <Routes>

@@ -3,6 +3,7 @@ import { windows } from './windows';
 import { useContext } from 'react';
 import { DefaultContext } from '../contexts/DefaultContext';
 
+// TODO: это похоже на hook, но точно не компонент
 export default function LinearLossCalc() {
   const {
     brickLambda,
