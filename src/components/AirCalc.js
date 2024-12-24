@@ -38,7 +38,30 @@ export default function AirCalc({
     windMembraneR,
     windMembrane,
   } = useContext(DefaultContext);
-
+/**
+ * 
+ *  TODO: 
+ * const plasterV = {
+ *   plaster1: 0,
+ *   plaster2: 0.125,
+ *   plaster3: 0.1667,
+ * };
+ * для того что бы этим пользоваться, нужно завести ENUM каталога пластеров(в идеале использовать ts)
+ * 
+ * const plasetrEnum = {
+ *   plaster1: 'plaster1,
+ *   plaster2: 'plaster2,
+ *   plaster3: 'plaster3,
+ * };
+ * 
+ * и тогда использование сведется к 
+ * plasterV[plasetrEnum.plaster1]
+ * 
+ * скорее всего plasterV и plasterA можно объеденить в один словать или в один enum, 
+ * в зависимости от выбранной стратегии
+ * 
+ * И это все нужно унести в константы, не хранить в компонентах
+ */
   const plasterV = () => {
     if (plaster === 1) return 0;
     if (plaster === 2) return 0.125;
@@ -50,7 +73,11 @@ export default function AirCalc({
     if (plaster === 2) return 142;
     if (plaster === 3) return 373;
   };
-
+/**
+ * TODO: Вычеслений в рендере быть не должно. все что может быть переиспользовано, уносится в утилиты и применяется в хуках.
+ * хуки подключаются к компонентам и отдают готовый результат
+ * 
+ */
   const rX = 1 / 8.7 + concreteQ + brickQ + insQ + secondInsQ;
   const tx = innerTemp - ((innerTemp - cityProp.tm) / (buildingType === 1 ? rCond1 : rCond2)) * rX;
   const eCond = 1.84 * 10 ** 11 * Math.exp(-5330 / (273 + tx));

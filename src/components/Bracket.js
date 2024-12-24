@@ -1,4 +1,5 @@
 import { Col, Form, Row } from 'react-bootstrap';
+// TODO: убрать то что не используется
 import { createContext, useContext, useState } from 'react';
 import { brackets } from './brackets';
 import PointLossCalc from './PointLossCalc';
@@ -14,6 +15,8 @@ export default function Bracket(props) {
 
   const bracketList = brackets.map((list, i) => {
     if (bracketType && bracketWeight && list.c)
+      // TODO: что бы не городить `c-${i}`. в массиве brackets, лучше заранее каждому элементу задать уникальный id 
+    // относится ко всем похожим случаям
       return (
         <option key={`c-${i}`} value={i}>
           {list.c.name}

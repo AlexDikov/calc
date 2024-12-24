@@ -1,3 +1,8 @@
+/* TODO (minor): порядок сортировки импортов
+1) библиотеки
+2) модули приложения
+3) стили
+*/ 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-tooltip/dist/react-tooltip.css';
 import React from 'react';

@@ -145,12 +145,16 @@ export default function Final() {
           ) : (
             <div className="final rounded shadow p-3 mb-5 bg-body-tertiary ">
               <h4>
+                {/* // TODO:  никаких рассчетов в рендере */}
                 G<sub>у({gU.toFixed(3)})</sub> {'>'} G<sub>тр({gObl.toFixed(3)})</sub>
               </h4>
               <p>Добавьте штукатурку или пароизоляцию</p>
               {plaster ? null : (
                 <Row>
                   <Col>
+                  {/* 
+                  // TODO: Думаю селект можно вынести в отдельный компонент и просто пробрасывать в него опшины
+                  */}
                     <Form.Select id="plaster" className=" mx-auto" onChange={handlePlasterValue}>
                       <option>Штукатурка изнутри</option>
                       <option value={1}>Нет</option>

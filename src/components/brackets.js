@@ -1,3 +1,4 @@
+// TODO: это должно быть в папке constants (проверь рядом лежащие файлы)
 export const brackets = [
   { a: { name: 'MFT-MF HS' }, b: { name: 'MFT-MF HS(sts)' } },
   { a: { name: 'MFT-MF S' }, c: { name: 'MFT-RB S' } },
